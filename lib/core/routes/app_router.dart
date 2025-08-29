@@ -36,7 +36,7 @@ class SupabaseAuthNotifier extends ChangeNotifier {
 class AppRouter {
   static final router = GoRouter(
     refreshListenable: SupabaseAuthNotifier(),
-    initialLocation: AppPaths.accessLocation,
+    initialLocation: AppPaths.home,
 
     // redirect: (context, state) {
     //   if (!getIt<AuthService>().isUserLoggedIn()) {
@@ -53,10 +53,8 @@ class AppRouter {
       GoRoute(
         path: AppPaths.home,
         builder: (context, state) {
-          final args = state.extra as HomeScreenArgs;
-          return HomeScreen(
-            userLocation: args.userLocation ?? 'Unknown Location',
-          );
+          //final args = state.extra as HomeScreenArgs;
+          return HomeScreen(userLocation: 'Unknown Location');
         },
       ),
       GoRoute(

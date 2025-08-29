@@ -54,9 +54,9 @@ class DeliveryApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       child: SystemUIWrapper(
-        statusBarColor: AppColors.primary,
+        statusBarColor: AppColors.white,
         statusBarIconBrightness: Brightness.dark,
-        navigationBarColor: AppColors.primary,
+        navigationBarColor: AppColors.white,
         navigationBarIconBrightness: Brightness.dark,
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
@@ -68,8 +68,8 @@ class DeliveryApp extends StatelessWidget {
                 TargetPlatform.macOS: GoTransitions.cupertino,
               },
             ),
-            scaffoldBackgroundColor: AppColors.primary,
-            primaryColor: AppColors.primary,
+            scaffoldBackgroundColor: AppColors.white,
+            primaryColor: AppColors.white,
             textSelectionTheme: TextSelectionThemeData(
               cursorColor: AppColors.secondary,
               selectionColor: AppColors.secondary.withAlpha(40),

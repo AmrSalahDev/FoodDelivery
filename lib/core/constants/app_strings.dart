@@ -33,4 +33,18 @@ class AppStrings {
   static const String accessLocation = "Access location";
   static const String accessLocationDescription =
       "DFOOD WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP";
+  static const String deliverTo = "Deliver to";
+  static const String seeAll = "See All";
+
+  // food
+  static const String burger = "Burger";
+  static const String pizza = "Pizza";
+  static const String salad = "Salad";
+  static const String pasta = "Pasta";
+  static const String steak = "Steak";
+  static const String frenchFries = "French Fries";
+  static const String soup = "Soup";
+
+  // Restaurants
+  static const String roseGardenRestaurant = "Rose Garden Restaurant";
 }
