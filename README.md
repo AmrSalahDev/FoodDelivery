@@ -6,6 +6,8 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Android-blue.svg?style=for-the-badge)
 ![State Management: Bloc](https://img.shields.io/badge/State%20Management-Bloc-purple.svg?style=for-the-badge)
+![Supabase](https://img.shields.io/badge/Backend-Supabase-green?style=for-the-badge&logo=supabase&logoColor=white)  
+![Sentry](https://img.shields.io/badge/Monitoring-Sentry-red?style=for-the-badge&logo=sentry&logoColor=white)  
 
 ---
 
