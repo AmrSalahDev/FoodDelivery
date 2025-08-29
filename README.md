@@ -47,6 +47,54 @@ A modern Food Delivery App built with Flutter. The app provides an intuitive UI 
 
 ![App Architecture](screenshots/diagram.png)
 
+
+```plaintext
+lib
+├───app
+│   └───widgets
+├───core
+│   ├───constants
+│   ├───di
+│   ├───routes
+│   │   └───args
+│   └───services
+└───features
+    ├───access_location
+    │   └───ui
+    │       └───screens
+    ├───forget_password
+    │   └───ui
+    │       └───screens
+    ├───home
+    │   └───ui
+    │       └───screens
+    ├───login
+    │   ├───data
+    │   │   └───repo
+    │   ├───domain
+    │   │   ├───repo
+    │   │   └───usecases
+    │   └───ui
+    │       ├───cubit
+    │       └───screens
+    ├───onboarding
+    │   ├───data
+    │   │   └───models
+    │   └───ui
+    │       └───screens
+    ├───register
+    │   ├───data
+    │   │   └───repo
+    │   ├───domain
+    │   │   ├───repo
+    │   │   └───usecases
+    │   └───ui
+    │       ├───cubit
+    │       └───screens
+    └───verification_password
+        └───ui
+            └───screens
+
 ---
 
 ### 🚀 Getting Started
