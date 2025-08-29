@@ -94,7 +94,7 @@ Below is a list of packages used in this Flutter project along with their versio
 
 Here’s the app UI design created in Figma:
 
-[![Figma Design](screenshots/figma_thumbnail.png)](https://www.figma.com/community/file/1436702392024339380/grabber-grocrey-app)
+[![Figma Design](screenshots/figma_thumbnail.png)](https://www.figma.com/community/file/1231521889522325040/food-delivery-app)
 
 📌 Click the image to view the live Figma prototype.
 
@@ -105,12 +105,16 @@ Here’s the app UI design created in Figma:
 ### 📸 Screenshots
 
 <p float="left">
-  <img src="screenshots/splash_screen.png" width="45%"/>
+  <img src="screenshots/onboarding_screen.png" width="45%"/>
+  <img src="screenshots/login_screen.png" width="45%"/>
   <img src="screenshots/home_screen.png" width="45%"/>
+  <img src="screenshots/food_details_screen.png" width="45%"/>
   <img src="screenshots/cart_screen.png" width="45%"/>
-  <img src="screenshots/payment_screen.png" width="45%"/>
-  <img src="screenshots/checkout_screen.png" width="45%"/>
-  <img src="screenshots/order_track_screen.png" width="45%"/>
+  <img src="screenshots/tracking_order_screen.png" width="45%"/>
+  <img src="screenshots/restaurant_screen.png" width="45%"/>
+  <img src="screenshots/my_orders_screen.png" width="45%"/>
+  <img src="screenshots/location_access_screen.png" width="45%"/>
+  <img src="screenshots/profile_screen.png" width="45%"/>
 </p>
 
 
