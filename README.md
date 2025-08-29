@@ -94,10 +94,10 @@ lib
     └───verification_password
         └───ui
             └───screens
-
+```
 ---
 
-### 🚀 Getting Started
+## 🚀 Getting Started
 
 To run this app locally:
 
