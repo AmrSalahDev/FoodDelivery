@@ -47,53 +47,52 @@ A modern Food Delivery App built with Flutter. The app provides an intuitive UI 
 
 ![App Architecture](screenshots/diagram.png)
 
-
 ```plaintext
 lib
-├───app
-│   └───widgets
-├───core
-│   ├───constants
-│   ├───di
-│   ├───routes
-│   │   └───args
-│   └───services
-└───features
-    ├───access_location
-    │   └───ui
-    │       └───screens
-    ├───forget_password
-    │   └───ui
-    │       └───screens
-    ├───home
-    │   └───ui
-    │       └───screens
-    ├───login
-    │   ├───data
-    │   │   └───repo
-    │   ├───domain
-    │   │   ├───repo
-    │   │   └───usecases
-    │   └───ui
-    │       ├───cubit
-    │       └───screens
-    ├───onboarding
-    │   ├───data
-    │   │   └───models
-    │   └───ui
-    │       └───screens
-    ├───register
-    │   ├───data
-    │   │   └───repo
-    │   ├───domain
-    │   │   ├───repo
-    │   │   └───usecases
-    │   └───ui
-    │       ├───cubit
-    │       └───screens
-    └───verification_password
-        └───ui
-            └───screens
+├── 📦 app
+│   └── 🎨 widgets                # Shared reusable UI components
+│
+├── ⚙️ core
+│   ├── 📌 constants              # App-wide constants
+│   ├── 🛠️ di                     # Dependency Injection setup
+│   ├── 🛣️ routes
+│   │   └── 📥 args               # Route arguments
+│   └── 🔧 services               # Core services (API, storage, etc.)
+│
+└── 🚀 features
+    ├── 📍 access_location
+    │   └── 🖼️ ui/screens         # Location access screen
+    │
+    ├── 🔑 forget_password
+    │   └── 🖼️ ui/screens         # Forgot password screen
+    │
+    ├── 🏠 home
+    │   └── 🖼️ ui/screens         # Home screen
+    │
+    ├── 🔓 login
+    │   ├── 💾 data/repo          # Repository implementations
+    │   ├── 🧩 domain
+    │   │   ├── 📂 repo           # Abstract repository
+    │   │   └── ⚡ usecases       # Business logic
+    │   └── 🖼️ ui
+    │       ├── 🎛️ cubit         # State management
+    │       └── 📱 screens        # Login screens
+    │
+    ├── 👋 onboarding
+    │   ├── 💾 data/models        # Onboarding models
+    │   └── 🖼️ ui/screens         # Onboarding screens
+    │
+    ├── 📝 register
+    │   ├── 💾 data/repo          # Repository implementations
+    │   ├── 🧩 domain
+    │   │   ├── 📂 repo           # Abstract repository
+    │   │   └── ⚡ usecases       # Business logic
+    │   └── 🖼️ ui
+    │       ├── 🎛️ cubit         # State management
+    │       └── 📱 screens        # Register screens
+    │
+    └── ✅ verification_password
+        └── 🖼️ ui/screens         # Password verification screen
 ```
 ---
 
