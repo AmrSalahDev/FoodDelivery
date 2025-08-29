@@ -26,6 +26,20 @@ A modern Food Delivery App built with Flutter. The app provides an intuitive UI 
 
 ---
 
+## 📑 Table of Contents
+- [✨ Badges](#-badges)
+- [🍔 Food Delivery App](#-food-delivery-app)
+- [🚀 Features](#-features)
+- [🚀 Getting Started](#-getting-started)
+- [📦 Dependencies Used](#-dependencies-used)
+- [🎨 Figma Design](#-figma-design)
+- [📸 Screenshots](#-screenshots)
+- [🎥 Demo](#-demo)
+- [🛠️ Contributions](#️-contributions)
+- [📜 License](#-license)
+
+---
+
 ### 🚀 Getting Started
 
 To run this app locally:
