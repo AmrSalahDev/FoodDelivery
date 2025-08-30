@@ -1,14 +1,17 @@
 import 'dart:async';
+import 'package:after_layout/after_layout.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
-import 'package:food_delivery/core/constants/app_images.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/features/home/data/models/food_items_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userLocation;
@@ -18,7 +21,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with AfterLayoutMixin<HomeScreen> {
   late String fullName;
   late String fisrtName;
   late String greeting;
@@ -55,31 +59,161 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void _showOfferDialog(BuildContext parentContext) {
+    showDialog(
+      context: parentContext,
+      useSafeArea: false,
+      barrierDismissible: false,
+      barrierColor: Colors.black38,
+      builder: (BuildContext dialogContext) {
+        return AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: Brightness.dark,
+            systemNavigationBarColor: Colors.black38,
+            systemNavigationBarIconBrightness: Brightness.dark,
+          ),
+
+          child: Dialog(
+            backgroundColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              height: 400.h,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFFFA500), Color(0xFFE76F00)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(35.r),
+              ),
+              padding: const EdgeInsets.all(20),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 30.h),
+                      Text(
+                        AppStrings.hurryOffers,
+                        style: GoogleFonts.sen(
+                          fontSize: 35.sp,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 40.h),
+                      Text(
+                        "#1243CD2",
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.sen(
+                          fontSize: 25.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      Text(
+                        AppStrings.offerDescription,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.sen(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      OutlinedButton(
+                        onPressed: () {
+                          Navigator.of(parentContext).pop();
+                        },
+                        style: OutlinedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 60.h),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          side: const BorderSide(color: Colors.white),
+                        ),
+                        child: Text(
+                          AppStrings.gotIt.toUpperCase(),
+                          style: GoogleFonts.sen(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Positioned(
+                    top: -40,
+                    right: -25,
+                    child: IconButton.filled(
+                      icon: Icon(
+                        Icons.close,
+                        color: Color(0xFFEF761A),
+                        size: 20.h,
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStateProperty.all(
+                          Color(0xFFFFE194),
+                        ),
+                        shape: WidgetStateProperty.all(const CircleBorder()),
+                        minimumSize: WidgetStateProperty.all(Size(45.w, 45.h)),
+                      ),
+                      onPressed: () {
+                        Navigator.of(parentContext).pop();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  FutureOr<void> afterFirstLayout(BuildContext context) {
+    Future.delayed(const Duration(seconds: 2), () {
+      if (context.mounted) {
+        _showOfferDialog(context);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildAppBar(),
-                SizedBox(height: 30.h),
-                _buildGreeting(),
-                SizedBox(height: 30.h),
-                _buildSearchBar(),
-                SizedBox(height: 30.h),
-                _buildSeeAllBar(title: "All Categories"),
-                SizedBox(height: 30.h),
-                _buildCategories(),
-                SizedBox(height: 40.h),
-                _buildSeeAllBar(title: "Open Restaurants"),
-                SizedBox(height: 30.h),
-                _buildRestaurants(),
-              ],
-            ),
+        minimum: const EdgeInsets.only(left: 20, right: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 30.h),
+              _buildAppBar(),
+              SizedBox(height: 30.h),
+              _buildGreeting(),
+              SizedBox(height: 30.h),
+              _buildSearchBar(),
+              SizedBox(height: 30.h),
+              _buildSeeAllBar(title: "All Categories"),
+              SizedBox(height: 30.h),
+              _buildCategories(),
+              SizedBox(height: 40.h),
+              _buildSeeAllBar(title: "Open Restaurants"),
+              SizedBox(height: 30.h),
+              _buildRestaurants(),
+              SizedBox(height: 30.h),
+              _buildRestaurants(),
+            ],
           ),
         ),
       ),
@@ -140,7 +274,6 @@ class _HomeScreenState extends State<HomeScreen> {
               .toList(),
         ),
         SizedBox(height: 20.h),
-
         Row(
           children: [
             Icon(FontAwesomeIcons.star, color: AppColors.secondary, size: 20.h),
@@ -191,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildCategories() {
     return SizedBox(
-      height: 170.h,
+      height: 175.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
@@ -207,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(right: 20),
+          margin: const EdgeInsets.only(right: 10, left: 5, top: 5),
           width: 130.w,
           height: 130.h,
           decoration: BoxDecoration(
@@ -233,7 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SizedBox(height: 10.h),
         Padding(
-          padding: const EdgeInsets.only(right: 20),
+          padding: const EdgeInsets.only(right: 10),
           child: Text(
             FoodItemsModel.foodItems[index].title,
             style: GoogleFonts.sen(
@@ -338,7 +471,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Row(
       children: [
         IconButton.filled(
-          onPressed: () {},
+          onPressed: () {
+            _showOfferDialog(context);
+          },
           style: IconButton.styleFrom(
             backgroundColor: Color(0xFFECF0F4),
 

@@ -35,6 +35,9 @@ class AppStrings {
       "DFOOD WILL ACCESS YOUR LOCATION ONLY WHILE USING THE APP";
   static const String deliverTo = "Deliver to";
   static const String seeAll = "See All";
+  static const String gotIt = "Got it";
+  static const String hurryOffers = "Hurry Offers!";
+  static const String offerDescription = "Use the cupon get 25% discount";
 
   // food
   static const String burger = "Burger";

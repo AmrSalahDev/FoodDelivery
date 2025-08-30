@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery/core/di/di.dart';
-import 'package:food_delivery/core/routes/args/home_screen_args.dart';
 import 'package:food_delivery/core/routes/args/verification_screen_args.dart';
 import 'package:food_delivery/features/access_location/ui/screens/access_location_screen.dart';
 import 'package:food_delivery/features/forget_password/ui/screens/forget_password_screen.dart';
