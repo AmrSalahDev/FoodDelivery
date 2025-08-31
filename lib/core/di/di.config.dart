@@ -10,8 +10,9 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:food_delivery/core/services/auth_service.dart' as _i717;
-import 'package:food_delivery/core/services/location_service.dart' as _i524;
+import 'package:food_delivery/core/services/location_service.dart' as _i750;
 import 'package:food_delivery/core/services/toast_service.dart' as _i947;
+import 'package:food_delivery/features/home/cubit/home_cubit.dart' as _i718;
 import 'package:food_delivery/features/login/data/repo/login_repo_impl.dart'
     as _i392;
 import 'package:food_delivery/features/login/domain/repo/login_repo.dart'
@@ -38,8 +39,9 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.factory<_i718.HomeCubit>(() => _i718.HomeCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
-    gh.lazySingleton<_i524.LocationService>(() => _i524.LocationService());
+    gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());
     gh.lazySingleton<_i852.LoginRepo>(() => _i392.LoginRepoImpl());
     gh.lazySingleton<_i566.RegisterRepo>(() => _i70.RegisterRepoImpl());

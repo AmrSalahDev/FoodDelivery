@@ -16,6 +16,8 @@ class AppImages {
   static const String pasta = 'assets/images/food/pasta.png';
   static const String steak = 'assets/images/food/steak.png';
   static const String soup = 'assets/images/food/soup.png';
+  static const String buffaloPizza = 'assets/images/food/buffalo_pizza.png';
+  static const String europeanPizza = 'assets/images/food/european_pizza.png';
 
   // Restaurants
   static const String restaurant1 =

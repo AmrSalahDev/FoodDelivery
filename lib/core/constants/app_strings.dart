@@ -38,6 +38,9 @@ class AppStrings {
   static const String gotIt = "Got it";
   static const String hurryOffers = "Hurry Offers!";
   static const String offerDescription = "Use the cupon get 25% discount";
+  static const String allCategories = "All Categories";
+  static const String openRestaurants = "Open Restaurants";
+  static const String search = "Search";
 
   // food
   static const String burger = "Burger";

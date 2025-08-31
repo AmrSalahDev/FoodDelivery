@@ -3,15 +3,17 @@ import 'package:after_layout/after_layout.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/core/routes/app_router.dart';
+import 'package:food_delivery/features/home/cubit/home_cubit.dart';
 import 'package:food_delivery/features/home/data/models/food_items_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userLocation;
@@ -25,38 +27,65 @@ class _HomeScreenState extends State<HomeScreen>
     with AfterLayoutMixin<HomeScreen> {
   late String fullName;
   late String fisrtName;
-  late String greeting;
-  late Timer timer;
 
   @override
   void initState() {
     super.initState();
     fullName = faker.faker.person.name();
     fisrtName = fullName.split(" ")[0];
-    greeting = _getGreeting();
-
-    timer = Timer.periodic(const Duration(minutes: 1), (timer) {
-      setState(() {
-        greeting = _getGreeting();
-      });
-    });
-  }
-
-  String _getGreeting() {
-    final hour = DateTime.now().hour;
-    if (hour < 12) {
-      return "Good Morning";
-    } else if (hour < 17) {
-      return "Good Afternoon";
-    } else {
-      return "Good Evening";
-    }
+    context.read<HomeCubit>().startGreeting();
   }
 
   @override
   void dispose() {
-    timer.cancel();
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 30.h),
+                    _buildAppBar(),
+                    SizedBox(height: 30.h),
+                    _buildGreeting(),
+                    SizedBox(height: 30.h),
+                    _buildSearchBar(),
+                    SizedBox(height: 30.h),
+                    _buildSeeAllBar(title: AppStrings.allCategories),
+                    SizedBox(height: 30.h),
+                  ],
+                ),
+              ),
+              _buildCategories(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 40.h),
+                    _buildSeeAllBar(title: AppStrings.openRestaurants),
+                    SizedBox(height: 30.h),
+                    _buildRestaurants(),
+                    SizedBox(height: 30.h),
+                    _buildRestaurants(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _showOfferDialog(BuildContext parentContext) {
@@ -181,43 +210,11 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (context.mounted) {
         _showOfferDialog(context);
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        minimum: const EdgeInsets.only(left: 20, right: 20),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 30.h),
-              _buildAppBar(),
-              SizedBox(height: 30.h),
-              _buildGreeting(),
-              SizedBox(height: 30.h),
-              _buildSearchBar(),
-              SizedBox(height: 30.h),
-              _buildSeeAllBar(title: "All Categories"),
-              SizedBox(height: 30.h),
-              _buildCategories(),
-              SizedBox(height: 40.h),
-              _buildSeeAllBar(title: "Open Restaurants"),
-              SizedBox(height: 30.h),
-              _buildRestaurants(),
-              SizedBox(height: 30.h),
-              _buildRestaurants(),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget _buildRestaurants() {
@@ -329,6 +326,7 @@ class _HomeScreenState extends State<HomeScreen>
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: FoodItemsModel.foodItems.length,
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         itemBuilder: (context, index) {
           return _buildCategoryItem(index);
         },
@@ -418,52 +416,59 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildSearchBar() {
-    return Container(
-      height: 65.h,
-      width: double.infinity,
-      alignment: Alignment.center,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Color(0xFFF6F6F6),
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.search_rounded, color: Color(0xFFA0A5BA), size: 27.h),
-          SizedBox(width: 10.w),
-          Text(
-            "Search dishes, restaurants",
-            style: GoogleFonts.sen(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.normal,
-              color: Color(0xFF676767),
+    return GestureDetector(
+      onTap: () => context.push(AppPaths.homeSearch),
+      child: Container(
+        height: 65.h,
+        width: double.infinity,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Color(0xFFF6F6F6),
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        child: Row(
+          children: [
+            Icon(Icons.search_rounded, color: Color(0xFFA0A5BA), size: 27.h),
+            SizedBox(width: 10.w),
+            Text(
+              "Search dishes, restaurants",
+              style: GoogleFonts.sen(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF676767),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildGreeting() {
-    return Text.rich(
-      TextSpan(
-        text: "Hey $fisrtName, ",
-        style: GoogleFonts.sen(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.normal,
-          color: Color(0xFF1E1D1D),
-        ),
-        children: [
+    return BlocBuilder<HomeCubit, HomeState>(
+      builder: (context, state) {
+        return Text.rich(
           TextSpan(
-            text: greeting,
+            text: "Hey $fisrtName, ",
             style: GoogleFonts.sen(
               fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.normal,
               color: Color(0xFF1E1D1D),
             ),
+            children: [
+              TextSpan(
+                text: state is UserGreeting ? state.greeting : "",
+                style: GoogleFonts.sen(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1E1D1D),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
