@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/app/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
-import 'package:food_delivery/core/constants/app_images.dart';
+
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
 import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
@@ -87,7 +88,6 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           ),
         ),
         SizedBox(width: 10.w),
-
         Chip(
           label: Text(widget.query!),
           backgroundColor: AppColors.white,
@@ -109,7 +109,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           onPressed: () {},
           backgroundColor: AppColors.lightGray,
           size: 55.h,
-          icon: Image.asset(AppImages.sortSettings, height: 20.h, width: 20.w),
+          icon: Assets.icons.icSortSettings.image(height: 20.h, width: 20.h),
         ),
       ],
     );

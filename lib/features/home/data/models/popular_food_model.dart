@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:food_delivery/core/constants/app_images.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 
 class PopularFoodModel extends Equatable {
   final String id;
@@ -21,11 +21,11 @@ class PopularFoodModel extends Equatable {
   @override
   List<Object?> get props => [id, title, image, subtitle, price, quantity];
 
-  static final List<PopularFoodModel> popularFoodList = const [
+  static final List<PopularFoodModel> popularFoodList = [
     PopularFoodModel(
       id: '1',
       title: 'Burger Bistro',
-      image: AppImages.burgerBistro,
+      image: Assets.images.food.burgerBistro.path,
       subtitle: 'Rose garden',
       price: 40,
       quantity: 0,
@@ -33,7 +33,7 @@ class PopularFoodModel extends Equatable {
     PopularFoodModel(
       id: '2',
       title: "Smokin' Burger",
-      image: AppImages.smokinBurger,
+      image: Assets.images.food.smokinBurger.path,
       subtitle: 'Cafenio Restaurant',
       price: 60,
       quantity: 0,
@@ -41,7 +41,7 @@ class PopularFoodModel extends Equatable {
     PopularFoodModel(
       id: '3',
       title: 'Buffalo Burgers',
-      image: AppImages.buffaloBurger,
+      image: Assets.images.food.buffaloBurger.path,
       subtitle: 'Kaji Firm Kitchen',
       price: 75,
       quantity: 0,
@@ -49,7 +49,7 @@ class PopularFoodModel extends Equatable {
     PopularFoodModel(
       id: '4',
       title: 'Bullseye Burgers',
-      image: AppImages.bullseyeBurger,
+      image: Assets.images.food.bullseyeBurger.path,
       subtitle: 'Kabab restaurant',
       price: 94,
       quantity: 0,

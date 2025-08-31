@@ -19,6 +19,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^9.1.1
   flutter_dotenv: ^6.0.0
+  flutter_gen_runner: ^5.11.0
   flutter_native_splash: ^2.4.6
   flutter_screenutil: ^5.9.3
   font_awesome_flutter: ^10.10.0
@@ -48,6 +49,15 @@ dev_dependencies:
   flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
+
+flutter_gen:
+  output: lib/core/gen/
+  integrations:
+    image: true
+    flutter_svg: true
+    rive: false
+    lottie: false
+
 
 flutter:
   uses-material-design: true

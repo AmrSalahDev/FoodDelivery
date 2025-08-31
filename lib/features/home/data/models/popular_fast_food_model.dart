@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:food_delivery/core/constants/app_images.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 
 class PopularFastFoodModel extends Equatable {
   final String id;
@@ -20,25 +20,25 @@ class PopularFastFoodModel extends Equatable {
   static final List<PopularFastFoodModel> popularFastFoodList = [
     PopularFastFoodModel(
       id: "1",
-      image: AppImages.buffaloPizza,
+      image: Assets.images.food.buffaloPizza.path,
       title: "Buffalo Pizza",
       subtitle: "Cafenio Coffee Club",
     ),
     PopularFastFoodModel(
       id: "2",
-      image: AppImages.europeanPizza,
+      image: Assets.images.food.europeanPizza.path,
       title: "European Pizza",
       subtitle: "Uttora Coffe House",
     ),
     PopularFastFoodModel(
       id: "3",
-      image: AppImages.buffaloPizza,
+      image: Assets.images.food.buffaloPizza.path,
       title: "Buffalo Pizza",
       subtitle: "Cafenio Coffee Club",
     ),
     PopularFastFoodModel(
       id: "4",
-      image: AppImages.europeanPizza,
+      image: Assets.images.food.europeanPizza.path,
       title: "European Pizza",
       subtitle: "Uttora Coffe House",
     ),
