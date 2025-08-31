@@ -210,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (context.mounted) {
         _showOfferDialog(context);
       }

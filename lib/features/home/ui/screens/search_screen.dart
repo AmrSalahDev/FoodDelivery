@@ -6,8 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/app/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/core/routes/app_router.dart';
+import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
 import 'package:food_delivery/features/home/data/models/suggested_restaurants_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -21,6 +24,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   late final TextEditingController searchController;
   final List<String> keywords = [];
+  bool isSearching = false;
 
   @override
   void initState() {
@@ -49,20 +53,28 @@ class _SearchScreenState extends State<SearchScreen> {
                 SizedBox(height: 30.h),
                 CustomSearchBar(
                   controller: searchController,
-                  onSearch: (value) {
+                  onSubmitted: (value) {
                     setState(() {
                       keywords.add(value);
+                      context.push(
+                        AppPaths.homeSearchResult,
+                        extra: SearchResultScreenArgs(query: value),
+                      );
                     });
                   },
+                  onSearch: (value) {
+                    isSearching = value.isNotEmpty && value.length > 1;
+                    setState(() {});
+                  },
                 ),
-                if (keywords.isNotEmpty) ...[
+                if (isSearching) ...[
                   SizedBox(height: 30.h),
                   _buildRecentKeywords(),
+                  SizedBox(height: 30.h),
+                  _buildSuggestedRestaurants(),
+                  SizedBox(height: 30.h),
+                  _buildPopularFastFood(),
                 ],
-                SizedBox(height: 30.h),
-                _buildSuggestedRestaurants(),
-                SizedBox(height: 30.h),
-                _buildPopularFastFood(),
               ],
             ),
           ),
@@ -239,9 +251,12 @@ class _SearchScreenState extends State<SearchScreen> {
           onPressed: () {},
           backgroundColor: AppColors.lightGray,
           size: 55.h,
-          iconSize: 20.h,
-          iconColor: AppColors.darkBlue,
-          icon: Icons.arrow_back_ios_new_rounded,
+
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.darkBlue,
+            size: 20.h,
+          ),
         ),
         SizedBox(width: 10.w),
         Text(
@@ -268,9 +283,11 @@ class _SearchScreenState extends State<SearchScreen> {
             onPressed: () {},
             backgroundColor: AppColors.darkBlue,
             size: 55.h,
-            iconSize: 24.h,
-            iconColor: AppColors.white,
-            icon: FontAwesomeIcons.basketShopping,
+            icon: Icon(
+              FontAwesomeIcons.basketShopping,
+              size: 24.h,
+              color: AppColors.white,
+            ),
           ),
         ),
       ],
@@ -369,8 +386,14 @@ class _RestaurantItemState extends State<RestaurantItem> {
 
 class CustomSearchBar extends StatefulWidget {
   final TextEditingController controller;
+  final Function(String)? onSubmitted;
   final Function(String)? onSearch;
-  const CustomSearchBar({super.key, required this.controller, this.onSearch});
+  const CustomSearchBar({
+    super.key,
+    required this.controller,
+    this.onSearch,
+    this.onSubmitted,
+  });
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
@@ -385,6 +408,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
     widget.controller.addListener(() {
       setState(() {
         isSearching = widget.controller.text.isNotEmpty;
+        if (widget.onSearch != null) widget.onSearch!(widget.controller.text);
       });
     });
   }
@@ -401,8 +425,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       controller: widget.controller,
       textInputAction: TextInputAction.search,
       onSubmitted: (value) {
-        if (widget.onSearch != null) {
-          widget.onSearch!(value);
+        if (widget.onSubmitted != null) {
+          widget.onSubmitted!(value);
         }
       },
       decoration: InputDecoration(

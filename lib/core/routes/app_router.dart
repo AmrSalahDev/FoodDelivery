@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery/core/di/di.dart';
+import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/core/routes/args/verification_screen_args.dart';
 import 'package:food_delivery/features/access_location/ui/screens/access_location_screen.dart';
 import 'package:food_delivery/features/forget_password/ui/screens/forget_password_screen.dart';
 import 'package:food_delivery/features/home/cubit/home_cubit.dart';
 import 'package:food_delivery/features/home/ui/screens/home_screen.dart';
+import 'package:food_delivery/features/home/ui/screens/search_result_screen.dart';
 import 'package:food_delivery/features/home/ui/screens/search_screen.dart';
 import 'package:food_delivery/features/login/ui/cubit/login_cubit.dart';
 import 'package:food_delivery/features/login/ui/screens/login_screen.dart';
@@ -25,6 +27,7 @@ class AppPaths {
   static const String verificationPassword = "/verificationPassword";
   static const String accessLocation = "/accessLocation";
   static const String homeSearch = "/homeSearch";
+  static const String homeSearchResult = "/homeSearchResult";
 }
 
 class SupabaseAuthNotifier extends ChangeNotifier {
@@ -65,6 +68,13 @@ class AppRouter {
       GoRoute(
         path: AppPaths.homeSearch,
         builder: (context, state) => SearchScreen(),
+      ),
+      GoRoute(
+        path: AppPaths.homeSearchResult,
+        builder: (context, state) {
+          final args = state.extra as SearchResultScreenArgs;
+          return SearchResultScreen(query: args.query);
+        },
       ),
 
       GoRoute(

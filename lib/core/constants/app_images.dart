@@ -7,6 +7,7 @@ class AppImages {
   static const String corner = 'assets/images/corner.png';
   static const String corner2 = 'assets/images/corner_2.png';
   static const String locationAccess = 'assets/images/location_access.png';
+  static const String sortSettings = 'assets/icons/ic_sort_settings.png';
 
   // food
   static const String burger = 'assets/images/food/burger.png';
@@ -18,6 +19,10 @@ class AppImages {
   static const String soup = 'assets/images/food/soup.png';
   static const String buffaloPizza = 'assets/images/food/buffalo_pizza.png';
   static const String europeanPizza = 'assets/images/food/european_pizza.png';
+  static const String buffaloBurger = 'assets/images/food/buffalo_burger.png';
+  static const String bullseyeBurger = 'assets/images/food/bullseye_burger.png';
+  static const String burgerBistro = 'assets/images/food/burger_bistro.png';
+  static const String smokinBurger = 'assets/images/food/smokin_burger.png';
 
   // Restaurants
   static const String restaurant1 =

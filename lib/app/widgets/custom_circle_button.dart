@@ -4,17 +4,13 @@ class CustomCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
   final Color backgroundColor;
   final double size;
-  final double iconSize;
-  final Color iconColor;
-  final IconData icon;
+  final Widget icon;
 
   const CustomCircleButton({
     super.key,
     required this.onPressed,
     required this.backgroundColor,
     required this.size,
-    required this.iconSize,
-    required this.iconColor,
     required this.icon,
   });
 
@@ -28,7 +24,7 @@ class CustomCircleButton extends StatelessWidget {
         shape: const CircleBorder(),
         minimumSize: Size(size, size),
       ),
-      icon: Icon(icon, color: iconColor, size: iconSize),
+      icon: icon,
     );
   }
 }
