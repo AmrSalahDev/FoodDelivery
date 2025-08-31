@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:after_layout/after_layout.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ import 'package:food_delivery/features/home/data/models/food_items_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomeScreen extends StatefulWidget {
   final String userLocation;
@@ -74,8 +76,6 @@ class _HomeScreenState extends State<HomeScreen>
                   children: [
                     SizedBox(height: 40.h),
                     _buildSeeAllBar(title: AppStrings.openRestaurants),
-                    SizedBox(height: 30.h),
-                    _buildRestaurants(),
                     SizedBox(height: 30.h),
                     _buildRestaurants(),
                   ],
@@ -218,104 +218,13 @@ class _HomeScreenState extends State<HomeScreen>
   }
 
   Widget _buildRestaurants() {
-    return SizedBox(
-      height: 350.h,
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: RestaurantItemsModel.restaurantItems.length,
-        itemBuilder: (context, index) {
-          return _buildRestaurantItem(index);
-        },
-      ),
-    );
-  }
-
-  Widget _buildRestaurantItem(int index) {
-    final restaurant = RestaurantItemsModel.restaurantItems[index];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(24.r),
-          child: Image.asset(
-            restaurant.image,
-            fit: BoxFit.fill,
-            height: 200.h,
-            width: double.infinity,
-          ),
-        ),
-        SizedBox(height: 10.h),
-        Text(
-          restaurant.name,
-          style: GoogleFonts.sen(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.normal,
-            color: Color(0xFF181C2E),
-          ),
-        ),
-        SizedBox(height: 10.h),
-        Row(
-          children: restaurant.foodTypes
-              .map(
-                (foodType) => Text(
-                  foodType == restaurant.foodTypes.last
-                      ? foodType
-                      : "$foodType - ",
-                  style: GoogleFonts.sen(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.normal,
-                    color: Color(0xFFA0A5BA),
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-        SizedBox(height: 20.h),
-        Row(
-          children: [
-            Icon(FontAwesomeIcons.star, color: AppColors.secondary, size: 20.h),
-            SizedBox(width: 10.w),
-            Text(
-              restaurant.rate,
-              style: GoogleFonts.sen(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
-              ),
-            ),
-            SizedBox(width: 30.w),
-            Icon(
-              FontAwesomeIcons.truck,
-              color: AppColors.secondary,
-              size: 20.h,
-            ),
-            SizedBox(width: 10.w),
-            Text(
-              restaurant.deliveryCost,
-              style: GoogleFonts.sen(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
-              ),
-            ),
-            SizedBox(width: 30.w),
-            Icon(
-              FontAwesomeIcons.clock,
-              color: AppColors.secondary,
-              size: 20.h,
-            ),
-            SizedBox(width: 10.w),
-            Text(
-              restaurant.deliveryTime,
-              style: GoogleFonts.sen(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
-              ),
-            ),
-          ],
-        ),
-      ],
+    return ListView.builder(
+      itemCount: RestaurantItemsModel.restaurantItems.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        return RestaurantItem(index: index);
+      },
     );
   }
 
@@ -472,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Row _buildAppBar() {
+  Widget _buildAppBar() {
     return Row(
       children: [
         IconButton.filled(
@@ -537,8 +446,8 @@ class _HomeScreenState extends State<HomeScreen>
           label: Text(
             faker.faker.randomGenerator.integer(100).toString(),
             style: GoogleFonts.sen(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+              fontSize: 14.sp,
+              fontWeight: FontWeight.normal,
               color: AppColors.white,
             ),
           ),
@@ -557,6 +466,139 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
       ],
+    );
+  }
+}
+
+class RestaurantItem extends StatefulWidget {
+  final int index;
+  const RestaurantItem({super.key, required this.index});
+
+  @override
+  State<RestaurantItem> createState() => _RestaurantItemState();
+}
+
+class _RestaurantItemState extends State<RestaurantItem> {
+  bool _isLoading = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final restaurant = RestaurantItemsModel.restaurantItems[widget.index];
+
+    return Skeletonizer(
+      enabled: _isLoading,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(24.r),
+            child: CachedNetworkImage(
+              imageUrl: restaurant.image,
+              fit: BoxFit.fill,
+              height: 200.h,
+              width: double.infinity,
+
+              placeholder: (context, url) => Container(
+                height: 200.h,
+                width: double.infinity,
+                color: AppColors.lightGray,
+              ),
+              imageBuilder: (context, imageProvider) {
+                // Use addPostFrameCallback to avoid calling setState during build
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (mounted && _isLoading) {
+                    setState(() => _isLoading = false);
+                  }
+                });
+                return Image(
+                  image: imageProvider,
+                  height: 200.h,
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                );
+              },
+              errorWidget: (context, url, error) =>
+                  Center(child: Icon(Icons.error, color: Colors.red)),
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            restaurant.name,
+            style: GoogleFonts.sen(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.normal,
+              color: Color(0xFF181C2E),
+            ),
+          ),
+          SizedBox(height: 10.h),
+          Row(
+            children: restaurant.foodTypes
+                .map(
+                  (foodType) => Text(
+                    foodType == restaurant.foodTypes.last
+                        ? foodType
+                        : "$foodType - ",
+                    style: GoogleFonts.sen(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFFA0A5BA),
+                    ),
+                  ),
+                )
+                .toList(),
+          ),
+          SizedBox(height: 20.h),
+          Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.star,
+                color: AppColors.secondary,
+                size: 20.h,
+              ),
+              SizedBox(width: 10.w),
+              Text(
+                restaurant.rate,
+                style: GoogleFonts.sen(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF181C2E),
+                ),
+              ),
+              SizedBox(width: 30.w),
+              Icon(
+                FontAwesomeIcons.truck,
+                color: AppColors.secondary,
+                size: 20.h,
+              ),
+              SizedBox(width: 10.w),
+              Text(
+                restaurant.deliveryCost,
+                style: GoogleFonts.sen(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF181C2E),
+                ),
+              ),
+              SizedBox(width: 30.w),
+              Icon(
+                FontAwesomeIcons.clock,
+                color: AppColors.secondary,
+                size: 20.h,
+              ),
+              SizedBox(width: 10.w),
+              Text(
+                restaurant.deliveryTime,
+                style: GoogleFonts.sen(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF181C2E),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.h),
+        ],
+      ),
     );
   }
 }
