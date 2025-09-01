@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/app/widgets/custom_circle_button.dart';
 import 'package:food_delivery/app/widgets/custom_rectangle_button.dart';
+import 'package:food_delivery/app/widgets/favorite_button.dart';
 import 'package:food_delivery/app/widgets/select_size_buttons.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
@@ -262,7 +263,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                       onIncrement: (value) {},
                       onDecrement: (value) {},
                       maxQuantity: 100,
-                      backgroundColor: Color(0xFF121223),
+                      iconBackgroundColor: Colors.white.withAlpha(100),
+                      backgroundColor: AppColors.secondary,
                       height: 50,
                       width: 130,
                       iconColor: AppColors.white,
@@ -301,10 +303,14 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         ),
         const Spacer(),
         CustomCircleButton(
-          onPressed: () => Navigator.pop(context),
           backgroundColor: AppColors.white,
           size: 55.h,
-          icon: Icon(Icons.favorite, size: 20.h, color: Color(0xFFFF8400)),
+          icon: FavoriteButton(
+            heartColor: Color(0xFFFF8400),
+            size: 24.h,
+            onFavorited: () {},
+            onUnfavorited: () {},
+          ),
         ),
       ],
     );
