@@ -7,9 +7,12 @@ import 'package:food_delivery/core/constants/app_colors.dart';
 
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
+import 'package:food_delivery/core/routes/app_router.dart';
+import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
 import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
 import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/buttons/add_to_cart_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -150,84 +153,90 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
 
   Widget _buildPopularFoodItem({required int index}) {
     final popularFood = PopularFoodModel.popularFoodList[index];
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        Container(
-          width: 153.w,
-          height: 175.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 70.h),
-              Text(
-                popularFood.title,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkBlue,
+    return GestureDetector(
+      onTap: () => context.push(
+        AppPaths.foodDetails,
+        extra: FoodDetailsScreenArgs(popularFoodModel: popularFood),
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: 153.w,
+            height: 175.h,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
-              ),
-              Text(
-                popularFood.subtitle,
-                style: GoogleFonts.sen(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF646982),
+              ],
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: 70.h),
+                Text(
+                  popularFood.title,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBlue,
+                  ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  children: [
-                    Text(
-                      "\$${popularFood.price.toString()}",
-                      style: GoogleFonts.sen(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkBlue,
+                Text(
+                  popularFood.subtitle,
+                  style: GoogleFonts.sen(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xFF646982),
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      Text(
+                        "\$${popularFood.price.toString()}",
+                        style: GoogleFonts.sen(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.darkBlue,
+                        ),
                       ),
-                    ),
-                    const Spacer(),
-                    AddToCartButton(
-                      onIncrement: (value) {},
-                      onDecrement: (value) {},
-                      maxQuantity: 100,
-                      width: 75.w,
-                      height: 40.h,
-                      backgroundColor: AppColors.secondary,
-                      iconColor: AppColors.white,
-                      initialSize: 40.h,
-                      countColor: AppColors.white,
-                    ),
-                  ],
+                      const Spacer(),
+                      AddToCartButton(
+                        onIncrement: (value) {},
+                        onDecrement: (value) {},
+                        maxQuantity: 100,
+                        width: 75.w,
+                        height: 40.h,
+                        backgroundColor: AppColors.secondary,
+                        iconColor: AppColors.white,
+                        initialSize: 40.h,
+                        countColor: AppColors.white,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Positioned(
-          top: -25,
-          child: Image.asset(
-            popularFood.image,
-            width: 100.w,
-            height: 100.h,
-            fit: BoxFit.cover,
+          Positioned(
+            top: -25,
+            child: Image.asset(
+              popularFood.image,
+              width: 100.w,
+              height: 100.h,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

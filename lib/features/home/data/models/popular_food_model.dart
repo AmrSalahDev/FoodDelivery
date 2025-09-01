@@ -8,6 +8,10 @@ class PopularFoodModel extends Equatable {
   final String subtitle;
   final double price;
   final int quantity;
+  final double rating;
+  final String deliveryTime;
+  final String deliveryCost;
+  final String description;
 
   const PopularFoodModel({
     required this.id,
@@ -16,6 +20,10 @@ class PopularFoodModel extends Equatable {
     required this.subtitle,
     required this.price,
     required this.quantity,
+    required this.rating,
+    required this.deliveryTime,
+    required this.deliveryCost,
+    required this.description,
   });
 
   @override
@@ -29,6 +37,11 @@ class PopularFoodModel extends Equatable {
       subtitle: 'Rose garden',
       price: 40,
       quantity: 0,
+      rating: 4.5,
+      deliveryTime: '40 min',
+      deliveryCost: 'Free',
+      description:
+          'Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
     ),
     PopularFoodModel(
       id: '2',
@@ -37,6 +50,11 @@ class PopularFoodModel extends Equatable {
       subtitle: 'Cafenio Restaurant',
       price: 60,
       quantity: 0,
+      rating: 4.5,
+      deliveryTime: '40 min',
+      deliveryCost: 'Free',
+      description:
+          'Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
     ),
     PopularFoodModel(
       id: '3',
@@ -45,6 +63,11 @@ class PopularFoodModel extends Equatable {
       subtitle: 'Kaji Firm Kitchen',
       price: 75,
       quantity: 0,
+      rating: 4.5,
+      deliveryTime: '40 min',
+      deliveryCost: 'Free',
+      description:
+          'Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
     ),
     PopularFoodModel(
       id: '4',
@@ -53,6 +76,11 @@ class PopularFoodModel extends Equatable {
       subtitle: 'Kabab restaurant',
       price: 94,
       quantity: 0,
+      rating: 4.5,
+      deliveryTime: '40 min',
+      deliveryCost: 'Free',
+      description:
+          'Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.',
     ),
   ];
 }

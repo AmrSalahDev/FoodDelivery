@@ -9,17 +9,59 @@
 // ignore_for_file: type=lint
 // ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsIconsGen {
   const $AssetsIconsGen();
+
+  /// File path: assets/icons/ic_broccoli.svg
+  SvgGenImage get icBroccoli =>
+      const SvgGenImage('assets/icons/ic_broccoli.svg');
+
+  /// File path: assets/icons/ic_chicken.svg
+  SvgGenImage get icChicken => const SvgGenImage('assets/icons/ic_chicken.svg');
+
+  /// File path: assets/icons/ic_garlic.svg
+  SvgGenImage get icGarlic => const SvgGenImage('assets/icons/ic_garlic.svg');
+
+  /// File path: assets/icons/ic_ginger.svg
+  SvgGenImage get icGinger => const SvgGenImage('assets/icons/ic_ginger.svg');
+
+  /// File path: assets/icons/ic_onion.svg
+  SvgGenImage get icOnion => const SvgGenImage('assets/icons/ic_onion.svg');
+
+  /// File path: assets/icons/ic_orange.svg
+  SvgGenImage get icOrange => const SvgGenImage('assets/icons/ic_orange.svg');
+
+  /// File path: assets/icons/ic_pappers.svg
+  SvgGenImage get icPappers => const SvgGenImage('assets/icons/ic_pappers.svg');
+
+  /// File path: assets/icons/ic_salt.svg
+  SvgGenImage get icSalt => const SvgGenImage('assets/icons/ic_salt.svg');
 
   /// File path: assets/icons/ic_sort_settings.png
   AssetGenImage get icSortSettings =>
       const AssetGenImage('assets/icons/ic_sort_settings.png');
 
+  /// File path: assets/icons/ic_walnut.svg
+  SvgGenImage get icWalnut => const SvgGenImage('assets/icons/ic_walnut.svg');
+
   /// List of all assets
-  List<AssetGenImage> get values => [icSortSettings];
+  List<dynamic> get values => [
+    icBroccoli,
+    icChicken,
+    icGarlic,
+    icGinger,
+    icOnion,
+    icOrange,
+    icPappers,
+    icSalt,
+    icSortSettings,
+    icWalnut,
+  ];
 }
 
 class $AssetsImagesGen {
@@ -253,4 +295,78 @@ class AssetGenImageAnimation {
   final bool isAnimation;
   final Duration duration;
   final int frames;
+}
+
+class SvgGenImage {
+  const SvgGenImage(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = false;
+
+  const SvgGenImage.vec(this._assetName, {this.size, this.flavors = const {}})
+    : _isVecFormat = true;
+
+  final String _assetName;
+  final Size? size;
+  final Set<String> flavors;
+  final bool _isVecFormat;
+
+  _svg.SvgPicture svg({
+    Key? key,
+    bool matchTextDirection = false,
+    AssetBundle? bundle,
+    String? package,
+    double? width,
+    double? height,
+    BoxFit fit = BoxFit.contain,
+    AlignmentGeometry alignment = Alignment.center,
+    bool allowDrawingOutsideViewBox = false,
+    WidgetBuilder? placeholderBuilder,
+    String? semanticsLabel,
+    bool excludeFromSemantics = false,
+    _svg.SvgTheme? theme,
+    _svg.ColorMapper? colorMapper,
+    ColorFilter? colorFilter,
+    Clip clipBehavior = Clip.hardEdge,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
+  }) {
+    final _svg.BytesLoader loader;
+    if (_isVecFormat) {
+      loader = _vg.AssetBytesLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+      );
+    } else {
+      loader = _svg.SvgAssetLoader(
+        _assetName,
+        assetBundle: bundle,
+        packageName: package,
+        theme: theme,
+        colorMapper: colorMapper,
+      );
+    }
+    return _svg.SvgPicture(
+      loader,
+      key: key,
+      matchTextDirection: matchTextDirection,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
+      placeholderBuilder: placeholderBuilder,
+      semanticsLabel: semanticsLabel,
+      excludeFromSemantics: excludeFromSemantics,
+      colorFilter:
+          colorFilter ??
+          (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
+      clipBehavior: clipBehavior,
+      cacheColorFilter: cacheColorFilter,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
 }

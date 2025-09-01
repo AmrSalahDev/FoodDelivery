@@ -41,6 +41,8 @@ class AppStrings {
   static const String allCategories = "All Categories";
   static const String openRestaurants = "Open Restaurants";
   static const String search = "Search";
+  static const String showMore = "Show more";
+  static const String showLess = "Show less";
 
   // food
   static const String burger = "Burger";
