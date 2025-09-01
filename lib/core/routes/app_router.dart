@@ -18,6 +18,7 @@ import 'package:food_delivery/features/register/ui/cubit/register_cubit.dart';
 import 'package:food_delivery/features/register/ui/screens/register_screen.dart';
 import 'package:food_delivery/features/verification_password/ui/screens/verification_password_screen.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_transitions/go_transitions.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppPaths {
@@ -81,6 +82,7 @@ class AppRouter {
       ),
       GoRoute(
         path: AppPaths.foodDetails,
+        pageBuilder: GoTransitions.fade.call,
         builder: (context, state) {
           final args = state.extra as FoodDetailsScreenArgs;
           return FoodDetailsScreen(popularFoodModel: args.popularFoodModel);

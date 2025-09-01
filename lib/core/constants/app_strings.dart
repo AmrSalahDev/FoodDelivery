@@ -43,6 +43,9 @@ class AppStrings {
   static const String search = "Search";
   static const String showMore = "Show more";
   static const String showLess = "Show less";
+  static const String addToCart = "Add to cart";
+  static const String ingridents = "Ingridents";
+  static const String size = "Size: ";
 
   // food
   static const String burger = "Burger";
