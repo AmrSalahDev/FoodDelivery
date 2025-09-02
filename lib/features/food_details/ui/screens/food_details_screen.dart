@@ -23,18 +23,44 @@ class FoodDetailsScreen extends StatefulWidget {
   State<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
 }
 
-class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
+class _FoodDetailsScreenState extends State<FoodDetailsScreen>
+    with SingleTickerProviderStateMixin {
   late final AddToCartController _addToCartController;
+  late AnimationController _animationController;
+  late Animation<Offset> _foodSlideAnimation;
+  late Animation<Offset> _backBtnSlideAnimation;
+  late Animation<Offset> _favoriteBtnSlideAnimation;
 
   @override
   void initState() {
     super.initState();
     _addToCartController = AddToCartController(initialQuantity: 2);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 800),
+    );
+
+    _foodSlideAnimation = _buildSlideAnimation(const Offset(0, -1));
+
+    _backBtnSlideAnimation = _buildSlideAnimation(const Offset(-2, 0));
+
+    _favoriteBtnSlideAnimation = _buildSlideAnimation(const Offset(2, 0));
+
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _animationController.forward(),
+    );
+  }
+
+  Animation<Offset> _buildSlideAnimation(Offset begin) {
+    return Tween<Offset>(begin: begin, end: Offset.zero).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
+    );
   }
 
   @override
   void dispose() {
     _addToCartController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -95,10 +121,13 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         child: Column(
           children: [
             _buildAppBar(context),
-            Image.asset(
-              widget.popularFoodModel.image,
-              width: 245.w,
-              height: 245.h,
+            SlideTransition(
+              position: _foodSlideAnimation,
+              child: Image.asset(
+                widget.popularFoodModel.image,
+                width: 245.w,
+                height: 245.h,
+              ),
             ),
           ],
         ),
@@ -319,7 +348,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
             ),
             SizedBox(height: 20.h),
             CustomRectangleButton(
-              onPressed: () {},
+              onPressed: () {
+                _animationController.toggle();
+              },
               title: AppStrings.addToCart.toUpperCase(),
               height: 60.h,
               backgroundColor: AppColors.secondary,
@@ -334,25 +365,31 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   Widget _buildAppBar(BuildContext context) {
     return Row(
       children: [
-        CustomCircleButton(
-          onPressed: () => Navigator.pop(context),
-          backgroundColor: AppColors.white,
-          size: 55.h,
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 20.h,
-            color: AppColors.darkBlue,
+        SlideTransition(
+          position: _backBtnSlideAnimation,
+          child: CustomCircleButton(
+            onPressed: () => Navigator.pop(context),
+            backgroundColor: AppColors.white,
+            size: 55.h,
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 20.h,
+              color: AppColors.darkBlue,
+            ),
           ),
         ),
         const Spacer(),
-        CustomCircleButton(
-          backgroundColor: AppColors.white,
-          size: 55.h,
-          icon: FavoriteButton(
-            heartColor: Color(0xFFFF8400),
-            size: 24.h,
-            onFavorited: () {},
-            onUnfavorited: () {},
+        SlideTransition(
+          position: _favoriteBtnSlideAnimation,
+          child: CustomCircleButton(
+            backgroundColor: AppColors.white,
+            size: 55.h,
+            icon: FavoriteButton(
+              heartColor: Color(0xFFFF8400),
+              size: 24.h,
+              onFavorited: () {},
+              onUnfavorited: () {},
+            ),
           ),
         ),
       ],
@@ -362,7 +399,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
 
 class AddToCartController extends ChangeNotifier {
   int _quantity;
-
   final int minQuantity;
   final int maxQuantity;
 
