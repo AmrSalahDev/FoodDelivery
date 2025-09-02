@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen>
     showDialog(
       context: parentContext,
       useSafeArea: false,
-      barrierDismissible: false,
+      barrierDismissible: true,
       barrierColor: Colors.black38,
       builder: (BuildContext dialogContext) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -230,12 +230,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   Widget _buildCategories() {
     return SizedBox(
-      height: 175.h,
+      height: 180.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         itemCount: FoodItemsModel.foodItems.length,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
         itemBuilder: (context, index) {
           return _buildCategoryItem(index);
         },
@@ -442,7 +442,7 @@ class _HomeScreenState extends State<HomeScreen>
         const Spacer(),
         Badge(
           backgroundColor: AppColors.secondary,
-          offset: Offset(-10, 0),
+          offset: Offset(-10.w, 0),
           label: Text(
             faker.faker.randomGenerator.integer(100).toString(),
             style: GoogleFonts.sen(

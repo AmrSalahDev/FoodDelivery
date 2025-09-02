@@ -257,44 +257,41 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
           style: GoogleFonts.sen(fontSize: 16.sp, color: AppColors.darkBlue),
         ),
         SizedBox(height: 20.h),
-        GridView.builder(
-          itemBuilder: (context, index) => Column(
-            children: [
-              CustomCircleButton(
-                onPressed: () {},
-                backgroundColor: Color(0xFFFFEBE4),
-                size: 60.h,
-                icon: SvgPicture.asset(
-                  // placeholderBuilder: (context) {
-                  //   return Container(
-                  //     height: 60.h,
-                  //     width: 60.h,
-                  //     color: Color(0xFFFFEBE4),
-                  //   );
-                  // },
-                  IngridentsModel.ingridentsList[index].image,
+        Wrap(
+          spacing: 12.w,
+          runSpacing: 20.h,
+          children: IngridentsModel.ingridentsList
+              .map(
+                (ingridents) => Column(
+                  children: [
+                    CustomCircleButton(
+                      onPressed: () {},
+                      backgroundColor: Color(0xFFFFEBE4),
+                      size: 60.h,
+                      icon: SvgPicture.asset(
+                        // placeholderBuilder: (context) {
+                        //   return Container(
+                        //     height: 60.h,
+                        //     width: 60.h,
+                        //     color: Color(0xFFFFEBE4),
+                        //   );
+                        // },
+                        ingridents.image,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      ingridents.title,
+                      style: GoogleFonts.sen(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF747783),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(height: 10.h),
-              Text(
-                IngridentsModel.ingridentsList[index].title,
-                style: GoogleFonts.sen(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF747783),
-                ),
-              ),
-            ],
-          ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 15,
-            childAspectRatio: 0.6,
-          ),
-          itemCount: IngridentsModel.ingridentsList.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+              )
+              .toList(),
         ),
       ],
     );
@@ -349,7 +346,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
             SizedBox(height: 20.h),
             CustomRectangleButton(
               onPressed: () {
-                _animationController.toggle();
+                _animationController.reset();
+                _animationController.forward();
               },
               title: AppStrings.addToCart.toUpperCase(),
               height: 60.h,

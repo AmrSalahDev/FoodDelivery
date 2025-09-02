@@ -74,6 +74,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   _buildSuggestedRestaurants(),
                   SizedBox(height: 30.h),
                   _buildPopularFastFood(),
+                  SizedBox(height: 50.h),
                 ],
               ],
             ),
@@ -98,11 +99,11 @@ class _SearchScreenState extends State<SearchScreen> {
         SizedBox(height: 35.h),
 
         GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 25,
-            //childAspectRatio: 0.8,
+            crossAxisSpacing: 10.w,
+            mainAxisSpacing: 40.h,
+            mainAxisExtent: 150.h,
           ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -115,57 +116,65 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildPopularFastFoodItem({required int index}) {
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.center,
-      children: [
-        Container(
-          //margin: const EdgeInsets.only(right: 7, left: 7),
-          width: 153.w,
-          height: 144.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 65.h),
-              Text(
-                PopularFastFoodModel.popularFastFoodList[index].title,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkBlue,
+    return LayoutBuilder(
+      builder: (context, constraints) => Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          Container(
+            width: constraints.maxWidth,
+            height: constraints.maxHeight,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
-              ),
-              Text(
-                PopularFastFoodModel.popularFastFoodList[index].title,
-                style: GoogleFonts.sen(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF646982),
+              ],
+            ),
+            child: Column(
+              children: [
+                SizedBox(height: constraints.maxHeight * 0.5), // 50%
+                Text(
+                  PopularFastFoodModel.popularFastFoodList[index].title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBlue,
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  PopularFastFoodModel.popularFastFoodList[index].title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.sen(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                    color: Color(0xFF646982),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-        Positioned(
-          top: -25,
-          child: Image.asset(
-            PopularFastFoodModel.popularFastFoodList[index].image,
-            width: 100.w,
-            height: 100.h,
-            fit: BoxFit.cover,
+
+          Positioned(
+            top: -35.h,
+            child: Image.asset(
+              PopularFastFoodModel.popularFastFoodList[index].image,
+              width: constraints.maxWidth,
+              height: constraints.maxHeight * 0.7,
+              fit: BoxFit.contain,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -251,7 +260,6 @@ class _SearchScreenState extends State<SearchScreen> {
           onPressed: () {},
           backgroundColor: AppColors.lightGray,
           size: 55.h,
-
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: AppColors.darkBlue,
@@ -270,7 +278,7 @@ class _SearchScreenState extends State<SearchScreen> {
         const Spacer(),
         Badge(
           backgroundColor: AppColors.secondary,
-          offset: Offset(-5, 0),
+          offset: Offset(-5.w, 0),
           label: Text(
             faker.faker.randomGenerator.integer(100).toString(),
             style: GoogleFonts.sen(
@@ -429,7 +437,9 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           widget.onSubmitted!(value);
         }
       },
+
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
         filled: true,
         fillColor: AppColors.searchBarColor,
         hintText: AppStrings.search,

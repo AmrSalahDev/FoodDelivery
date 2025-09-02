@@ -1,3 +1,4 @@
+import 'package:animated_digit/animated_digit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -91,14 +92,25 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           ),
         ),
         SizedBox(width: 10.w),
-        Chip(
-          label: Text(widget.query!),
-          backgroundColor: AppColors.white,
-          onDeleted: () {},
-          deleteIcon: Icon(Icons.arrow_drop_down, size: 24.h),
-          deleteIconColor: AppColors.secondary,
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
-          shape: StadiumBorder(side: BorderSide(color: Color(0xFFECF0F4))),
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.r),
+            border: Border.all(color: Color(0xFFECF0F4), width: 1),
+            color: AppColors.white,
+          ),
+          padding: EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            children: [
+              SizedBox(width: 15.w),
+              Text(widget.query!),
+              Icon(
+                Icons.arrow_drop_down,
+                size: 24.h,
+                color: AppColors.secondary,
+              ),
+              SizedBox(width: 10.w),
+            ],
+          ),
         ),
         const Spacer(),
         CustomCircleButton(
@@ -134,11 +146,11 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
           ),
           SizedBox(height: 50.h),
           GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 30,
-              //childAspectRatio: 0.8,
+              crossAxisSpacing: 15.w,
+              mainAxisSpacing: 45.h,
+              mainAxisExtent: 190.h,
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -158,84 +170,98 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         AppPaths.foodDetails,
         extra: FoodDetailsScreenArgs(popularFoodModel: popularFood),
       ),
-      child: Stack(
-        clipBehavior: Clip.none,
-        alignment: Alignment.center,
-        children: [
-          Container(
-            width: 153.w,
-            height: 175.h,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 70.h),
-                Text(
-                  popularFood.title,
-                  style: GoogleFonts.sen(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.darkBlue,
+      child: LayoutBuilder(
+        builder: (context, constraints) => Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
                   ),
-                ),
-                Text(
-                  popularFood.subtitle,
-                  style: GoogleFonts.sen(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.normal,
-                    color: Color(0xFF646982),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: constraints.maxHeight * 0.4), // 40%
+                  Text(
+                    popularFood.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.sen(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkBlue,
+                    ),
                   ),
-                ),
-                SizedBox(height: 10.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    children: [
-                      Text(
-                        "\$${popularFood.price.toString()}",
-                        style: GoogleFonts.sen(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.darkBlue,
+                  Text(
+                    popularFood.subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.sen(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF646982),
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 7.h,
+                    ),
+                    child: Row(
+                      children: [
+                        AnimatedDigitWidget(
+                          value: popularFood.price,
+                          prefix: '\$',
+                          textStyle: GoogleFonts.sen(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkBlue,
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      AddToCartButton(
-                        onIncrement: (value) {},
-                        onDecrement: (value) {},
-                        maxQuantity: 100,
-                        width: 75.w,
-                        height: 40.h,
-                        backgroundColor: AppColors.secondary,
-                        iconColor: AppColors.white,
-                        initialSize: 40.h,
-                        countColor: AppColors.white,
-                      ),
-                    ],
+                        const Spacer(),
+                        AddToCartButton(
+                          onIncrement: (value) {},
+                          onDecrement: (value) {},
+                          maxQuantity: 100,
+                          width: 75.w,
+                          height: 40.h,
+                          backgroundColor: AppColors.secondary,
+                          iconColor: AppColors.white,
+                          initialSize: 40.h,
+                          countColor: AppColors.white,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Positioned(
-            top: -25,
-            child: Image.asset(
-              popularFood.image,
-              width: 100.w,
-              height: 100.h,
-              fit: BoxFit.cover,
+
+            Positioned(
+              top: -35.h,
+              child: Image.asset(
+                popularFood.image,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight * 0.6,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
