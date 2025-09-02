@@ -37,7 +37,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
     _addToCartController = AddToCartController(initialQuantity: 2);
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 1000),
     );
 
     _foodSlideAnimation = _buildSlideAnimation(const Offset(0, -1));

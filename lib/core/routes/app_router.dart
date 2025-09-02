@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
+import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/core/routes/args/verification_screen_args.dart';
 import 'package:food_delivery/features/access_location/ui/screens/access_location_screen.dart';
@@ -16,6 +17,7 @@ import 'package:food_delivery/features/login/ui/screens/login_screen.dart';
 import 'package:food_delivery/features/onboarding/ui/screens/on_boarding_screen.dart';
 import 'package:food_delivery/features/register/ui/cubit/register_cubit.dart';
 import 'package:food_delivery/features/register/ui/screens/register_screen.dart';
+import 'package:food_delivery/features/restaurant_details/ui/screens/restaurant_details_screen.dart';
 import 'package:food_delivery/features/verification_password/ui/screens/verification_password_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:go_transitions/go_transitions.dart';
@@ -32,6 +34,7 @@ class AppPaths {
   static const String homeSearch = "/homeSearch";
   static const String homeSearchResult = "/homeSearchResult";
   static const String foodDetails = "/foodDetails";
+  static const String restaurantDetails = "/restaurantDetails";
 }
 
 class SupabaseAuthNotifier extends ChangeNotifier {
@@ -86,6 +89,16 @@ class AppRouter {
         builder: (context, state) {
           final args = state.extra as FoodDetailsScreenArgs;
           return FoodDetailsScreen(popularFoodModel: args.popularFoodModel);
+        },
+      ),
+      GoRoute(
+        path: AppPaths.restaurantDetails,
+        pageBuilder: GoTransitions.fade.call,
+        builder: (context, state) {
+          final args = state.extra as RestaurantDetailsScreenArgs;
+          return RestaurantDetailsScreen(
+            restaurantItemsModel: args.restaurantItemsModel,
+          );
         },
       ),
 

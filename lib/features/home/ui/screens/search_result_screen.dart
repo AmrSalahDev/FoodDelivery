@@ -10,6 +10,7 @@ import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
+import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
 import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
 import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
 import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
@@ -282,119 +283,125 @@ class _RestaurantItemState extends State<RestaurantItem> {
   Widget build(BuildContext context) {
     final restaurant = RestaurantItemsModel.restaurantItems[widget.index];
 
-    return Skeletonizer(
-      enabled: _isLoading,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(24.r),
-            child: CachedNetworkImage(
-              imageUrl: restaurant.image,
-              fit: BoxFit.fill,
-              height: 200.h,
-              width: double.infinity,
-
-              placeholder: (context, url) => Container(
+    return GestureDetector(
+      onTap: () => context.push(
+        AppPaths.restaurantDetails,
+        extra: RestaurantDetailsScreenArgs(restaurant),
+      ),
+      child: Skeletonizer(
+        enabled: _isLoading,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24.r),
+              child: CachedNetworkImage(
+                imageUrl: restaurant.image,
+                fit: BoxFit.fill,
                 height: 200.h,
                 width: double.infinity,
-                color: AppColors.lightGray,
-              ),
-              imageBuilder: (context, imageProvider) {
-                // Use addPostFrameCallback to avoid calling setState during build
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && _isLoading) {
-                    setState(() => _isLoading = false);
-                  }
-                });
-                return Image(
-                  image: imageProvider,
+
+                placeholder: (context, url) => Container(
                   height: 200.h,
                   width: double.infinity,
-                  fit: BoxFit.fill,
-                );
-              },
-              errorWidget: (context, url, error) =>
-                  Center(child: Icon(Icons.error, color: Colors.red)),
+                  color: AppColors.lightGray,
+                ),
+                imageBuilder: (context, imageProvider) {
+                  // Use addPostFrameCallback to avoid calling setState during build
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted && _isLoading) {
+                      setState(() => _isLoading = false);
+                    }
+                  });
+                  return Image(
+                    image: imageProvider,
+                    height: 200.h,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  );
+                },
+                errorWidget: (context, url, error) =>
+                    Center(child: Icon(Icons.error, color: Colors.red)),
+              ),
             ),
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            restaurant.name,
-            style: GoogleFonts.sen(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.normal,
-              color: Color(0xFF181C2E),
+            SizedBox(height: 10.h),
+            Text(
+              restaurant.name,
+              style: GoogleFonts.sen(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.normal,
+                color: Color(0xFF181C2E),
+              ),
             ),
-          ),
-          SizedBox(height: 10.h),
-          Row(
-            children: restaurant.foodTypes
-                .map(
-                  (foodType) => Text(
-                    foodType == restaurant.foodTypes.last
-                        ? foodType
-                        : "$foodType - ",
-                    style: GoogleFonts.sen(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFFA0A5BA),
+            SizedBox(height: 10.h),
+            Row(
+              children: restaurant.foodTypes
+                  .map(
+                    (foodType) => Text(
+                      foodType == restaurant.foodTypes.last
+                          ? foodType
+                          : "$foodType - ",
+                      style: GoogleFonts.sen(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.normal,
+                        color: Color(0xFFA0A5BA),
+                      ),
                     ),
+                  )
+                  .toList(),
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Icon(
+                  FontAwesomeIcons.star,
+                  color: AppColors.secondary,
+                  size: 20.h,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.rate,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF181C2E),
                   ),
-                )
-                .toList(),
-          ),
-          SizedBox(height: 20.h),
-          Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.star,
-                color: AppColors.secondary,
-                size: 20.h,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.rate,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
                 ),
-              ),
-              SizedBox(width: 30.w),
-              Icon(
-                FontAwesomeIcons.truck,
-                color: AppColors.secondary,
-                size: 20.h,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.deliveryCost,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
+                SizedBox(width: 30.w),
+                Icon(
+                  FontAwesomeIcons.truck,
+                  color: AppColors.secondary,
+                  size: 20.h,
                 ),
-              ),
-              SizedBox(width: 30.w),
-              Icon(
-                FontAwesomeIcons.clock,
-                color: AppColors.secondary,
-                size: 20.h,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.deliveryTime,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.deliveryCost,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF181C2E),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 30.h),
-        ],
+                SizedBox(width: 30.w),
+                Icon(
+                  FontAwesomeIcons.clock,
+                  color: AppColors.secondary,
+                  size: 20.h,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.deliveryTime,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF181C2E),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30.h),
+          ],
+        ),
       ),
     );
   }
