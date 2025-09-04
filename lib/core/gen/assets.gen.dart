@@ -12,6 +12,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart' as _svg;
+import 'package:lottie/lottie.dart' as _lottie;
 import 'package:vector_graphics/vector_graphics.dart' as _vg;
 
 class $AssetsIconsGen {
@@ -114,52 +115,43 @@ class $AssetsLogoGen {
   List<AssetGenImage> get values => [splash];
 }
 
+class $AssetsLottieGen {
+  const $AssetsLottieGen();
+
+  /// File path: assets/lottie/error.json
+  LottieGenImage get error => const LottieGenImage('assets/lottie/error.json');
+
+  /// File path: assets/lottie/hand_loading.json
+  LottieGenImage get handLoading =>
+      const LottieGenImage('assets/lottie/hand_loading.json');
+
+  /// List of all assets
+  List<LottieGenImage> get values => [error, handLoading];
+}
+
 class $AssetsImagesFoodGen {
   const $AssetsImagesFoodGen();
 
-  /// File path: assets/images/food/buffalo_burger.png
-  AssetGenImage get buffaloBurger =>
-      const AssetGenImage('assets/images/food/buffalo_burger.png');
-
-  /// File path: assets/images/food/buffalo_pizza.png
-  AssetGenImage get buffaloPizza =>
-      const AssetGenImage('assets/images/food/buffalo_pizza.png');
-
-  /// File path: assets/images/food/bullseye_burger.png
-  AssetGenImage get bullseyeBurger =>
-      const AssetGenImage('assets/images/food/bullseye_burger.png');
-
-  /// File path: assets/images/food/burger.png
-  AssetGenImage get burger =>
-      const AssetGenImage('assets/images/food/burger.png');
-
-  /// File path: assets/images/food/burger_bistro.png
-  AssetGenImage get burgerBistro =>
-      const AssetGenImage('assets/images/food/burger_bistro.png');
-
-  /// File path: assets/images/food/european_pizza.png
-  AssetGenImage get europeanPizza =>
-      const AssetGenImage('assets/images/food/european_pizza.png');
+  /// Directory path: assets/images/food/burger
+  $AssetsImagesFoodBurgerGen get burger => const $AssetsImagesFoodBurgerGen();
 
   /// File path: assets/images/food/french_fries.png
   AssetGenImage get frenchFries =>
       const AssetGenImage('assets/images/food/french_fries.png');
 
-  /// File path: assets/images/food/pasta.png
-  AssetGenImage get pasta =>
-      const AssetGenImage('assets/images/food/pasta.png');
+  /// Directory path: assets/images/food/pasta
+  $AssetsImagesFoodPastaGen get pasta => const $AssetsImagesFoodPastaGen();
 
-  /// File path: assets/images/food/pizza.png
-  AssetGenImage get pizza =>
-      const AssetGenImage('assets/images/food/pizza.png');
+  /// Directory path: assets/images/food/pizza
+  $AssetsImagesFoodPizzaGen get pizza => const $AssetsImagesFoodPizzaGen();
 
   /// File path: assets/images/food/salad.png
   AssetGenImage get salad =>
       const AssetGenImage('assets/images/food/salad.png');
 
-  /// File path: assets/images/food/smokin_burger.png
-  AssetGenImage get smokinBurger =>
-      const AssetGenImage('assets/images/food/smokin_burger.png');
+  /// Directory path: assets/images/food/sandwich
+  $AssetsImagesFoodSandwichGen get sandwich =>
+      const $AssetsImagesFoodSandwichGen();
 
   /// File path: assets/images/food/soup.png
   AssetGenImage get soup => const AssetGenImage('assets/images/food/soup.png');
@@ -169,21 +161,7 @@ class $AssetsImagesFoodGen {
       const AssetGenImage('assets/images/food/steak.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
-    buffaloBurger,
-    buffaloPizza,
-    bullseyeBurger,
-    burger,
-    burgerBistro,
-    europeanPizza,
-    frenchFries,
-    pasta,
-    pizza,
-    salad,
-    smokinBurger,
-    soup,
-    steak,
-  ];
+  List<AssetGenImage> get values => [frenchFries, salad, soup, steak];
 }
 
 class $AssetsImagesRestaurantsGen {
@@ -197,6 +175,125 @@ class $AssetsImagesRestaurantsGen {
   List<AssetGenImage> get values => [restaurant1];
 }
 
+class $AssetsImagesFoodBurgerGen {
+  const $AssetsImagesFoodBurgerGen();
+
+  /// File path: assets/images/food/burger/burger_1.png
+  AssetGenImage get burger1 =>
+      const AssetGenImage('assets/images/food/burger/burger_1.png');
+
+  /// File path: assets/images/food/burger/burger_2.png
+  AssetGenImage get burger2 =>
+      const AssetGenImage('assets/images/food/burger/burger_2.png');
+
+  /// File path: assets/images/food/burger/burger_3.png
+  AssetGenImage get burger3 =>
+      const AssetGenImage('assets/images/food/burger/burger_3.png');
+
+  /// File path: assets/images/food/burger/burger_4.png
+  AssetGenImage get burger4 =>
+      const AssetGenImage('assets/images/food/burger/burger_4.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [burger1, burger2, burger3, burger4];
+}
+
+class $AssetsImagesFoodPastaGen {
+  const $AssetsImagesFoodPastaGen();
+
+  /// File path: assets/images/food/pasta/pasta_1.png
+  AssetGenImage get pasta1 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_1.png');
+
+  /// File path: assets/images/food/pasta/pasta_2.png
+  AssetGenImage get pasta2 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_2.png');
+
+  /// File path: assets/images/food/pasta/pasta_3.png
+  AssetGenImage get pasta3 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_3.png');
+
+  /// File path: assets/images/food/pasta/pasta_4.png
+  AssetGenImage get pasta4 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_4.png');
+
+  /// File path: assets/images/food/pasta/pasta_5.png
+  AssetGenImage get pasta5 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_5.png');
+
+  /// File path: assets/images/food/pasta/pasta_6.png
+  AssetGenImage get pasta6 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_6.png');
+
+  /// File path: assets/images/food/pasta/pasta_7.png
+  AssetGenImage get pasta7 =>
+      const AssetGenImage('assets/images/food/pasta/pasta_7.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    pasta1,
+    pasta2,
+    pasta3,
+    pasta4,
+    pasta5,
+    pasta6,
+    pasta7,
+  ];
+}
+
+class $AssetsImagesFoodPizzaGen {
+  const $AssetsImagesFoodPizzaGen();
+
+  /// File path: assets/images/food/pizza/pizza_1.png
+  AssetGenImage get pizza1 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_1.png');
+
+  /// File path: assets/images/food/pizza/pizza_2.png
+  AssetGenImage get pizza2 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_2.png');
+
+  /// File path: assets/images/food/pizza/pizza_3.png
+  AssetGenImage get pizza3 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_3.png');
+
+  /// File path: assets/images/food/pizza/pizza_4.png
+  AssetGenImage get pizza4 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_4.png');
+
+  /// File path: assets/images/food/pizza/pizza_5.png
+  AssetGenImage get pizza5 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_5.png');
+
+  /// File path: assets/images/food/pizza/pizza_6.png
+  AssetGenImage get pizza6 =>
+      const AssetGenImage('assets/images/food/pizza/pizza_6.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+    pizza1,
+    pizza2,
+    pizza3,
+    pizza4,
+    pizza5,
+    pizza6,
+  ];
+}
+
+class $AssetsImagesFoodSandwichGen {
+  const $AssetsImagesFoodSandwichGen();
+
+  /// File path: assets/images/food/sandwich/sand_1.png
+  AssetGenImage get sand1 =>
+      const AssetGenImage('assets/images/food/sandwich/sand_1.png');
+
+  /// File path: assets/images/food/sandwich/sand_2.png
+  AssetGenImage get sand2 =>
+      const AssetGenImage('assets/images/food/sandwich/sand_2.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [sand1, sand2];
+}
+
 class Assets {
   const Assets._();
 
@@ -204,6 +301,7 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLogoGen logo = $AssetsLogoGen();
+  static const $AssetsLottieGen lottie = $AssetsLottieGen();
 
   /// List of all assets
   static List<String> get values => [aEnv];
@@ -363,6 +461,73 @@ class SvgGenImage {
           (color == null ? null : ColorFilter.mode(color, colorBlendMode)),
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
+    );
+  }
+
+  String get path => _assetName;
+
+  String get keyName => _assetName;
+}
+
+class LottieGenImage {
+  const LottieGenImage(this._assetName, {this.flavors = const {}});
+
+  final String _assetName;
+  final Set<String> flavors;
+
+  _lottie.LottieBuilder lottie({
+    Animation<double>? controller,
+    bool? animate,
+    _lottie.FrameRate? frameRate,
+    bool? repeat,
+    bool? reverse,
+    _lottie.LottieDelegates? delegates,
+    _lottie.LottieOptions? options,
+    void Function(_lottie.LottieComposition)? onLoaded,
+    _lottie.LottieImageProviderFactory? imageProviderFactory,
+    Key? key,
+    AssetBundle? bundle,
+    Widget Function(BuildContext, Widget, _lottie.LottieComposition?)?
+    frameBuilder,
+    ImageErrorWidgetBuilder? errorBuilder,
+    double? width,
+    double? height,
+    BoxFit? fit,
+    AlignmentGeometry? alignment,
+    String? package,
+    bool? addRepaintBoundary,
+    FilterQuality? filterQuality,
+    void Function(String)? onWarning,
+    _lottie.LottieDecoder? decoder,
+    _lottie.RenderCache? renderCache,
+    bool? backgroundLoading,
+  }) {
+    return _lottie.Lottie.asset(
+      _assetName,
+      controller: controller,
+      animate: animate,
+      frameRate: frameRate,
+      repeat: repeat,
+      reverse: reverse,
+      delegates: delegates,
+      options: options,
+      onLoaded: onLoaded,
+      imageProviderFactory: imageProviderFactory,
+      key: key,
+      bundle: bundle,
+      frameBuilder: frameBuilder,
+      errorBuilder: errorBuilder,
+      width: width,
+      height: height,
+      fit: fit,
+      alignment: alignment,
+      package: package,
+      addRepaintBoundary: addRepaintBoundary,
+      filterQuality: filterQuality,
+      onWarning: onWarning,
+      decoder: decoder,
+      renderCache: renderCache,
+      backgroundLoading: backgroundLoading,
     );
   }
 

@@ -1,8 +1,11 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/app/cubits/food_cubit.dart';
+import 'package:food_delivery/app/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/app/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 
@@ -11,12 +14,10 @@ import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
-import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
-import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
-import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
+import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/app/models/restaurant_imodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/ui/buttons/add_to_cart_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SearchResultScreen extends StatefulWidget {
@@ -28,6 +29,19 @@ class SearchResultScreen extends StatefulWidget {
 }
 
 class _SearchResultScreenState extends State<SearchResultScreen> {
+  late final FoodCubit _foodCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _foodCubit = context.read<FoodCubit>();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +82,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         ),
         SizedBox(height: 20.h),
         ListView.builder(
-          itemCount: RestaurantItemsModel.restaurantItems.length,
+          itemCount: RestaurantModel.restaurantItems.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
@@ -104,6 +118,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             children: [
               SizedBox(width: 15.w),
               Text(widget.query!),
+              //Text('Burgers'),
               Icon(
                 Icons.arrow_drop_down,
                 size: 24.h,
@@ -139,6 +154,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
         children: [
           Text(
             "Popular ${widget.query}",
+            //"Popular Burgers",
             style: GoogleFonts.sen(
               fontSize: 20.sp,
               fontWeight: FontWeight.normal,
@@ -155,7 +171,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
             ),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: PopularFastFoodModel.popularFastFoodList.length,
+            itemCount: FoodModel.foodList.length,
             itemBuilder: (context, index) =>
                 _buildPopularFoodItem(index: index),
           ),
@@ -165,11 +181,15 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
   }
 
   Widget _buildPopularFoodItem({required int index}) {
-    final popularFood = PopularFoodModel.popularFoodList[index];
+    final popularFood = FoodModel.foodList[index];
+    final addToCartController = AddToCartController();
+    final qty = context.watch<FoodCubit>().getQuantity(popularFood.id);
+    addToCartController.setQuantity(qty);
+
     return GestureDetector(
       onTap: () => context.push(
         AppPaths.foodDetails,
-        extra: FoodDetailsScreenArgs(popularFoodModel: popularFood),
+        extra: FoodDetailsScreenArgs(foodModel: popularFood),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) => Stack(
@@ -205,7 +225,7 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                     ),
                   ),
                   Text(
-                    popularFood.subtitle,
+                    popularFood.restaurantName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
@@ -234,15 +254,25 @@ class _SearchResultScreenState extends State<SearchResultScreen> {
                           ),
                         ),
                         const Spacer(),
-                        AddToCartButton(
-                          onIncrement: (value) {},
-                          onDecrement: (value) {},
-                          maxQuantity: 100,
-                          width: 75.w,
-                          height: 40.h,
+                        AddToCartButtonV2(
+                          controller: addToCartController,
+                          onIncrement: (value) {
+                            context.read<FoodCubit>().incrementQuantity(
+                              popularFood.id,
+                            );
+                          },
+                          onDecrement: (value) {
+                            context.read<FoodCubit>().decrementQuantity(
+                              popularFood.id,
+                            );
+                          },
+
+                          width: 90.w,
+                          height: 45.h,
                           backgroundColor: AppColors.secondary,
                           iconColor: AppColors.white,
                           initialSize: 40.h,
+                          iconBackgroundColor: Colors.white.withAlpha(100),
                           countColor: AppColors.white,
                         ),
                       ],
@@ -281,7 +311,7 @@ class _RestaurantItemState extends State<RestaurantItem> {
 
   @override
   Widget build(BuildContext context) {
-    final restaurant = RestaurantItemsModel.restaurantItems[widget.index];
+    final restaurant = RestaurantModel.restaurantItems[widget.index];
 
     return GestureDetector(
       onTap: () => context.push(

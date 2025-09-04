@@ -9,6 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:food_delivery/app/cubits/food_cubit.dart' as _i393;
 import 'package:food_delivery/core/services/auth_service.dart' as _i717;
 import 'package:food_delivery/core/services/location_service.dart' as _i750;
 import 'package:food_delivery/core/services/toast_service.dart' as _i947;
@@ -40,6 +41,7 @@ extension GetItInjectableX on _i174.GetIt {
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.factory<_i718.HomeCubit>(() => _i718.HomeCubit());
+    gh.lazySingleton<_i393.FoodCubit>(() => _i393.FoodCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
     gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());

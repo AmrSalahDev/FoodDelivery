@@ -8,7 +8,7 @@ import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
-import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
+import 'package:food_delivery/app/models/food_model.dart';
 import 'package:food_delivery/features/home/data/models/suggested_restaurants_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -107,7 +107,7 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: PopularFastFoodModel.popularFastFoodList.length,
+          itemCount: FoodModel.foodList.length,
           itemBuilder: (context, index) =>
               _buildPopularFastFoodItem(index: index),
         ),
@@ -139,7 +139,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 SizedBox(height: constraints.maxHeight * 0.5), // 50%
                 Text(
-                  PopularFastFoodModel.popularFastFoodList[index].title,
+                  FoodModel.foodList[index].title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -150,7 +150,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 Text(
-                  PopularFastFoodModel.popularFastFoodList[index].title,
+                  FoodModel.foodList[index].title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -167,7 +167,7 @@ class _SearchScreenState extends State<SearchScreen> {
           Positioned(
             top: -35.h,
             child: Image.asset(
-              PopularFastFoodModel.popularFastFoodList[index].image,
+              FoodModel.foodList[index].image,
               width: constraints.maxWidth,
               height: constraints.maxHeight * 0.7,
               fit: BoxFit.contain,

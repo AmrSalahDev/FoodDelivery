@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:after_layout/after_layout.dart';
+import 'package:animated_digit/animated_digit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
@@ -7,12 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/app/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
+import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
+import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/features/home/cubit/home_cubit.dart';
-import 'package:food_delivery/features/home/data/models/food_items_model.dart';
-import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
+import 'package:food_delivery/app/models/restaurant_imodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -51,36 +56,11 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30.h),
-                    _buildAppBar(),
-                    SizedBox(height: 30.h),
-                    _buildGreeting(),
-                    SizedBox(height: 30.h),
-                    _buildSearchBar(),
-                    SizedBox(height: 30.h),
-                    _buildSeeAllBar(title: AppStrings.allCategories),
-                    SizedBox(height: 30.h),
-                  ],
-                ),
-              ),
-              _buildCategories(),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 40.h),
-                    _buildSeeAllBar(title: AppStrings.openRestaurants),
-                    SizedBox(height: 30.h),
-                    _buildRestaurants(),
-                  ],
-                ),
-              ),
+              HeaderSecton(fisrtName: fisrtName, fullName: fullName),
+              SizedBox(height: 30.h),
+              BodySection(),
+              SizedBox(height: 30.h),
+              FooterSection(),
             ],
           ),
         ),
@@ -210,84 +190,289 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   FutureOr<void> afterFirstLayout(BuildContext context) {
-    Future.delayed(const Duration(seconds: 10), () {
+    Future.delayed(const Duration(hours: 1), () {
       if (context.mounted) {
         _showOfferDialog(context);
       }
     });
   }
+}
 
-  Widget _buildRestaurants() {
+class RestaurantsPart extends StatefulWidget {
+  final Function(RestaurantModel) onTap;
+  const RestaurantsPart({super.key, required this.onTap});
+
+  @override
+  State<RestaurantsPart> createState() => _RestaurantsPartState();
+}
+
+class _RestaurantsPartState extends State<RestaurantsPart> {
+  bool _isLoading = true;
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: RestaurantItemsModel.restaurantItems.length,
+      itemCount: RestaurantModel.restaurantItems.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return RestaurantItem(index: index);
+        final restaurant = RestaurantModel.restaurantItems[index];
+        return _buildRestaurantItem(restaurant);
       },
     );
   }
 
-  Widget _buildCategories() {
+  Widget _buildRestaurantItem(RestaurantModel restaurant) {
+    return GestureDetector(
+      onTap: () => widget.onTap(restaurant),
+      child: Skeletonizer(
+        enabled: _isLoading,
+        ignorePointers: _isLoading,
+        effect: ShimmerEffect(
+          baseColor: Colors.grey.shade200,
+          highlightColor: Colors.grey.shade100,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24.r),
+              child: CachedNetworkImage(
+                imageUrl: restaurant.image,
+                fit: BoxFit.fill,
+                height: 200.h,
+                width: double.infinity,
+
+                placeholder: (context, url) => Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      height: 200.h,
+                      width: double.infinity,
+                      color: AppColors.lightGray,
+                    ),
+
+                    Assets.lottie.handLoading.lottie(),
+                  ],
+                ),
+                imageBuilder: (context, imageProvider) {
+                  // Use addPostFrameCallback to avoid calling setState during build
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (mounted && _isLoading) {
+                      setState(() => _isLoading = false);
+                    }
+                  });
+                  return Image(
+                    image: imageProvider,
+                    height: 200.h,
+                    width: double.infinity,
+                    fit: BoxFit.fill,
+                  );
+                },
+                errorWidget: (context, url, error) =>
+                    Center(child: Assets.lottie.error.lottie()),
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Text(
+              restaurant.name,
+              style: GoogleFonts.sen(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.normal,
+                color: AppColors.darkBlue,
+              ),
+            ),
+            SizedBox(height: 10.h),
+            Row(
+              children: restaurant.foodTypes
+                  .map(
+                    (foodType) => Text(
+                      foodType == restaurant.foodTypes.last
+                          ? foodType
+                          : "$foodType - ",
+                      style: GoogleFonts.sen(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.normal,
+                        color: Color(0xFFA0A5BA),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+            SizedBox(height: 20.h),
+            Row(
+              children: [
+                Icon(
+                  FontAwesomeIcons.star,
+                  color: AppColors.secondary,
+                  size: 20.h,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.rate,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                SizedBox(width: 30.w),
+                Icon(
+                  FontAwesomeIcons.truck,
+                  color: AppColors.secondary,
+                  size: 20.h,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.deliveryCost,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                SizedBox(width: 30.w),
+                Icon(
+                  FontAwesomeIcons.clock,
+                  color: AppColors.secondary,
+                  size: 20.h,
+                ),
+                SizedBox(width: 10.w),
+                Text(
+                  restaurant.deliveryTime,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 30.h),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CategoriesPart extends StatelessWidget {
+  final Function(FoodModel) onTap;
+  const CategoriesPart({super.key, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
-      height: 180.h,
+      height: 170.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        itemCount: FoodItemsModel.foodItems.length,
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        itemCount: FoodModel.foodCategoriesList.length,
+        clipBehavior: Clip.none,
+        shrinkWrap: true,
         itemBuilder: (context, index) {
-          return _buildCategoryItem(index);
+          final foodItem = FoodModel.foodCategoriesList[index];
+          return _buildCategoryItem(foodItem);
         },
       ),
     );
   }
 
-  Widget _buildCategoryItem(int index) {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(right: 10, left: 5, top: 5),
-          width: 130.w,
-          height: 130.h,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Image.asset(
-              FoodItemsModel.foodItems[index].image,
-              width: 70.w,
-              height: 70.h,
-              fit: BoxFit.contain,
+  Widget _buildCategoryItem(FoodModel foodItem) {
+    return GestureDetector(
+      onTap: () => onTap(foodItem),
+      child: Padding(
+        padding: EdgeInsets.only(right: 12.w),
+        child: SizedBox(
+          width: 160.w,
+          height: 170.h,
+          child: LayoutBuilder(
+            builder: (context, constraints) => Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: constraints.maxHeight * 0.45), // 45%
+                        Text(
+                          foodItem.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.sen(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkBlue,
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Row(
+                          children: [
+                            Text(
+                              AppStrings.starting,
+                              style: GoogleFonts.sen(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.normal,
+                                color: Color(0xFF646982),
+                              ),
+                            ),
+                            const Spacer(),
+                            AnimatedDigitWidget(
+                              value: foodItem.price,
+                              prefix: '\$',
+                              textStyle: GoogleFonts.sen(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.darkBlue,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -35.h,
+                  child: Image.asset(
+                    foodItem.image,
+                    width: constraints.maxWidth * 0.6,
+                    height: constraints.maxHeight * 0.6,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
-        SizedBox(height: 10.h),
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: Text(
-            FoodItemsModel.foodItems[index].title,
-            style: GoogleFonts.sen(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF32343E),
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
+}
 
-  Widget _buildSeeAllBar({required String title, VoidCallback? onTap}) {
+class SeeAllBarPart extends StatelessWidget {
+  final String title;
+  final VoidCallback? onTap;
+  const SeeAllBarPart({super.key, required this.title, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
@@ -323,8 +508,13 @@ class _HomeScreenState extends State<HomeScreen>
       ],
     );
   }
+}
 
-  Widget _buildSearchBar() {
+class SearchBarPart extends StatelessWidget {
+  const SearchBarPart({super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => context.push(AppPaths.homeSearch),
       child: Container(
@@ -353,8 +543,14 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
+}
 
-  Widget _buildGreeting() {
+class GreetingPart extends StatelessWidget {
+  final String fisrtName;
+  const GreetingPart({super.key, required this.fisrtName});
+
+  @override
+  Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Text.rich(
@@ -380,25 +576,20 @@ class _HomeScreenState extends State<HomeScreen>
       },
     );
   }
+}
 
-  Widget _buildAppBar() {
+class AppBarPart extends StatelessWidget {
+  final String fullName;
+  const AppBarPart({super.key, required this.fullName});
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
-        IconButton.filled(
-          onPressed: () {
-            _showOfferDialog(context);
-          },
-          style: IconButton.styleFrom(
-            backgroundColor: Color(0xFFECF0F4),
-
-            shape: const CircleBorder(),
-            minimumSize: Size(60.w, 60.h),
-          ),
-          icon: Icon(
-            FontAwesomeIcons.barsStaggered,
-            color: Color(0xFF181C2E),
-            size: 24.h,
-          ),
+        CustomCircleButton(
+          backgroundColor: Color(0xFFECF0F4),
+          size: 60.h,
+          icon: Icon(FontAwesomeIcons.barsStaggered, color: AppColors.darkBlue),
         ),
         SizedBox(width: 10.w),
         Column(
@@ -431,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen>
                   ),
                   Icon(
                     Icons.arrow_drop_down,
-                    color: Color(0xFF181C2E),
+                    color: AppColors.darkBlue,
                     size: 27.h,
                   ),
                 ],
@@ -442,7 +633,7 @@ class _HomeScreenState extends State<HomeScreen>
         const Spacer(),
         Badge(
           backgroundColor: AppColors.secondary,
-          offset: Offset(-10.w, 0),
+          offset: Offset(-8.w, 0),
           label: Text(
             faker.faker.randomGenerator.integer(100).toString(),
             style: GoogleFonts.sen(
@@ -451,18 +642,10 @@ class _HomeScreenState extends State<HomeScreen>
               color: AppColors.white,
             ),
           ),
-          child: IconButton.filled(
-            onPressed: () {},
-            style: IconButton.styleFrom(
-              backgroundColor: Color(0xFF181C2E),
-              shape: const CircleBorder(),
-              minimumSize: Size(60.w, 60.h),
-            ),
-            icon: Icon(
-              FontAwesomeIcons.basketShopping,
-              color: AppColors.white,
-              size: 24.h,
-            ),
+          child: CustomCircleButton(
+            backgroundColor: AppColors.darkBlue,
+            size: 60.h,
+            icon: Icon(FontAwesomeIcons.basketShopping, color: AppColors.white),
           ),
         ),
       ],
@@ -470,133 +653,78 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-class RestaurantItem extends StatefulWidget {
-  final int index;
-  const RestaurantItem({super.key, required this.index});
-
-  @override
-  State<RestaurantItem> createState() => _RestaurantItemState();
-}
-
-class _RestaurantItemState extends State<RestaurantItem> {
-  bool _isLoading = true;
+class BodySection extends StatelessWidget {
+  const BodySection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final restaurant = RestaurantItemsModel.restaurantItems[widget.index];
-
-    return Skeletonizer(
-      enabled: _isLoading,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(24.r),
-            child: CachedNetworkImage(
-              imageUrl: restaurant.image,
-              fit: BoxFit.fill,
-              height: 200.h,
-              width: double.infinity,
-
-              placeholder: (context, url) => Container(
-                height: 200.h,
-                width: double.infinity,
-                color: AppColors.lightGray,
-              ),
-              imageBuilder: (context, imageProvider) {
-                // Use addPostFrameCallback to avoid calling setState during build
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (mounted && _isLoading) {
-                    setState(() => _isLoading = false);
-                  }
-                });
-                return Image(
-                  image: imageProvider,
-                  height: 200.h,
-                  width: double.infinity,
-                  fit: BoxFit.fill,
-                );
-              },
-              errorWidget: (context, url, error) =>
-                  Center(child: Icon(Icons.error, color: Colors.red)),
-            ),
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            restaurant.name,
-            style: GoogleFonts.sen(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.normal,
-              color: Color(0xFF181C2E),
-            ),
-          ),
-          SizedBox(height: 10.h),
-          Row(
-            children: restaurant.foodTypes
-                .map(
-                  (foodType) => Text(
-                    foodType == restaurant.foodTypes.last
-                        ? foodType
-                        : "$foodType - ",
-                    style: GoogleFonts.sen(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFFA0A5BA),
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
-          SizedBox(height: 20.h),
-          Row(
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
             children: [
-              Icon(
-                FontAwesomeIcons.star,
-                color: AppColors.secondary,
-                size: 20.h,
+              SeeAllBarPart(title: AppStrings.allCategories),
+              SizedBox(height: 50.h),
+              CategoriesPart(
+                onTap: (food) {
+                  context.push(
+                    AppPaths.homeSearchResult,
+                    extra: SearchResultScreenArgs(query: food.title),
+                  );
+                },
               ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.rate,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
-                ),
-              ),
-              SizedBox(width: 30.w),
-              Icon(
-                FontAwesomeIcons.truck,
-                color: AppColors.secondary,
-                size: 20.h,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.deliveryCost,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
-                ),
-              ),
-              SizedBox(width: 30.w),
-              Icon(
-                FontAwesomeIcons.clock,
-                color: AppColors.secondary,
-                size: 20.h,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                restaurant.deliveryTime,
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF181C2E),
-                ),
+              SizedBox(height: 50.h),
+              SeeAllBarPart(title: AppStrings.openRestaurants),
+              SizedBox(height: 30.h),
+              RestaurantsPart(
+                onTap: (restaurant) {
+                  context.push(
+                    AppPaths.restaurantDetails,
+                    extra: RestaurantDetailsScreenArgs(restaurant),
+                  );
+                },
               ),
             ],
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class FooterSection extends StatelessWidget {
+  const FooterSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.shrink();
+  }
+}
+
+class HeaderSecton extends StatelessWidget {
+  final String fullName;
+  final String fisrtName;
+
+  const HeaderSecton({
+    super.key,
+    required this.fullName,
+    required this.fisrtName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           SizedBox(height: 30.h),
+          AppBarPart(fullName: fullName),
+          SizedBox(height: 30.h),
+          GreetingPart(fisrtName: fisrtName),
+          SizedBox(height: 30.h),
+          SearchBarPart(),
         ],
       ),
     );

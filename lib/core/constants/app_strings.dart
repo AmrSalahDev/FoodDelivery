@@ -46,6 +46,7 @@ class AppStrings {
   static const String addToCart = "Add to cart";
   static const String ingridents = "Ingridents";
   static const String size = "Size: ";
+  static const String starting = "Starting";
 
   // food
   static const String burger = "Burger";

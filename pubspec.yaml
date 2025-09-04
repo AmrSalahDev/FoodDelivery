@@ -34,6 +34,7 @@ dependencies:
   injectable: ^2.5.1
   injectable_generator: ^2.8.1
   location: ^8.0.1
+  lottie: ^3.3.1
   meta: ^1.16.0
   my_flutter_toolkit:
     git:
@@ -60,7 +61,7 @@ flutter_gen:
     image: true
     flutter_svg: true
     rive: false
-    lottie: false
+    lottie: true
 
 
 flutter:
@@ -68,7 +69,12 @@ flutter:
   assets:
     - .env
     - assets/images/
+    - assets/lottie/
     - assets/images/food/
+    - assets/images/food/burger/
+    - assets/images/food/pizza/
+    - assets/images/food/pasta/
+    - assets/images/food/sandwich/
     - assets/images/restaurants/
     - assets/icons/
     - assets/logo/

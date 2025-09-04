@@ -1,6 +1,6 @@
 import 'package:food_delivery/core/constants/app_strings.dart';
 
-class RestaurantItemsModel {
+class RestaurantModel {
   final String id;
   final String name;
   final String deliveryCost;
@@ -11,7 +11,7 @@ class RestaurantItemsModel {
   final String description;
   final String deliveryTime;
 
-  RestaurantItemsModel({
+  RestaurantModel({
     required this.id,
     required this.name,
     required this.deliveryCost,
@@ -23,8 +23,8 @@ class RestaurantItemsModel {
     required this.deliveryTime,
   });
 
-  static final List<RestaurantItemsModel> restaurantItems = [
-    RestaurantItemsModel(
+  static final List<RestaurantModel> restaurantItems = [
+    RestaurantModel(
       id: "1",
       name: AppStrings.roseGardenRestaurant,
       deliveryCost: "Free",
@@ -42,7 +42,7 @@ class RestaurantItemsModel {
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
     ),
-    RestaurantItemsModel(
+    RestaurantModel(
       id: "1",
       name: AppStrings.roseGardenRestaurant,
       deliveryCost: "Free",
@@ -59,7 +59,7 @@ class RestaurantItemsModel {
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
     ),
-    RestaurantItemsModel(
+    RestaurantModel(
       id: "1",
       name: AppStrings.roseGardenRestaurant,
       deliveryCost: "Free",
@@ -76,7 +76,7 @@ class RestaurantItemsModel {
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
     ),
-    RestaurantItemsModel(
+    RestaurantModel(
       id: "1",
       name: AppStrings.roseGardenRestaurant,
       deliveryCost: "Free",

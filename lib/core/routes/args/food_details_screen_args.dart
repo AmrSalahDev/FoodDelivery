@@ -1,7 +1,7 @@
-import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
+import 'package:food_delivery/app/models/food_model.dart';
 
 class FoodDetailsScreenArgs {
-  final PopularFoodModel popularFoodModel;
+  final FoodModel foodModel;
 
-  const FoodDetailsScreenArgs({required this.popularFoodModel});
+  const FoodDetailsScreenArgs({required this.foodModel});
 }

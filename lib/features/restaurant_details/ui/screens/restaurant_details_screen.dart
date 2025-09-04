@@ -1,21 +1,23 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/app/cubits/food_cubit.dart';
+import 'package:food_delivery/app/cubits/food_state.dart';
 import 'package:food_delivery/app/widgets/custom_circle_button.dart';
+import 'package:food_delivery/app/widgets/custom_readmore.dart';
 import 'package:food_delivery/app/widgets/custom_select_food_button.dart';
-import 'package:food_delivery/app/widgets/select_size_buttons.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/app/models/restaurant_imodel.dart';
+import 'package:food_delivery/core/di/di.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
-import 'package:food_delivery/features/home/data/models/popular_fast_food_model.dart';
-import 'package:food_delivery/features/home/data/models/popular_food_model.dart';
-import 'package:food_delivery/features/home/data/models/restaurant_items_model.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/buttons/add_to_cart_button.dart';
@@ -25,11 +27,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
-  final RestaurantItemsModel restaurantItemsModel;
-  const RestaurantDetailsScreen({
-    super.key,
-    required this.restaurantItemsModel,
-  });
+  final RestaurantModel restaurantModel;
+  const RestaurantDetailsScreen({super.key, required this.restaurantModel});
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -38,13 +37,17 @@ class RestaurantDetailsScreen extends StatefulWidget {
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   late final CarouselSliderController _carouselController;
-  final List<String> foundFoods = ['Burger', 'Pizza', 'Sandwich', 'Pasta'];
+  late final List<String> foundFoods;
   int _currentIndex = 0;
+  late final FoodCubit foodCubit;
 
   @override
   void initState() {
     super.initState();
     _carouselController = CarouselSliderController();
+    foundFoods = ['Burger', 'Pizza', 'Sandwich', 'Pasta'];
+    foodCubit = getIt<FoodCubit>();
+    //foodCubit.loadBurger();
   }
 
   @override
@@ -69,31 +72,39 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 children: [
                   CarouselSlider.builder(
                     carouselController: _carouselController,
-                    itemCount: widget.restaurantItemsModel.images.length,
-                    itemBuilder:
-                        (
-                          BuildContext context,
-                          int itemIndex,
-                          int pageViewIndex,
-                        ) => ClipRRect(
+                    itemCount: widget.restaurantModel.images.length,
+                    itemBuilder: (context, itemIndex, pageViewIndex) =>
+                        ClipRRect(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(30.r),
                             bottomRight: Radius.circular(30.r),
                           ),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                widget.restaurantItemsModel.images[itemIndex],
+                            imageUrl: widget.restaurantModel.images[itemIndex],
                             height: 350.h,
                             width: double.infinity,
                             fit: BoxFit.cover,
-                            placeholder: (context, url) => Skeletonizer(
-                              enabled: true,
-                              child: Container(
-                                height: 350.h,
-                                width: double.infinity,
-                                color: AppColors.lightGray,
-                              ),
+                            placeholder: (context, url) => Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Skeletonizer(
+                                  enabled: true,
+                                  effect: ShimmerEffect(
+                                    baseColor: Colors.grey.shade200,
+                                    highlightColor: Colors.grey.shade100,
+                                  ),
+                                  child: Container(
+                                    height: 350.h,
+                                    width: double.infinity,
+                                    color: AppColors.lightGray,
+                                  ),
+                                ),
+
+                                Assets.lottie.handLoading.lottie(),
+                              ],
                             ),
+                            errorWidget: (context, url, error) =>
+                                Center(child: Assets.lottie.error.lottie()),
                           ),
                         ),
                     options: CarouselOptions(
@@ -120,7 +131,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           controller: PageController(
                             initialPage: _currentIndex,
                           ),
-                          count: widget.restaurantItemsModel.images.length,
+                          count: widget.restaurantModel.images.length,
                           effect: WormEffect(
                             dotHeight: 12,
                             dotWidth: 12,
@@ -154,6 +165,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     top: 50.h,
                     right: 20.w,
                     child: CustomCircleButton(
+                      onPressed: () => _showFliterDialog(),
                       backgroundColor: AppColors.white,
                       size: 55.h,
                       icon: Icon(
@@ -169,19 +181,59 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    _buildFoodInfo(),
+                    RestaurantInfoSection(
+                      restaurantModel: widget.restaurantModel,
+                    ),
+                    SizedBox(height: 10.h),
+                    CustomReadMore(text: widget.restaurantModel.description),
                     SizedBox(height: 30.h),
                     CustomSelectFoodButton(
                       foods: foundFoods,
                       selectedBackgroundColor: Color(0xFFF58D1D),
                       unselectedBackgroundColor: AppColors.white,
                       borderColor: Color(0xFFEDEDED),
+                      onSelected: (index, name) {
+                        // if (index == 0) {
+                        //   foodCubit.loadBurger();
+                        // } else if (index == 1) {
+                        //   foodCubit.loadPizza();
+                        // } else if (index == 2) {
+                        //   foodCubit.loadSandwich();
+                        // } else if (index == 3) {
+                        //   foodCubit.loadPasta();
+                        // }
+                      },
                     ),
                   ],
                 ),
               ),
               SizedBox(height: 10.h),
-              _buildPopularFood(),
+              // BlocBuilder<FoodCubit, FoodState>(
+              //   bloc: foodCubit,
+              //   builder: (context, state) {
+              //     if (state is FoodLoading) {
+              //       return const Center(
+              //         child: CircularProgressIndicator(
+              //           color: AppColors.secondary,
+              //         ),
+              //       );
+              //     }
+              //     if (state is FoodLoaded) {
+              //       return GenerateFoodItems(
+              //         onTap: (foodModel) {
+              //           context.push(
+              //             AppPaths.foodDetails,
+              //             extra: FoodDetailsScreenArgs(foodModel: foodModel),
+              //           );
+              //         },
+              //         showCartButton: true,
+              //         foodList: state.foods,
+              //       );
+              //     }
+
+              //     return Container();
+              //   },
+              // ),
               SizedBox(height: 50.h),
             ],
           ),
@@ -190,164 +242,83 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     );
   }
 
-  Widget _buildPopularFood() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Burger (${PopularFastFoodModel.popularFastFoodList.length})",
-            style: GoogleFonts.sen(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.normal,
-              color: AppColors.darkBlue,
-            ),
+  void _showFliterDialog() {
+    final List<String> offers = [
+      'Delivery',
+      'Pick Up',
+      'Offer',
+      'Online payment available',
+    ];
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => Dialog(
+        insetPadding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(20.r),
           ),
-          SizedBox(height: 30.h),
-          GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 15.w,
-              mainAxisSpacing: 45.h,
-              mainAxisExtent: 190.h,
-            ),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: PopularFastFoodModel.popularFastFoodList.length,
-            itemBuilder: (context, index) =>
-                _buildPopularFoodItem(index: index),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPopularFoodItem({required int index}) {
-    final popularFood = PopularFoodModel.popularFoodList[index];
-    return GestureDetector(
-      onTap: () => context.push(
-        AppPaths.foodDetails,
-        extra: FoodDetailsScreenArgs(popularFoodModel: popularFood),
-      ),
-      child: LayoutBuilder(
-        builder: (context, constraints) => Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: constraints.maxWidth,
-              height: constraints.maxHeight,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24.r),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  SizedBox(height: constraints.maxHeight * 0.4), // 40%
                   Text(
-                    popularFood.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
+                    "Filter your search",
                     style: GoogleFonts.sen(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.normal,
                       color: AppColors.darkBlue,
                     ),
                   ),
-                  Text(
-                    popularFood.subtitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.sen(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF646982),
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      left: 10.w,
-                      right: 10.w,
-                      bottom: 7.h,
-                    ),
-                    child: Row(
-                      children: [
-                        AnimatedDigitWidget(
-                          value: popularFood.price,
-                          prefix: '\$',
-                          textStyle: GoogleFonts.sen(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.darkBlue,
-                          ),
-                        ),
-                        const Spacer(),
-                        AddToCartButton(
-                          onIncrement: (value) {},
-                          onDecrement: (value) {},
-                          maxQuantity: 100,
-                          width: 75.w,
-                          height: 40.h,
-                          backgroundColor: AppColors.secondary,
-                          iconColor: AppColors.white,
-                          initialSize: 40.h,
-                          countColor: AppColors.white,
-                        ),
-                      ],
+                  const Spacer(),
+                  CustomCircleButton(
+                    onPressed: () => Navigator.pop(context),
+                    backgroundColor: AppColors.lightGray,
+                    size: 55.h,
+                    icon: Icon(
+                      Icons.close,
+                      color: AppColors.darkBlue,
+                      size: 20.h,
                     ),
                   ),
                 ],
               ),
-            ),
-
-            Positioned(
-              top: -35.h,
-              child: Image.asset(
-                popularFood.image,
-                width: constraints.maxWidth,
-                height: constraints.maxHeight * 0.6,
-                fit: BoxFit.contain,
+              SizedBox(height: 20.h),
+              Text(
+                "Offers",
+                style: GoogleFonts.sen(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.normal,
+                  color: AppColors.darkBlue,
+                ),
               ),
-            ),
-          ],
+              SizedBox(height: 20.h),
+              // CustomSelectFoodButton(
+              //   foods: offers,
+              //   isWrap: true,
+              //   selectedBackgroundColor: Color(0xFFF58D1D),
+              //   unselectedBackgroundColor: AppColors.white,
+              //   borderColor: Color(0xFFEDEDED),
+              // ),
+            ],
+          ),
         ),
       ),
     );
   }
+}
 
-  Widget _buildReadMore() {
-    return ReadMoreText(
-      "${widget.restaurantItemsModel.description} ",
-      trimMode: TrimMode.Line,
-      trimLines: 3,
-      style: GoogleFonts.sen(
-        fontSize: 16.sp,
-        fontWeight: FontWeight.normal,
-        color: Color(0xFFA0A5BA),
-      ),
-      colorClickableText: AppColors.secondary,
-      trimCollapsedText: AppStrings.showMore,
-      trimExpandedText: AppStrings.showLess,
-      moreStyle: GoogleFonts.sen(
-        fontSize: 16.sp,
-        color: AppColors.secondary,
-        fontWeight: FontWeight.normal,
-      ),
-    );
-  }
+class RestaurantInfoSection extends StatelessWidget {
+  final RestaurantModel restaurantModel;
+  const RestaurantInfoSection({super.key, required this.restaurantModel});
 
-  Widget _buildFoodInfo() {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -357,7 +328,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             Icon(FontAwesomeIcons.star, color: AppColors.secondary, size: 20.h),
             SizedBox(width: 10.w),
             Text(
-              widget.restaurantItemsModel.rate.toString(),
+              restaurantModel.rate.toString(),
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -372,7 +343,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             ),
             SizedBox(width: 10.w),
             Text(
-              widget.restaurantItemsModel.deliveryCost,
+              restaurantModel.deliveryCost,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -387,7 +358,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             ),
             SizedBox(width: 10.w),
             Text(
-              widget.restaurantItemsModel.deliveryTime,
+              restaurantModel.deliveryTime,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -398,15 +369,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
         ),
         SizedBox(height: 20.h),
         Text(
-          widget.restaurantItemsModel.name,
+          restaurantModel.name,
           style: GoogleFonts.sen(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
             color: AppColors.darkBlue,
           ),
         ),
-        SizedBox(height: 10.h),
-        _buildReadMore(),
       ],
     );
   }

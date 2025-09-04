@@ -7,21 +7,25 @@ class CustomSelectFoodButton extends StatefulWidget {
   final Color selectedBackgroundColor;
   final Color unselectedBackgroundColor;
   final EdgeInsetsGeometry? padding;
+  final bool isWrap;
   final double? borderRadius;
   final Color? borderColor;
   final Color? selectedTextColor;
   final Color? unselectedTextColor;
+  final Function(int index, String name) onSelected;
 
   const CustomSelectFoodButton({
     super.key,
     required this.foods,
     required this.selectedBackgroundColor,
     required this.unselectedBackgroundColor,
+    this.isWrap = false,
     this.padding,
     this.borderColor,
     this.borderRadius,
     this.selectedTextColor,
     this.unselectedTextColor,
+    required this.onSelected,
   });
 
   @override
@@ -49,6 +53,7 @@ class _CustomSelectFoodButtonState extends State<CustomSelectFoodButton> {
                 setState(() {
                   selectedIndex = index;
                 });
+                widget.onSelected(index, widget.foods[index]);
               },
               child: Container(
                 alignment: Alignment.center,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery/app/cubits/food_cubit.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
@@ -80,7 +81,10 @@ class AppRouter {
         path: AppPaths.homeSearchResult,
         builder: (context, state) {
           final args = state.extra as SearchResultScreenArgs;
-          return SearchResultScreen(query: args.query);
+          return BlocProvider(
+            create: (context) => getIt<FoodCubit>(),
+            child: SearchResultScreen(query: args.query),
+          );
         },
       ),
       GoRoute(
@@ -88,7 +92,10 @@ class AppRouter {
         pageBuilder: GoTransitions.fade.call,
         builder: (context, state) {
           final args = state.extra as FoodDetailsScreenArgs;
-          return FoodDetailsScreen(popularFoodModel: args.popularFoodModel);
+          return BlocProvider(
+            create: (context) => getIt<FoodCubit>(),
+            child: FoodDetailsScreen(foodModel: args.foodModel),
+          );
         },
       ),
       GoRoute(
@@ -96,8 +103,11 @@ class AppRouter {
         pageBuilder: GoTransitions.fade.call,
         builder: (context, state) {
           final args = state.extra as RestaurantDetailsScreenArgs;
-          return RestaurantDetailsScreen(
-            restaurantItemsModel: args.restaurantItemsModel,
+          return BlocProvider(
+            create: (context) => getIt<FoodCubit>(),
+            child: RestaurantDetailsScreen(
+              restaurantModel: args.restaurantModel,
+            ),
           );
         },
       ),
