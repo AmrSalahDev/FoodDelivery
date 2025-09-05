@@ -1,7 +1,7 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/core/models/food_model.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/buttons/add_to_cart_button.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery/app/widgets/custom_rectangle_button.dart';
+import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/routes/app_router.dart';

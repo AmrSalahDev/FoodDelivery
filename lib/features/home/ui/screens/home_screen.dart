@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_delivery/app/models/food_model.dart';
-import 'package:food_delivery/app/widgets/custom_circle_button.dart';
+import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
@@ -17,7 +17,7 @@ import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/features/home/cubit/home_cubit.dart';
-import 'package:food_delivery/app/models/restaurant_imodel.dart';
+import 'package:food_delivery/core/models/restaurant_imodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -60,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen>
               SizedBox(height: 30.h),
               BodySection(),
               SizedBox(height: 30.h),
-              FooterSection(),
             ],
           ),
         ),
@@ -249,7 +248,7 @@ class _RestaurantsPartState extends State<RestaurantsPart> {
                     Container(
                       height: 200.h,
                       width: double.infinity,
-                      color: AppColors.lightGray,
+                      color: Colors.grey.shade200,
                     ),
 
                     Assets.lottie.handLoading.lottie(),
@@ -516,7 +515,7 @@ class SearchBarPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.push(AppPaths.homeSearch),
+      onTap: () => context.push(AppPaths.search),
       child: Container(
         height: 65.h,
         width: double.infinity,
@@ -669,7 +668,7 @@ class BodySection extends StatelessWidget {
               CategoriesPart(
                 onTap: (food) {
                   context.push(
-                    AppPaths.homeSearchResult,
+                    AppPaths.searchResult,
                     extra: SearchResultScreenArgs(query: food.title),
                   );
                 },

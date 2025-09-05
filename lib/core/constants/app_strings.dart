@@ -47,6 +47,9 @@ class AppStrings {
   static const String ingridents = "Ingridents";
   static const String size = "Size: ";
   static const String starting = "Starting";
+  static const String recentKeywords = "Recent Keywords";
+  static const String suggestedRestaurants = "Suggested Restaurants";
+  static const String popularFastFood = "Popular Fast Food";
 
   // food
   static const String burger = "Burger";

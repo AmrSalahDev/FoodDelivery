@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_delivery/app/cubits/food_cubit.dart';
+import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
@@ -11,8 +11,8 @@ import 'package:food_delivery/features/food_details/ui/screens/food_details_scre
 import 'package:food_delivery/features/forget_password/ui/screens/forget_password_screen.dart';
 import 'package:food_delivery/features/home/cubit/home_cubit.dart';
 import 'package:food_delivery/features/home/ui/screens/home_screen.dart';
-import 'package:food_delivery/features/home/ui/screens/search_result_screen.dart';
-import 'package:food_delivery/features/home/ui/screens/search_screen.dart';
+import 'package:food_delivery/features/search/ui/screens/search_result_screen.dart';
+import 'package:food_delivery/features/search/ui/screens/search_screen.dart';
 import 'package:food_delivery/features/login/ui/cubit/login_cubit.dart';
 import 'package:food_delivery/features/login/ui/screens/login_screen.dart';
 import 'package:food_delivery/features/onboarding/ui/screens/on_boarding_screen.dart';
@@ -32,8 +32,8 @@ class AppPaths {
   static const String forgetPassword = "/forgetPassword";
   static const String verificationPassword = "/verificationPassword";
   static const String accessLocation = "/accessLocation";
-  static const String homeSearch = "/homeSearch";
-  static const String homeSearchResult = "/homeSearchResult";
+  static const String search = "/search";
+  static const String searchResult = "/searchResult";
   static const String foodDetails = "/foodDetails";
   static const String restaurantDetails = "/restaurantDetails";
 }
@@ -74,11 +74,11 @@ class AppRouter {
         },
       ),
       GoRoute(
-        path: AppPaths.homeSearch,
+        path: AppPaths.search,
         builder: (context, state) => SearchScreen(),
       ),
       GoRoute(
-        path: AppPaths.homeSearchResult,
+        path: AppPaths.searchResult,
         builder: (context, state) {
           final args = state.extra as SearchResultScreenArgs;
           return BlocProvider(

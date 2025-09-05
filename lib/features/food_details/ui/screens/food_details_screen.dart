@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_delivery/app/cubits/food_cubit.dart';
-import 'package:food_delivery/app/widgets/add_to_cart_button_v2.dart';
-import 'package:food_delivery/app/widgets/custom_circle_button.dart';
-import 'package:food_delivery/app/widgets/custom_readmore.dart';
-import 'package:food_delivery/app/widgets/custom_rectangle_button.dart';
-import 'package:food_delivery/app/widgets/favorite_button.dart';
-import 'package:food_delivery/app/widgets/select_size_buttons.dart';
+import 'package:food_delivery/shared/cubits/food_cubit.dart';
+import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
+import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
+import 'package:food_delivery/shared/widgets/custom_readmore.dart';
+import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
+import 'package:food_delivery/shared/widgets/favorite_button.dart';
+import 'package:food_delivery/shared/widgets/select_size_buttons.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/features/food_details/data/models/ingridents_model.dart';
-import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/core/models/food_model.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
@@ -47,7 +47,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
     );
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
     // animations

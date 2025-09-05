@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery/app/widgets/custom_back_button.dart';
-import 'package:food_delivery/app/widgets/custom_rectangle_button.dart';
+import 'package:food_delivery/shared/widgets/custom_back_button.dart';
+import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';

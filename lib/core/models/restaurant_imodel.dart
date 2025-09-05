@@ -33,6 +33,9 @@ class RestaurantModel {
         "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
         "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
         "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg",
+        'https://images.pexels.com/photos/2977514/pexels-photo-2977514.jpeg',
+        'https://images.pexels.com/photos/4252146/pexels-photo-4252146.jpeg',
+        'https://images.pexels.com/photos/3717880/pexels-photo-3717880.jpeg',
       ],
       image:
           "https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg",
@@ -54,6 +57,9 @@ class RestaurantModel {
         "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
         "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
         "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg",
+        'https://images.pexels.com/photos/2977514/pexels-photo-2977514.jpeg',
+        'https://images.pexels.com/photos/4252146/pexels-photo-4252146.jpeg',
+        'https://images.pexels.com/photos/3717880/pexels-photo-3717880.jpeg',
       ],
       deliveryTime: "10 min",
       description:
@@ -72,6 +78,9 @@ class RestaurantModel {
         "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
         "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
         "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg",
+        'https://images.pexels.com/photos/2977514/pexels-photo-2977514.jpeg',
+        'https://images.pexels.com/photos/4252146/pexels-photo-4252146.jpeg',
+        'https://images.pexels.com/photos/3717880/pexels-photo-3717880.jpeg',
       ],
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -90,6 +99,9 @@ class RestaurantModel {
         "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
         "https://images.pexels.com/photos/958545/pexels-photo-958545.jpeg",
         "https://images.pexels.com/photos/1099680/pexels-photo-1099680.jpeg",
+        'https://images.pexels.com/photos/2977514/pexels-photo-2977514.jpeg',
+        'https://images.pexels.com/photos/4252146/pexels-photo-4252146.jpeg',
+        'https://images.pexels.com/photos/3717880/pexels-photo-3717880.jpeg',
       ],
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",

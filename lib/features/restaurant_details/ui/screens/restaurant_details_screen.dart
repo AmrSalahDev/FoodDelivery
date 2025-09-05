@@ -5,24 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_delivery/app/cubits/food_cubit.dart';
-import 'package:food_delivery/app/cubits/food_state.dart';
-import 'package:food_delivery/app/widgets/custom_circle_button.dart';
-import 'package:food_delivery/app/widgets/custom_readmore.dart';
-import 'package:food_delivery/app/widgets/custom_select_food_button.dart';
-import 'package:food_delivery/core/constants/app_colors.dart';
-import 'package:food_delivery/core/constants/app_strings.dart';
-import 'package:food_delivery/app/models/food_model.dart';
-import 'package:food_delivery/app/models/restaurant_imodel.dart';
-import 'package:food_delivery/core/di/di.dart';
-import 'package:food_delivery/core/gen/assets.gen.dart';
+import 'package:food_delivery/core/models/food_model.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
+import 'package:food_delivery/shared/cubits/food_cubit.dart';
+import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
+import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
+import 'package:food_delivery/shared/widgets/custom_readmore.dart';
+import 'package:food_delivery/shared/widgets/custom_select_food_button.dart';
+import 'package:food_delivery/core/constants/app_colors.dart';
+import 'package:food_delivery/core/models/restaurant_imodel.dart';
+import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/ui/buttons/add_to_cart_button.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
-import 'package:readmore/readmore.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -36,18 +32,12 @@ class RestaurantDetailsScreen extends StatefulWidget {
 }
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
-  late final CarouselSliderController _carouselController;
   late final List<String> foundFoods;
-  int _currentIndex = 0;
-  late final FoodCubit foodCubit;
 
   @override
   void initState() {
     super.initState();
-    _carouselController = CarouselSliderController();
     foundFoods = ['Burger', 'Pizza', 'Sandwich', 'Pasta'];
-    foodCubit = getIt<FoodCubit>();
-    //foodCubit.loadBurger();
   }
 
   @override
@@ -67,174 +57,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  CarouselSlider.builder(
-                    carouselController: _carouselController,
-                    itemCount: widget.restaurantModel.images.length,
-                    itemBuilder: (context, itemIndex, pageViewIndex) =>
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(30.r),
-                            bottomRight: Radius.circular(30.r),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.restaurantModel.images[itemIndex],
-                            height: 350.h,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Skeletonizer(
-                                  enabled: true,
-                                  effect: ShimmerEffect(
-                                    baseColor: Colors.grey.shade200,
-                                    highlightColor: Colors.grey.shade100,
-                                  ),
-                                  child: Container(
-                                    height: 350.h,
-                                    width: double.infinity,
-                                    color: AppColors.lightGray,
-                                  ),
-                                ),
-
-                                Assets.lottie.handLoading.lottie(),
-                              ],
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Center(child: Assets.lottie.error.lottie()),
-                          ),
-                        ),
-                    options: CarouselOptions(
-                      height: 350.h,
-                      autoPlay: true,
-                      autoPlayInterval: Duration(seconds: 3),
-                      autoPlayAnimationDuration: Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.fastOutSlowIn,
-                      enlargeCenterPage: false,
-                      viewportFraction: 1.0,
-                      pageSnapping: true,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _currentIndex = index;
-                        });
-                      },
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Column(
-                      children: [
-                        SmoothPageIndicator(
-                          controller: PageController(
-                            initialPage: _currentIndex,
-                          ),
-                          count: widget.restaurantModel.images.length,
-                          effect: WormEffect(
-                            dotHeight: 12,
-                            dotWidth: 12,
-                            spacing: 8,
-                            dotColor: AppColors.white.withAlpha(100),
-                            activeDotColor: AppColors.white,
-                            type: WormType.thin,
-                          ),
-                          onDotClicked: (index) {
-                            _carouselController.animateToPage(index);
-                          },
-                        ),
-                        SizedBox(height: 20.h),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    top: 50.h,
-                    left: 20.w,
-                    child: CustomCircleButton(
-                      backgroundColor: AppColors.white,
-                      size: 55.h,
-                      icon: Icon(
-                        Icons.arrow_back_ios_new_rounded,
-                        color: AppColors.darkBlue,
-                        size: 20.h,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 50.h,
-                    right: 20.w,
-                    child: CustomCircleButton(
-                      onPressed: () => _showFliterDialog(),
-                      backgroundColor: AppColors.white,
-                      size: 55.h,
-                      icon: Icon(
-                        Icons.more_horiz_rounded,
-                        color: AppColors.darkBlue,
-                        size: 20.h,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              HeaderSection(restaurantModel: widget.restaurantModel),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    RestaurantInfoSection(
-                      restaurantModel: widget.restaurantModel,
-                    ),
-                    SizedBox(height: 10.h),
-                    CustomReadMore(text: widget.restaurantModel.description),
+                    BodySection(restaurantModel: widget.restaurantModel),
                     SizedBox(height: 30.h),
-                    CustomSelectFoodButton(
-                      foods: foundFoods,
-                      selectedBackgroundColor: Color(0xFFF58D1D),
-                      unselectedBackgroundColor: AppColors.white,
-                      borderColor: Color(0xFFEDEDED),
-                      onSelected: (index, name) {
-                        // if (index == 0) {
-                        //   foodCubit.loadBurger();
-                        // } else if (index == 1) {
-                        //   foodCubit.loadPizza();
-                        // } else if (index == 2) {
-                        //   foodCubit.loadSandwich();
-                        // } else if (index == 3) {
-                        //   foodCubit.loadPasta();
-                        // }
-                      },
-                    ),
+                    FooterSection(foundFoods: foundFoods),
                   ],
                 ),
               ),
-              SizedBox(height: 10.h),
-              // BlocBuilder<FoodCubit, FoodState>(
-              //   bloc: foodCubit,
-              //   builder: (context, state) {
-              //     if (state is FoodLoading) {
-              //       return const Center(
-              //         child: CircularProgressIndicator(
-              //           color: AppColors.secondary,
-              //         ),
-              //       );
-              //     }
-              //     if (state is FoodLoaded) {
-              //       return GenerateFoodItems(
-              //         onTap: (foodModel) {
-              //           context.push(
-              //             AppPaths.foodDetails,
-              //             extra: FoodDetailsScreenArgs(foodModel: foodModel),
-              //           );
-              //         },
-              //         showCartButton: true,
-              //         foodList: state.foods,
-              //       );
-              //     }
-
-              //     return Container();
-              //   },
-              // ),
-              SizedBox(height: 50.h),
             ],
           ),
         ),
@@ -313,9 +146,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 }
 
-class RestaurantInfoSection extends StatelessWidget {
+class RestaurantInfoPart extends StatelessWidget {
   final RestaurantModel restaurantModel;
-  const RestaurantInfoSection({super.key, required this.restaurantModel});
+  const RestaurantInfoPart({super.key, required this.restaurantModel});
 
   @override
   Widget build(BuildContext context) {
@@ -332,7 +165,7 @@ class RestaurantInfoSection extends StatelessWidget {
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
+                color: AppColors.darkBlue,
               ),
             ),
             SizedBox(width: 30.w),
@@ -347,7 +180,7 @@ class RestaurantInfoSection extends StatelessWidget {
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
+                color: AppColors.darkBlue,
               ),
             ),
             SizedBox(width: 30.w),
@@ -362,7 +195,7 @@ class RestaurantInfoSection extends StatelessWidget {
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF181C2E),
+                color: AppColors.darkBlue,
               ),
             ),
           ],
@@ -377,6 +210,359 @@ class RestaurantInfoSection extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class HeaderSection extends StatefulWidget {
+  final RestaurantModel restaurantModel;
+  const HeaderSection({super.key, required this.restaurantModel});
+
+  @override
+  State<HeaderSection> createState() => _HeaderSectionState();
+}
+
+class _HeaderSectionState extends State<HeaderSection> {
+  late final CarouselSliderController _carouselController;
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _carouselController = CarouselSliderController();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        CarouselSlider.builder(
+          carouselController: _carouselController,
+          itemCount: widget.restaurantModel.images.length,
+          itemBuilder: (context, itemIndex, pageViewIndex) => ClipRRect(
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30.r),
+              bottomRight: Radius.circular(30.r),
+            ),
+            child: CachedNetworkImage(
+              imageUrl: widget.restaurantModel.images[itemIndex],
+              height: 350.h,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Stack(
+                alignment: Alignment.center,
+                children: [
+                  Skeletonizer(
+                    enabled: true,
+                    effect: ShimmerEffect(
+                      baseColor: Colors.grey.shade200,
+                      highlightColor: Colors.grey.shade100,
+                    ),
+                    child: Container(
+                      height: 350.h,
+                      width: double.infinity,
+                      color: Colors.grey.shade200,
+                    ),
+                  ),
+
+                  Assets.lottie.handLoading.lottie(),
+                ],
+              ),
+              errorWidget: (context, url, error) =>
+                  Center(child: Assets.lottie.error.lottie()),
+            ),
+          ),
+          options: CarouselOptions(
+            height: 350.h,
+            autoPlay: true,
+            autoPlayInterval: Duration(seconds: 3),
+            autoPlayAnimationDuration: Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enlargeCenterPage: false,
+            viewportFraction: 1.0,
+            pageSnapping: true,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Column(
+            children: [
+              SmoothPageIndicator(
+                controller: PageController(initialPage: _currentIndex),
+                count: widget.restaurantModel.images.length,
+                effect: WormEffect(
+                  dotHeight: 12,
+                  dotWidth: 12,
+                  spacing: 8,
+                  dotColor: AppColors.white.withAlpha(100),
+                  activeDotColor: AppColors.white,
+                  type: WormType.thin,
+                ),
+                onDotClicked: (index) {
+                  _carouselController.animateToPage(index);
+                },
+              ),
+              SizedBox(height: 20.h),
+            ],
+          ),
+        ),
+        Positioned(
+          top: 50.h,
+          left: 20.w,
+          child: CustomCircleButton(
+            backgroundColor: AppColors.white,
+            size: 55.h,
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: AppColors.darkBlue,
+              size: 20.h,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 50.h,
+          right: 20.w,
+          child: CustomCircleButton(
+            //onPressed: () => _showFliterDialog(),
+            backgroundColor: AppColors.white,
+            size: 55.h,
+            icon: Icon(
+              Icons.more_horiz_rounded,
+              color: AppColors.darkBlue,
+              size: 20.h,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class BodySection extends StatelessWidget {
+  final RestaurantModel restaurantModel;
+
+  const BodySection({super.key, required this.restaurantModel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        RestaurantInfoPart(restaurantModel: restaurantModel),
+        SizedBox(height: 10.h),
+        CustomReadMore(text: restaurantModel.description),
+      ],
+    );
+  }
+}
+
+class FooterSection extends StatefulWidget {
+  final List<String> foundFoods;
+  const FooterSection({super.key, required this.foundFoods});
+
+  @override
+  State<FooterSection> createState() => _FooterSectionState();
+}
+
+class _FooterSectionState extends State<FooterSection> {
+  String selectedType = 'Burger';
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CustomSelectFoodButton(
+          foods: widget.foundFoods,
+          selectedBackgroundColor: Color(0xFFF58D1D),
+          unselectedBackgroundColor: AppColors.white,
+          borderColor: Color(0xFFEDEDED),
+          onSelected: (index, name) {
+            setState(() {
+              selectedType = name;
+            });
+          },
+        ),
+        SizedBox(height: 30.h),
+        FoodPart(
+          type: selectedType,
+          onTap: (food) {
+            context.push(
+              AppPaths.foodDetails,
+              extra: FoodDetailsScreenArgs(foodModel: food),
+            );
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class FoodPart extends StatefulWidget {
+  final String type;
+  final Function(FoodModel foodd) onTap;
+  const FoodPart({super.key, required this.type, required this.onTap});
+
+  @override
+  State<FoodPart> createState() => _FoodPartState();
+}
+
+class _FoodPartState extends State<FoodPart> {
+  late List<FoodModel> foodList;
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, List<FoodModel>> foodMap = {
+      'pizza': FoodModel.pizzaList,
+      'burger': FoodModel.burgerList,
+      'pasta': FoodModel.pastaList,
+      'sandwich': FoodModel.sandwichList,
+    };
+
+    foodList = foodMap[widget.type.toLowerCase()] ?? FoodModel.foodList;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "${widget.type} (${foodList.length})",
+
+          style: GoogleFonts.sen(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.w,
+            mainAxisSpacing: 45.h,
+            mainAxisExtent: 190.h,
+          ),
+          clipBehavior: Clip.none,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: foodList.length,
+          itemBuilder: (context, index) {
+            final popularFood = foodList[index];
+            return _buildPopularFoodItem(popularFood);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPopularFoodItem(FoodModel popularFood) {
+    return GestureDetector(
+      onTap: () => widget.onTap(popularFood),
+      child: LayoutBuilder(
+        builder: (context, constraints) => Stack(
+          clipBehavior: Clip.none,
+          alignment: Alignment.center,
+          children: [
+            Container(
+              width: constraints.maxWidth,
+              height: constraints.maxHeight,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                children: [
+                  SizedBox(height: constraints.maxHeight * 0.4), // 40%
+                  Text(
+                    popularFood.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.sen(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkBlue,
+                    ),
+                  ),
+                  Text(
+                    popularFood.restaurantName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.sen(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF646982),
+                    ),
+                  ),
+                  SizedBox(height: 10.h),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 10.w,
+                      right: 10.w,
+                      bottom: 7.h,
+                    ),
+                    child: Row(
+                      children: [
+                        AnimatedDigitWidget(
+                          value: popularFood.price,
+                          prefix: '\$',
+                          textStyle: GoogleFonts.sen(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.darkBlue,
+                          ),
+                        ),
+                        const Spacer(),
+                        AddToCartButtonV2(
+                          controller: AddToCartController(),
+                          onIncrement: (value) {
+                            context.read<FoodCubit>().incrementQuantity(
+                              popularFood.id,
+                            );
+                          },
+                          onDecrement: (value) {
+                            context.read<FoodCubit>().decrementQuantity(
+                              popularFood.id,
+                            );
+                          },
+
+                          width: 90.w,
+                          height: 45.h,
+                          backgroundColor: AppColors.secondary,
+                          iconColor: AppColors.white,
+                          initialSize: 40.h,
+                          iconBackgroundColor: Colors.white.withAlpha(100),
+                          countColor: AppColors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Positioned(
+              top: -45.h,
+              child: Image.asset(
+                popularFood.image,
+                width: constraints.maxWidth * 0.65,
+                height: constraints.maxHeight * 0.65,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

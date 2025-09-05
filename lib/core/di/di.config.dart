@@ -9,7 +9,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:food_delivery/app/cubits/food_cubit.dart' as _i393;
+import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i393;
 import 'package:food_delivery/core/services/auth_service.dart' as _i717;
 import 'package:food_delivery/core/services/location_service.dart' as _i750;
 import 'package:food_delivery/core/services/toast_service.dart' as _i947;

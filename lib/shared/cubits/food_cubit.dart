@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/core/models/food_model.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton

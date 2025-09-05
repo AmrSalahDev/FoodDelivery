@@ -1,4 +1,4 @@
-import 'package:food_delivery/app/models/food_model.dart';
+import 'package:food_delivery/core/models/food_model.dart';
 
 class FoodDetailsScreenArgs {
   final FoodModel foodModel;
