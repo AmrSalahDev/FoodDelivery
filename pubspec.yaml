@@ -31,6 +31,7 @@ dependencies:
   go_router: ^16.2.0
   go_transitions: ^0.8.2
   google_fonts: ^6.3.0
+  group_button: ^5.3.4
   injectable: ^2.5.1
   injectable_generator: ^2.8.1
   location: ^8.0.1

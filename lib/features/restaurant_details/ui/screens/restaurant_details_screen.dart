@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/models/food_model.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
@@ -12,12 +13,15 @@ import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_readmore.dart';
+import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_select_food_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/models/restaurant_imodel.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:group_button/group_button.dart';
+import 'package:my_flutter_toolkit/core/extensions/context_extensions.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -68,76 +72,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _showFliterDialog() {
-    final List<String> offers = [
-      'Delivery',
-      'Pick Up',
-      'Offer',
-      'Online payment available',
-    ];
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => Dialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(20.r),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    "Filter your search",
-                    style: GoogleFonts.sen(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.normal,
-                      color: AppColors.darkBlue,
-                    ),
-                  ),
-                  const Spacer(),
-                  CustomCircleButton(
-                    onPressed: () => Navigator.pop(context),
-                    backgroundColor: AppColors.lightGray,
-                    size: 55.h,
-                    icon: Icon(
-                      Icons.close,
-                      color: AppColors.darkBlue,
-                      size: 20.h,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
-              Text(
-                "Offers",
-                style: GoogleFonts.sen(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.normal,
-                  color: AppColors.darkBlue,
-                ),
-              ),
-              SizedBox(height: 20.h),
-              // CustomSelectFoodButton(
-              //   foods: offers,
-              //   isWrap: true,
-              //   selectedBackgroundColor: Color(0xFFF58D1D),
-              //   unselectedBackgroundColor: AppColors.white,
-              //   borderColor: Color(0xFFEDEDED),
-              // ),
             ],
           ),
         ),
@@ -232,6 +166,106 @@ class _HeaderSectionState extends State<HeaderSection> {
     _carouselController = CarouselSliderController();
   }
 
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return Dialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: 10.w),
+          child: Container(
+            width: double.infinity,
+            height: context.screenHeight * 0.91,
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(20.r),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  FilterDialogHeader(),
+                  OfferFilterPart(options: groupButtonRoundedOptions()),
+                  DeliveryTimeFilterPart(
+                    options: groupButtonRoundedOptions(horizontal: 15),
+                  ),
+                  PriceFilterPart(options: groupButtonCircleOptions),
+                  RateFilterPart(),
+                  SizedBox(height: 30.h),
+                  CustomRectangleButton(
+                    title: AppStrings.filter.toUpperCase(),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    backgroundColor: AppColors.secondary,
+                    textStyle: GoogleFonts.sen(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  GroupButtonOptions groupButtonRoundedOptions({double horizontal = 20}) {
+    return GroupButtonOptions(
+      selectedColor: Color(0xFFF58D1D),
+      unselectedColor: AppColors.white,
+      unselectedTextStyle: GoogleFonts.sen(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: Color(0xFF464E57),
+      ),
+      selectedTextStyle: GoogleFonts.sen(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: AppColors.white,
+      ),
+      unselectedBorderColor: Color(0xFFEDEDED),
+      borderRadius: BorderRadius.all(Radius.circular(33.r)),
+      selectedBorderColor: Color(0xFFF58D1D),
+      elevation: 0,
+      buttonHeight: 50.h,
+      textPadding: EdgeInsets.symmetric(horizontal: horizontal),
+      selectedShadow: const [],
+      unselectedShadow: const [],
+      mainGroupAlignment: MainGroupAlignment.start,
+    );
+  }
+
+  GroupButtonOptions get groupButtonCircleOptions => GroupButtonOptions(
+    selectedColor: Color(0xFFF58D1D),
+    unselectedColor: AppColors.white,
+    unselectedTextStyle: GoogleFonts.sen(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.normal,
+      color: Color(0xFF464E57),
+    ),
+    selectedTextStyle: GoogleFonts.sen(
+      fontSize: 16.sp,
+      fontWeight: FontWeight.normal,
+      color: AppColors.white,
+    ),
+    unselectedBorderColor: Color(0xFFEDEDED),
+    borderRadius: BorderRadius.all(Radius.circular(100)),
+    selectedBorderColor: Color(0xFFF58D1D),
+    elevation: 0,
+    buttonHeight: 55.h,
+    buttonWidth: 55.h,
+
+    selectedShadow: const [],
+    unselectedShadow: const [],
+    mainGroupAlignment: MainGroupAlignment.start,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -318,6 +352,7 @@ class _HeaderSectionState extends State<HeaderSection> {
           child: CustomCircleButton(
             backgroundColor: AppColors.white,
             size: 55.h,
+            onPressed: () => Navigator.pop(context),
             icon: Icon(
               Icons.arrow_back_ios_new_rounded,
               color: AppColors.darkBlue,
@@ -329,7 +364,7 @@ class _HeaderSectionState extends State<HeaderSection> {
           top: 50.h,
           right: 20.w,
           child: CustomCircleButton(
-            //onPressed: () => _showFliterDialog(),
+            onPressed: () => _showFilterDialog(),
             backgroundColor: AppColors.white,
             size: 55.h,
             icon: Icon(
@@ -338,6 +373,187 @@ class _HeaderSectionState extends State<HeaderSection> {
               size: 20.h,
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class FilterDialogHeader extends StatelessWidget {
+  const FilterDialogHeader({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          AppStrings.filterYourSearch,
+          style: GoogleFonts.sen(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.normal,
+            color: AppColors.darkBlue,
+          ),
+        ),
+        const Spacer(),
+        CustomCircleButton(
+          onPressed: () => Navigator.pop(context),
+          backgroundColor: AppColors.lightGray,
+          size: 55.h,
+          icon: Icon(Icons.close, color: AppColors.darkBlue, size: 20.h),
+        ),
+      ],
+    );
+  }
+}
+
+class OfferFilterPart extends StatelessWidget {
+  final GroupButtonOptions options;
+  OfferFilterPart({super.key, required this.options});
+
+  final List<String> offers = [
+    'Delivery',
+    'Pick Up',
+    'Offer',
+    'Online payment available',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 20.h),
+        Text(
+          AppStrings.offers.toUpperCase(),
+          style: GoogleFonts.sen(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        GroupButton(
+          isRadio: true,
+          //onSelected: (index, isSelected) => print('$index button is selected'),
+          buttons: offers,
+          options: options,
+        ),
+      ],
+    );
+  }
+}
+
+class DeliveryTimeFilterPart extends StatelessWidget {
+  final GroupButtonOptions options;
+  DeliveryTimeFilterPart({super.key, required this.options});
+
+  final List<String> deliveryTimes = ['10-15 min', '20 min', '30 min'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30.h),
+        Text(
+          AppStrings.deliverTime.toUpperCase(),
+          style: GoogleFonts.sen(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        GroupButton(
+          isRadio: true,
+          //onSelected: (index, isSelected) => print('$index button is selected'),
+          buttons: deliveryTimes,
+          options: options,
+        ),
+      ],
+    );
+  }
+}
+
+class PriceFilterPart extends StatelessWidget {
+  final GroupButtonOptions options;
+  PriceFilterPart({super.key, required this.options});
+
+  final List<String> prices = ['\$', '\$\$', '\$\$\$'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30.h),
+        Text(
+          AppStrings.pricing.toUpperCase(),
+          style: GoogleFonts.sen(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        GroupButton(
+          isRadio: true,
+          //onSelected: (index, isSelected) => print('$index button is selected'),
+          buttons: prices,
+          options: options,
+        ),
+      ],
+    );
+  }
+}
+
+class RateFilterPart extends StatelessWidget {
+  RateFilterPart({super.key});
+
+  final List<IconData> ratings = [
+    Icons.star,
+    Icons.star,
+    Icons.star,
+    Icons.star,
+    Icons.star,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(height: 30.h),
+        Text(
+          AppStrings.rating.toUpperCase(),
+          style: GoogleFonts.sen(
+            fontSize: 14.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        GroupButton<IconData>(
+          isRadio: false,
+          //onSelected: (index, isSelected) => print('$index button is selected'),
+          buttonBuilder: (selected, value, context) {
+            return Container(
+              //padding: const EdgeInsets.all(10),
+              width: 55.h,
+              height: 55.h,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Color(0xFFEDEDED)),
+              ),
+              child: Icon(
+                value,
+                size: 24.h,
+                color: selected ? AppColors.secondary : Color(0xFFD9D9D9),
+              ),
+            );
+          },
+          buttons: ratings,
         ),
       ],
     );

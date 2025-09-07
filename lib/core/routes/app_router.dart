@@ -103,8 +103,8 @@ class AppRouter {
         pageBuilder: GoTransitions.fade.call,
         builder: (context, state) {
           final args = state.extra as RestaurantDetailsScreenArgs;
-          return BlocProvider(
-            create: (context) => getIt<FoodCubit>(),
+          return MultiBlocProvider(
+            providers: [BlocProvider(create: (context) => getIt<FoodCubit>())],
             child: RestaurantDetailsScreen(
               restaurantModel: args.restaurantModel,
             ),

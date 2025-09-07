@@ -50,6 +50,12 @@ class AppStrings {
   static const String recentKeywords = "Recent Keywords";
   static const String suggestedRestaurants = "Suggested Restaurants";
   static const String popularFastFood = "Popular Fast Food";
+  static const String filter = "Filter";
+  static const String rating = "Rating";
+  static const String pricing = "pricing";
+  static const String deliverTime = "Deliver Time";
+  static const String offers = "Offers";
+  static const String filterYourSearch = "Filter your search";
 
   // food
   static const String burger = "Burger";
