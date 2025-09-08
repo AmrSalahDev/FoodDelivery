@@ -16,6 +16,14 @@
 A modern Food Delivery App built with Flutter. The app provides an intuitive UI and seamless experience for browsing restaurants, selecting meals, and placing orders.
 ---
 
+> ⚠️ **Project Status: In Development**  
+>
+> This project is still under active development.  
+> Features, structure, and dependencies may change frequently until a stable release is published.  
+> Contributions and feedback are always welcome!
+
+---
+
 ## 📑 Table of Contents
 - [✨ Badges](#-badges)
 - [🍔 Food Delivery App](#-food-delivery-app)
