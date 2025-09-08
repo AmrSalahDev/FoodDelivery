@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
+import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart';
+import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart';
+import 'package:food_delivery/features/cart/ui/screens/cart_screen.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
@@ -36,6 +40,7 @@ class AppPaths {
   static const String searchResult = "/searchResult";
   static const String foodDetails = "/foodDetails";
   static const String restaurantDetails = "/restaurantDetails";
+  static const String cart = "/cart";
 }
 
 class SupabaseAuthNotifier extends ChangeNotifier {
@@ -67,8 +72,11 @@ class AppRouter {
         path: AppPaths.home,
         builder: (context, state) {
           //final args = state.extra as HomeScreenArgs;
-          return BlocProvider(
-            create: (context) => getIt<HomeCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<HomeCubit>()),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
             child: HomeScreen(userLocation: 'Unknown Location'),
           );
         },
@@ -78,11 +86,25 @@ class AppRouter {
         builder: (context, state) => SearchScreen(),
       ),
       GoRoute(
+        path: AppPaths.cart,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: getIt<CartCubit>()),
+            BlocProvider(create: (context) => getIt<CartEditItemsCubit>()),
+            BlocProvider(create: (context) => getIt<CartEditAddressCubit>()),
+          ],
+          child: CartScreen(),
+        ),
+      ),
+      GoRoute(
         path: AppPaths.searchResult,
         builder: (context, state) {
           final args = state.extra as SearchResultScreenArgs;
-          return BlocProvider(
-            create: (context) => getIt<FoodCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<FoodCubit>()),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
             child: SearchResultScreen(query: args.query),
           );
         },
@@ -92,8 +114,11 @@ class AppRouter {
         pageBuilder: GoTransitions.fade.call,
         builder: (context, state) {
           final args = state.extra as FoodDetailsScreenArgs;
-          return BlocProvider(
-            create: (context) => getIt<FoodCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<FoodCubit>()),
+              BlocProvider.value(value: getIt<CartCubit>()),
+            ],
             child: FoodDetailsScreen(foodModel: args.foodModel),
           );
         },

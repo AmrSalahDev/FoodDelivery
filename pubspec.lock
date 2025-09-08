@@ -1073,6 +1073,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.28.0"
+  scroll_to_hide:
+    dependency: "direct main"
+    description:
+      name: scroll_to_hide
+      sha256: "242005340d5be2a4294c41195baad3abe29253914ac055c29f21fc9f94e0fa77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.1"
   sentry:
     dependency: transitive
     description:
@@ -1439,7 +1447,7 @@ packages:
     source: hosted
     version: "3.1.4"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       sha256: a5be9ef6618a7ac1e964353ef476418026db906c4facdedaa299b7a2e71690ff

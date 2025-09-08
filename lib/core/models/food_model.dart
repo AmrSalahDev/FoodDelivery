@@ -1,6 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:faker/faker.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
+import 'package:uuid/uuid.dart';
+
+final uuid = Uuid();
 
 class FoodModel extends Equatable {
   final String id;
@@ -52,23 +55,13 @@ class FoodModel extends Equatable {
   );
 
   @override
-  List<Object?> get props => [
-    id,
-    image,
-    title,
-    restaurantName,
-    price,
-    quantity,
-    rating,
-    deliveryTime,
-    deliveryCost,
-  ];
+  List<Object?> get props => [id, title, quantity];
 
   static final List<FoodModel> foodCategoriesList = <FoodModel>[
     FoodModel(
       title: "Burger",
       image: Assets.images.food.burger.burger2.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -81,7 +74,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "Pizza",
       image: Assets.images.food.pizza.pizza4.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -94,7 +87,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "Pasta",
       image: Assets.images.food.pasta.pasta1.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -107,7 +100,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "Salad",
       image: Assets.images.food.salad.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -120,7 +113,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "French Fries",
       image: Assets.images.food.frenchFries.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -133,7 +126,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "Soup",
       image: Assets.images.food.soup.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -146,7 +139,7 @@ class FoodModel extends Equatable {
     FoodModel(
       title: "Steak",
       image: Assets.images.food.steak.path,
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       restaurantName: "Cafenio Coffee Club",
       description:
           "Maecenas sed diam eget risus varius blandit sit amet non magna. Integer posuere erat a ante venenatis dapibus posuere velit aliquet.",
@@ -160,7 +153,7 @@ class FoodModel extends Equatable {
 
   static final List<FoodModel> sandwichList = [
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.sandwich.sand1.path,
       title: "Sandwich",
       restaurantName: "Cafenio Coffee Club",
@@ -173,7 +166,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.sandwich.sand2.path,
       title: "Sandwich",
       restaurantName: "Cafenio Coffee Club",
@@ -189,7 +182,7 @@ class FoodModel extends Equatable {
 
   static final List<FoodModel> pastaList = [
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta1.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -202,7 +195,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta2.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -215,7 +208,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta3.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -228,7 +221,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta4.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -241,7 +234,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta5.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -254,7 +247,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta6.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -267,7 +260,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta7.path,
       title: "Pasta",
       restaurantName: "Cafenio Coffee Club",
@@ -283,7 +276,7 @@ class FoodModel extends Equatable {
 
   static final List<FoodModel> pizzaList = [
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza1.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -296,7 +289,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza2.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -309,7 +302,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza3.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -322,7 +315,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza4.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -335,7 +328,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza5.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -348,7 +341,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza6.path,
       title: "Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -364,7 +357,7 @@ class FoodModel extends Equatable {
 
   static final List<FoodModel> burgerList = [
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.burger.burger1.path,
       title: "Burger",
       restaurantName: "Cafenio Coffee Club",
@@ -377,7 +370,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.burger.burger2.path,
       title: "Burger",
       restaurantName: "Cafenio Coffee Club",
@@ -390,7 +383,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.burger.burger3.path,
       title: "Burger",
       restaurantName: "Cafenio Coffee Club",
@@ -403,7 +396,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.burger.burger4.path,
       title: "Burger",
       restaurantName: "Cafenio Coffee Club",
@@ -419,7 +412,7 @@ class FoodModel extends Equatable {
 
   static final List<FoodModel> foodList = [
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.burger.burger1.path,
       title: "Buffalo Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -432,7 +425,7 @@ class FoodModel extends Equatable {
       deliveryCost: "Free",
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pizza.pizza1.path,
       title: "European Pizza",
       restaurantName: "Uttora Coffe House",
@@ -445,7 +438,7 @@ class FoodModel extends Equatable {
       quantity: 0,
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.pasta.pasta1.path,
       title: "Buffalo Pizza",
       restaurantName: "Cafenio Coffee Club",
@@ -458,7 +451,7 @@ class FoodModel extends Equatable {
       quantity: 0,
     ),
     FoodModel(
-      id: faker.guid.guid(),
+      id: uuid.v4(),
       image: Assets.images.food.sandwich.sand1.path,
       title: "European Pizza",
       restaurantName: "Uttora Coffe House",

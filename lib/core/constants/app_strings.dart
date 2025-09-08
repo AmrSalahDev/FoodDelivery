@@ -56,6 +56,16 @@ class AppStrings {
   static const String deliverTime = "Deliver Time";
   static const String offers = "Offers";
   static const String filterYourSearch = "Filter your search";
+  static const String editItems = 'Edit Items';
+  static const String cart = 'Cart';
+  static const String edit = 'edit';
+  static const String deliveryAddress = 'Delivery Address';
+  static const String total = "Total: ";
+  static const String placeOrder = 'Place Order';
+  static const String breakdown = 'Breakdown';
+  static const String done = 'Done';
+  static const String enterYourAddress = 'Enter your address';
+  static const String addressEmptyMessage = 'Address can\'t be empty';
 
   // food
   static const String burger = "Burger";

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_delivery/shared/cubits/food_cubit.dart';
+import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
@@ -247,27 +247,46 @@ class _PopularFoodPartState extends State<PopularFoodPart> {
           ),
         ),
         SizedBox(height: 50.h),
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15.w,
-            mainAxisSpacing: 45.h,
-            mainAxisExtent: 190.h,
-          ),
-          clipBehavior: Clip.none,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: foodList.length,
-          itemBuilder: (context, index) {
-            final popularFood = foodList[index];
-            return _buildPopularFoodItem(popularFood);
+        BlocBuilder<CartCubit, List<FoodModel>>(
+          builder: (context, cart) {
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15.w,
+                mainAxisSpacing: 45.h,
+                mainAxisExtent: 190.h,
+              ),
+              clipBehavior: Clip.none,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: foodList.length,
+              itemBuilder: (context, index) {
+                final popularFood = foodList[index];
+
+                // Check if the food item is in the cart
+                final cartItem = context.read<CartCubit>().isInCart(
+                  popularFood,
+                );
+
+                final addToCartController = AddToCartController(
+                  initialQuantity: cartItem.quantity,
+                );
+                return _buildPopularFoodItem(
+                  popularFood: popularFood,
+                  addToCartController: addToCartController,
+                );
+              },
+            );
           },
         ),
       ],
     );
   }
 
-  Widget _buildPopularFoodItem(FoodModel popularFood) {
+  Widget _buildPopularFoodItem({
+    required FoodModel popularFood,
+    required AddToCartController addToCartController,
+  }) {
     return GestureDetector(
       onTap: () => widget.onTap(popularFood),
       child: LayoutBuilder(
@@ -334,15 +353,15 @@ class _PopularFoodPartState extends State<PopularFoodPart> {
                         ),
                         const Spacer(),
                         AddToCartButtonV2(
-                          controller: AddToCartController(),
+                          controller: addToCartController,
                           onIncrement: (value) {
-                            context.read<FoodCubit>().incrementQuantity(
-                              popularFood.id,
+                            context.read<CartCubit>().incrementQuantity(
+                              popularFood,
                             );
                           },
                           onDecrement: (value) {
-                            context.read<FoodCubit>().decrementQuantity(
-                              popularFood.id,
+                            context.read<CartCubit>().decrementQuantity(
+                              popularFood,
                             );
                           },
 

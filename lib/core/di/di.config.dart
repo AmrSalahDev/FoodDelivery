@@ -9,10 +9,14 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i393;
 import 'package:food_delivery/core/services/auth_service.dart' as _i717;
 import 'package:food_delivery/core/services/location_service.dart' as _i750;
 import 'package:food_delivery/core/services/toast_service.dart' as _i947;
+import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart' as _i963;
+import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart'
+    as _i740;
+import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart'
+    as _i273;
 import 'package:food_delivery/features/home/cubit/home_cubit.dart' as _i718;
 import 'package:food_delivery/features/login/data/repo/login_repo_impl.dart'
     as _i392;
@@ -30,6 +34,7 @@ import 'package:food_delivery/features/register/domain/usecases/register_usecase
     as _i640;
 import 'package:food_delivery/features/register/ui/cubit/register_cubit.dart'
     as _i325;
+import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i1067;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -40,11 +45,14 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.factory<_i740.CartEditAddressCubit>(() => _i740.CartEditAddressCubit());
     gh.factory<_i718.HomeCubit>(() => _i718.HomeCubit());
-    gh.lazySingleton<_i393.FoodCubit>(() => _i393.FoodCubit());
+    gh.factory<_i273.CartEditItemsCubit>(() => _i273.CartEditItemsCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
     gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());
+    gh.lazySingleton<_i963.CartCubit>(() => _i963.CartCubit());
+    gh.lazySingleton<_i1067.FoodCubit>(() => _i1067.FoodCubit());
     gh.lazySingleton<_i852.LoginRepo>(() => _i392.LoginRepoImpl());
     gh.lazySingleton<_i566.RegisterRepo>(() => _i70.RegisterRepoImpl());
     gh.factory<_i36.LoginUseCase>(

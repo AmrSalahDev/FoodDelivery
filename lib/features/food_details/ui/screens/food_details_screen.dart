@@ -1,8 +1,10 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
@@ -42,9 +44,8 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
     foodCubit = getIt<FoodCubit>();
 
     // controllers
-    _addToCartController = AddToCartController(
-      initialQuantity: foodCubit.getQuantity(widget.foodModel.id),
-    );
+    _addToCartController = AddToCartController();
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
@@ -348,20 +349,28 @@ class FooterSection extends StatelessWidget {
                   //suffix: "€",
                 ),
                 const Spacer(),
-                AddToCartButtonV2(
-                  onIncrement: (value) {
-                    foodCubit.incrementQuantity(foodModel.id);
+                BlocBuilder<CartCubit, List<FoodModel>>(
+                  builder: (context, state) {
+                    final cartItem = context.read<CartCubit>().isInCart(
+                      foodModel,
+                    );
+                    addToCartController.setQuantity(cartItem.quantity);
+                    return AddToCartButtonV2(
+                      onIncrement: (value) {
+                        context.read<CartCubit>().incrementQuantity(foodModel);
+                      },
+                      onDecrement: (value) {
+                        context.read<CartCubit>().decrementQuantity(foodModel);
+                      },
+                      controller: addToCartController,
+                      iconBackgroundColor: Colors.white.withAlpha(100),
+                      backgroundColor: AppColors.secondary,
+                      height: 55.h,
+                      width: 130.w,
+                      iconColor: AppColors.white,
+                      countColor: AppColors.white,
+                    );
                   },
-                  onDecrement: (value) {
-                    foodCubit.decrementQuantity(foodModel.id);
-                  },
-                  controller: addToCartController,
-                  iconBackgroundColor: Colors.white.withAlpha(100),
-                  backgroundColor: AppColors.secondary,
-                  height: 55.h,
-                  width: 130.w,
-                  iconColor: AppColors.white,
-                  countColor: AppColors.white,
                 ),
               ],
             ),

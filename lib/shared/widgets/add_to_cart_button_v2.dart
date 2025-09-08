@@ -51,6 +51,7 @@ class AddToCartButtonV2 extends StatefulWidget {
   final double borderRadius;
   final double height;
   final double width;
+  final double iconSize;
   final double initialSize;
   final BoxShape initialShape;
   final Duration animationDuration;
@@ -68,6 +69,7 @@ class AddToCartButtonV2 extends StatefulWidget {
     this.iconColor = Colors.black,
     this.borderWidth = 1.0,
     this.borderRadius = 10.0,
+    this.iconSize = 18.0,
     this.animationDuration = const Duration(milliseconds: 200),
     this.height = 40.0,
     this.width = 100.0,
@@ -147,7 +149,7 @@ class _AddToCartButtonV2State extends State<AddToCartButtonV2> {
                       ),
                       child: Icon(
                         Icons.remove,
-                        size: 18,
+                        size: widget.iconSize,
                         color: widget.iconColor,
                       ),
                     ),
@@ -178,7 +180,11 @@ class _AddToCartButtonV2State extends State<AddToCartButtonV2> {
                             widget.iconBackgroundColor ?? Colors.grey.shade700,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(Icons.add, size: 18, color: widget.iconColor),
+                      child: Icon(
+                        Icons.add,
+                        size: widget.iconSize,
+                        color: widget.iconColor,
+                      ),
                     ),
                   ),
                 ),
