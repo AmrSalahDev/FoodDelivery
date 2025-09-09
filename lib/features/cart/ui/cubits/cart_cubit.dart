@@ -21,6 +21,10 @@ class CartCubit extends Cubit<List<FoodModel>> {
     ]);
   }
 
+  void changeSize({required FoodModel food, required String size}) => emit(
+    state.map((p) => p.id == food.id ? p.copyWith(size: size) : p).toList(),
+  );
+
   void incrementQuantity(FoodModel food) {
     if (isClosed) return;
     final index = state.indexWhere((p) => p.id == food.id);

@@ -16,6 +16,7 @@ class FoodModel extends Equatable {
   final double rating;
   final String deliveryTime;
   final String deliveryCost;
+  final String size;
 
   const FoodModel({
     required this.id,
@@ -28,6 +29,7 @@ class FoodModel extends Equatable {
     required this.rating,
     required this.deliveryTime,
     required this.deliveryCost,
+    required this.size,
   });
 
   FoodModel copyWith({
@@ -41,10 +43,12 @@ class FoodModel extends Equatable {
     double? rating,
     String? deliveryTime,
     String? deliveryCost,
+    String? size,
   }) => FoodModel(
     id: id ?? this.id,
     image: image ?? this.image,
     title: title ?? this.title,
+    size: size ?? this.size,
     description: description ?? this.description,
     price: price ?? this.price,
     restaurantName: restaurantName ?? this.restaurantName,
@@ -70,6 +74,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "Pizza",
@@ -83,6 +88,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "Pasta",
@@ -96,6 +102,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "Salad",
@@ -109,6 +116,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "French Fries",
@@ -122,6 +130,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "Soup",
@@ -135,6 +144,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       title: "Steak",
@@ -148,6 +158,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
   ];
 
@@ -164,6 +175,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -177,6 +189,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
   ];
 
@@ -193,6 +206,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -206,6 +220,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -219,6 +234,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -232,6 +248,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -245,6 +262,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -258,6 +276,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -271,6 +290,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
   ];
 
@@ -287,6 +307,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -300,6 +321,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -313,6 +335,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -326,6 +349,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -339,6 +363,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -352,6 +377,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
   ];
 
@@ -368,6 +394,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -381,6 +408,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -394,6 +422,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -407,6 +436,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
   ];
 
@@ -423,6 +453,7 @@ class FoodModel extends Equatable {
       rating: 4.5,
       deliveryTime: "10 min",
       deliveryCost: "Free",
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -436,6 +467,7 @@ class FoodModel extends Equatable {
       deliveryTime: "10 min",
       deliveryCost: "Free",
       quantity: 0,
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -449,6 +481,7 @@ class FoodModel extends Equatable {
       deliveryTime: "10 min",
       deliveryCost: "Free",
       quantity: 0,
+      size: "10”",
     ),
     FoodModel(
       id: uuid.v4(),
@@ -462,6 +495,7 @@ class FoodModel extends Equatable {
       deliveryTime: "10 min",
       deliveryCost: "Free",
       quantity: 0,
+      size: "10”",
     ),
   ];
 }

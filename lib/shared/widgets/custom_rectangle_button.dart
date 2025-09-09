@@ -24,12 +24,12 @@ class CustomRectangleButton extends StatelessWidget {
   final double? width;
 
   // Action params
-  final Function() onPressed;
+  final Function()? onPressed;
 
   CustomRectangleButton({
     super.key,
     this.title,
-    required this.onPressed,
+    this.onPressed,
     this.backgroundColor,
     this.textStyle,
     this.decoration,

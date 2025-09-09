@@ -61,17 +61,23 @@ class _CartScreenState extends State<CartScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: ScrollToHide(
-          hideDirection: Axis.vertical,
-          scrollController: _scrollController,
-          child: AnimatedPadding(
-            duration: const Duration(milliseconds: 200),
-            // padding = keyboard height
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: SafeArea(top: false, child: FooterSection()),
-          ),
+        bottomNavigationBar: BlocBuilder<CartCubit, List<FoodModel>>(
+          builder: (context, state) {
+            return state.isEmpty
+                ? const SizedBox.shrink()
+                : ScrollToHide(
+                    hideDirection: Axis.vertical,
+                    scrollController: _scrollController,
+                    child: AnimatedPadding(
+                      duration: const Duration(milliseconds: 200),
+                      // padding = keyboard height
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      child: SafeArea(top: false, child: FooterSection()),
+                    ),
+                  );
+          },
         ),
       ),
     );
@@ -110,26 +116,34 @@ class _AppBarPartState extends State<AppBarPart> {
           ),
         ),
         const Spacer(),
-        GestureDetector(
-          onTap: () => context.read<CartEditItemsCubit>().toggle(),
-          child: BlocBuilder<CartEditItemsCubit, bool>(
-            builder: (context, state) {
-              return Text(
-                state
-                    ? AppStrings.done.toUpperCase()
-                    : AppStrings.editItems.toUpperCase(),
-                style: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.normal,
-                  color: state ? Color(0xFF059C6A) : AppColors.secondary,
-                  decoration: TextDecoration.underline,
-                  decorationColor: state
-                      ? Color(0xFF059C6A)
-                      : AppColors.secondary,
-                ),
-              );
-            },
-          ),
+        BlocBuilder<CartCubit, List<FoodModel>>(
+          builder: (context, state) {
+            return state.isEmpty
+                ? const SizedBox.shrink()
+                : GestureDetector(
+                    onTap: () => context.read<CartEditItemsCubit>().toggle(),
+                    child: BlocBuilder<CartEditItemsCubit, bool>(
+                      builder: (context, state) {
+                        return Text(
+                          state
+                              ? AppStrings.done.toUpperCase()
+                              : AppStrings.editItems.toUpperCase(),
+                          style: GoogleFonts.sen(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.normal,
+                            color: state
+                                ? Color(0xFF059C6A)
+                                : AppColors.secondary,
+                            decoration: TextDecoration.underline,
+                            decorationColor: state
+                                ? Color(0xFF059C6A)
+                                : AppColors.secondary,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+          },
         ),
       ],
     );
@@ -245,13 +259,20 @@ class _CartPartState extends State<CartPart> {
               SizedBox(height: 10.h),
               Row(
                 children: [
-                  Text(
-                    '14',
-                    style: GoogleFonts.sen(
-                      color: Color(0xFF32343E),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
+                  BlocBuilder<CartCubit, List<FoodModel>>(
+                    builder: (context, state) {
+                      final cartItem = context.read<CartCubit>().isInCart(
+                        foodItem,
+                      );
+                      return Text(
+                        cartItem.size,
+                        style: GoogleFonts.sen(
+                          color: Color(0xFF32343E),
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      );
+                    },
                   ),
                   const Spacer(),
                   AddToCartButtonV2(
@@ -260,6 +281,10 @@ class _CartPartState extends State<CartPart> {
                       context.read<CartCubit>().incrementQuantity(foodItem);
                     },
                     onDecrement: (value) {
+                      if (value == 0) {
+                        context.read<CartCubit>().removeFromCart(foodItem);
+                        return;
+                      }
                       context.read<CartCubit>().decrementQuantity(foodItem);
                     },
                     width: 110.w,

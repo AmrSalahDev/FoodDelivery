@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
@@ -17,6 +18,7 @@ import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/features/food_details/data/models/ingridents_model.dart';
 import 'package:food_delivery/core/models/food_model.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
@@ -176,7 +178,8 @@ class IngridentsPart extends StatelessWidget {
 }
 
 class SizeSelectorPart extends StatelessWidget {
-  const SizeSelectorPart({super.key});
+  final FoodModel foodModel;
+  const SizeSelectorPart({super.key, required this.foodModel});
 
   @override
   Widget build(BuildContext context) {
@@ -192,10 +195,18 @@ class SizeSelectorPart extends StatelessWidget {
           ),
         ),
         SizedBox(width: 10.w),
-        SelectSizeButtons(
-          sizes: ["10”", "14”", "16”"],
-          selectedBackgroundColor: Color(0xFFF58D1D),
-          unselectedBackgroundColor: AppColors.lightGray,
+        BlocBuilder<CartCubit, List<FoodModel>>(
+          builder: (context, state) {
+            return SelectSizeButtons(
+              sizes: ["10”", "14”", "16”"],
+
+              selectedBackgroundColor: Color(0xFFF58D1D),
+              unselectedBackgroundColor: AppColors.lightGray,
+              onSizeSelected: (index, size) => context
+                  .read<CartCubit>()
+                  .changeSize(food: foodModel, size: size),
+            );
+          },
         ),
       ],
     );
@@ -293,7 +304,7 @@ class BodySection extends StatelessWidget {
           SizedBox(height: 20.h),
           CustomReadMore(text: foodModel.description),
           SizedBox(height: 20.h),
-          SizeSelectorPart(),
+          SizeSelectorPart(foodModel: foodModel),
           SizedBox(height: 30.h),
           IngridentsPart(),
         ],
@@ -375,15 +386,20 @@ class FooterSection extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20.h),
-            CustomRectangleButton(
-              onPressed: () {
-                animationController.reset();
-                animationController.forward();
+            BlocBuilder<CartCubit, List<FoodModel>>(
+              builder: (context, state) {
+                return CustomRectangleButton(
+                  onPressed: state.isEmpty
+                      ? null
+                      : () => context.push(AppPaths.cart),
+                  title: AppStrings.addToCart.toUpperCase(),
+                  height: 60.h,
+                  backgroundColor: state.isEmpty
+                      ? AppColors.secondary.withAlpha(100)
+                      : AppColors.secondary,
+                  titleColor: AppColors.white,
+                );
               },
-              title: AppStrings.addToCart.toUpperCase(),
-              height: 60.h,
-              backgroundColor: AppColors.secondary,
-              titleColor: AppColors.white,
             ),
           ],
         ),

@@ -10,7 +10,7 @@ class SelectSizeButtons extends StatefulWidget {
   final Color unselectedBackgroundColor;
   final Color? selectedTextColor;
   final Color? unselectedTextColor;
-  final Function(int size)? onSizeSelected;
+  final Function(int index, String size)? onSizeSelected;
 
   const SelectSizeButtons({
     super.key,
@@ -48,7 +48,7 @@ class _SelectSizeButtonsState extends State<SelectSizeButtons> {
                   selectedIndex = index;
                 });
                 if (widget.onSizeSelected != null) {
-                  widget.onSizeSelected!(index);
+                  widget.onSizeSelected!(index, widget.sizes[index]);
                 }
               },
               backgroundColor: isSelected
