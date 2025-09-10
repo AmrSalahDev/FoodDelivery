@@ -248,7 +248,7 @@ class _PopularFoodPartState extends State<PopularFoodPart> {
         ),
         SizedBox(height: 50.h),
         BlocBuilder<CartCubit, List<FoodModel>>(
-          builder: (context, cart) {
+          builder: (context, state) {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -264,7 +264,7 @@ class _PopularFoodPartState extends State<PopularFoodPart> {
                 final popularFood = foodList[index];
 
                 // Check if the food item is in the cart
-                final cartItem = context.read<CartCubit>().isInCart(
+                final cartItem = context.read<CartCubit>().getFoodFromCart(
                   popularFood,
                 );
 

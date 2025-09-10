@@ -66,6 +66,19 @@ class AppStrings {
   static const String done = 'Done';
   static const String enterYourAddress = 'Enter your address';
   static const String addressEmptyMessage = 'Address can\'t be empty';
+  static const String payment = 'Payment';
+  static const String payAndConfirm = "Pay & Confirm";
+  static const String addNew = 'Add New';
+  static const String addCard = 'Add Card';
+  static const String addAndMakePayment = 'Add & Make Payment';
+  static const String cardHolderName = 'card holder name';
+  static const String enterCardHolderName = 'Enter card holder name';
+  static const String cardNumber = 'Card number';
+  static const String enterCardNumber = 'Enter card number';
+  static const String cvv = 'CVV';
+  static const String enterCvv = 'Enter CVV';
+  static const String expiry = 'Expire date';
+  static const String enterExpiry = 'Enter expiry';
 
   // food
   static const String burger = "Burger";

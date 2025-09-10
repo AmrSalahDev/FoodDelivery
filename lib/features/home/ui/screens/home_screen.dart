@@ -648,7 +648,7 @@ class AppBarPart extends StatelessWidget {
                   )
                 : Badge(
                     backgroundColor: AppColors.secondary,
-                    offset: Offset(-8.w, 0),
+                    offset: Offset(-5.w, -2.h),
                     label: Text(
                       length.toString(),
                       style: GoogleFonts.sen(

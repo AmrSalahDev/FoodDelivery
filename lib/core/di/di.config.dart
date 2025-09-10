@@ -26,6 +26,8 @@ import 'package:food_delivery/features/login/domain/usecases/login_usecase.dart'
     as _i36;
 import 'package:food_delivery/features/login/ui/cubit/login_cubit.dart'
     as _i318;
+import 'package:food_delivery/features/payment/ui/cubits/selected_card_cubit.dart'
+    as _i807;
 import 'package:food_delivery/features/register/data/repo/register_repo_impl.dart'
     as _i70;
 import 'package:food_delivery/features/register/domain/repo/register_repo.dart'
@@ -48,6 +50,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i740.CartEditAddressCubit>(() => _i740.CartEditAddressCubit());
     gh.factory<_i718.HomeCubit>(() => _i718.HomeCubit());
     gh.factory<_i273.CartEditItemsCubit>(() => _i273.CartEditItemsCubit());
+    gh.factory<_i807.SelectedCardCubit>(() => _i807.SelectedCardCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
     gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());

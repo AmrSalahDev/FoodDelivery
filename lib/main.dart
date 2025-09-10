@@ -1,3 +1,4 @@
+import 'package:clarity_flutter/clarity_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -40,6 +41,49 @@ void main() async {
     FlutterNativeSplash.remove();
   }
 }
+
+// void main() async {
+//   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+//   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+//   await dotenv.load(fileName: ".env");
+
+//   configureDependencies();
+
+//   await Supabase.initialize(
+//     url: dotenv.env['SUPABASE_URL'] ?? '',
+//     anonKey: dotenv.env['SUPABASE_ANON_KEY'] ?? '',
+//   );
+
+//   // Create Clarity config
+//   final clarityConfig = ClarityConfig(
+//     projectId: dotenv.env['CLARITY_PROJECT_ID'] ?? '',
+//     //logLevel: kReleaseMode ? LogLevel.None : LogLevel.Verbose,
+//   );
+
+//   if (kReleaseMode) {
+//     await SentryFlutter.init(
+//       (options) {
+//         options.dsn = dotenv.env['SENTRY_DSN'];
+//         options.sendDefaultPii = true;
+//       },
+//       appRunner: () {
+//         runApp(
+//           ClarityWidget(
+//             clarityConfig: clarityConfig,
+//             app: SentryWidget(child: const DeliveryApp()),
+//           ),
+//         );
+//         FlutterNativeSplash.remove();
+//       },
+//     );
+//   } else {
+//     runApp(
+//       ClarityWidget(clarityConfig: clarityConfig, app: const DeliveryApp()),
+//     );
+//     FlutterNativeSplash.remove();
+//   }
+// }
 
 class DeliveryApp extends StatelessWidget {
   const DeliveryApp({super.key});

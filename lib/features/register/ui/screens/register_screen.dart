@@ -25,10 +25,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
   late final TextEditingController confirmPasswordController;
-  late final GlobalKey<FormState> nameFormKey;
-  late final GlobalKey<FormState> emailFormKey;
-  late final GlobalKey<FormState> passwordFormKey;
-  late final GlobalKey<FormState> confirmPasswordFormKey;
+
+  late final GlobalKey<FormState> formKey;
   late final RegisterCubit registerCubit;
 
   @override
@@ -39,10 +37,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     passwordController = TextEditingController();
     nameController = TextEditingController();
     confirmPasswordController = TextEditingController();
-    nameFormKey = GlobalKey<FormState>();
-    emailFormKey = GlobalKey<FormState>();
-    passwordFormKey = GlobalKey<FormState>();
-    confirmPasswordFormKey = GlobalKey<FormState>();
+    formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -127,64 +122,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         top: 20.h,
                       ),
                       child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextfield(
-                              controller: nameController,
-                              formKey: nameFormKey,
-                              hint: AppStrings.nameHint,
-                              validator: (value) => Validators.name(value),
-                              textInputType: TextInputType.name,
-                              label: AppStrings.name.toUpperCase(),
-                            ),
-                            CustomTextfield(
-                              controller: emailController,
-                              formKey: emailFormKey,
-                              hint: AppStrings.emailHint,
-                              validator: (value) => Validators.email(value),
-                              textInputType: TextInputType.emailAddress,
-                              label: AppStrings.email.toUpperCase(),
-                            ),
-                            CustomTextfield(
-                              controller: passwordController,
-                              formKey: passwordFormKey,
-                              isPassword: true,
-                              validator: (value) => Validators.password(value),
-                              hint: AppStrings.passwordHint,
-                              textInputType: TextInputType.visiblePassword,
-                              label: AppStrings.password.toUpperCase(),
-                            ),
-                            CustomTextfield(
-                              controller: confirmPasswordController,
-                              formKey: confirmPasswordFormKey,
-                              validator: (value) {
-                                if (value != passwordController.text) {
-                                  return AppStrings.passwordNotMatch;
-                                }
-                                return null;
-                              },
-                              isPassword: true,
-                              hint: AppStrings.confirmPassword,
-                              textInputType: TextInputType.visiblePassword,
-                              label: AppStrings.reTypePassword.toUpperCase(),
-                            ),
-                            SizedBox(height: 30.h),
-                            BlocSelector<RegisterCubit, RegisterState, bool>(
-                              selector: (state) => state is RegisterLoading,
-                              bloc: registerCubit,
-                              builder: (context, state) {
-                                return CustomRectangleButton(
-                                  title: AppStrings.signUp.toUpperCase(),
-                                  titleColor: AppColors.white,
-                                  isLoading: state,
-                                  onPressed: () async => _onSignUpClicked(),
-                                  backgroundColor: AppColors.secondary,
-                                );
-                              },
-                            ),
-                            SizedBox(height: 30.h),
-                          ],
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextfield(
+                                controller: nameController,
+
+                                hint: AppStrings.nameHint,
+                                validator: (value) => Validators.name(value),
+                                textInputType: TextInputType.name,
+                                label: AppStrings.name.toUpperCase(),
+                              ),
+                              CustomTextfield(
+                                controller: emailController,
+
+                                hint: AppStrings.emailHint,
+                                validator: (value) => Validators.email(value),
+                                textInputType: TextInputType.emailAddress,
+                                label: AppStrings.email.toUpperCase(),
+                              ),
+                              CustomTextfield(
+                                controller: passwordController,
+
+                                isPassword: true,
+                                validator: (value) =>
+                                    Validators.password(value),
+                                hint: AppStrings.passwordHint,
+                                textInputType: TextInputType.visiblePassword,
+                                label: AppStrings.password.toUpperCase(),
+                              ),
+                              CustomTextfield(
+                                controller: confirmPasswordController,
+
+                                validator: (value) {
+                                  if (value != passwordController.text) {
+                                    return AppStrings.passwordNotMatch;
+                                  }
+                                  return null;
+                                },
+                                isPassword: true,
+                                hint: AppStrings.confirmPassword,
+                                textInputType: TextInputType.visiblePassword,
+                                label: AppStrings.reTypePassword.toUpperCase(),
+                              ),
+                              SizedBox(height: 30.h),
+                              BlocSelector<RegisterCubit, RegisterState, bool>(
+                                selector: (state) => state is RegisterLoading,
+                                bloc: registerCubit,
+                                builder: (context, state) {
+                                  return CustomRectangleButton(
+                                    title: AppStrings.signUp.toUpperCase(),
+                                    titleColor: AppColors.white,
+                                    isLoading: state,
+                                    onPressed: () async => _onSignUpClicked(),
+                                    backgroundColor: AppColors.secondary,
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 30.h),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -199,10 +198,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Future<void> _onSignUpClicked() async {
-    if (nameFormKey.currentState!.validate() &&
-        emailFormKey.currentState!.validate() &&
-        passwordFormKey.currentState!.validate() &&
-        confirmPasswordFormKey.currentState!.validate()) {
+    if (formKey.currentState!.validate() &&
+        formKey.currentState!.validate() &&
+        formKey.currentState!.validate() &&
+        formKey.currentState!.validate()) {
       await registerCubit.register(
         email: emailController.text,
         password: passwordController.text,

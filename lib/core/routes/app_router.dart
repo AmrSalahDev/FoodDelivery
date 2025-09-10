@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery/core/routes/args/payment_screen_args.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart';
 import 'package:food_delivery/features/cart/ui/screens/cart_screen.dart';
+import 'package:food_delivery/features/payment/ui/cubits/selected_card_cubit.dart';
+import 'package:food_delivery/features/payment/ui/screens/add_card_screen.dart';
+import 'package:food_delivery/features/payment/ui/screens/payment_screen.dart';
+import 'package:food_delivery/features/payment/ui/screens/payment_success_screen.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
@@ -41,6 +46,9 @@ class AppPaths {
   static const String foodDetails = "/foodDetails";
   static const String restaurantDetails = "/restaurantDetails";
   static const String cart = "/cart";
+  static const String payment = "/payment";
+  static const String addCard = "/addCard";
+  static const String paymentSuccess = "/paymentSuccess";
 }
 
 class SupabaseAuthNotifier extends ChangeNotifier {
@@ -84,6 +92,24 @@ class AppRouter {
       GoRoute(
         path: AppPaths.search,
         builder: (context, state) => SearchScreen(),
+      ),
+      GoRoute(
+        path: AppPaths.payment,
+        builder: (context, state) {
+          final args = state.extra as PaymentScreenArgs;
+          return BlocProvider(
+            create: (context) => getIt<SelectedCardCubit>(),
+            child: PaymentScreen(totalPrice: args.totalPrice),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppPaths.paymentSuccess,
+        builder: (context, state) => PaymentSuccessScreen(),
+      ),
+      GoRoute(
+        path: AppPaths.addCard,
+        builder: (context, state) => AddCardScreen(),
       ),
       GoRoute(
         path: AppPaths.cart,

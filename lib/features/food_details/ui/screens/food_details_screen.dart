@@ -199,7 +199,6 @@ class SizeSelectorPart extends StatelessWidget {
           builder: (context, state) {
             return SelectSizeButtons(
               sizes: ["10”", "14”", "16”"],
-
               selectedBackgroundColor: Color(0xFFF58D1D),
               unselectedBackgroundColor: AppColors.lightGray,
               onSizeSelected: (index, size) => context
@@ -352,17 +351,13 @@ class FooterSection extends StatelessWidget {
                     color: AppColors.darkBlue,
                   ),
                   fractionDigits: 0,
-                  //enableSeparator: true,
-                  //separateSymbol: "·",
-                  //separateLength: 2,
-                  //decimalSeparator: ",",
+
                   prefix: "\$",
-                  //suffix: "€",
                 ),
                 const Spacer(),
                 BlocBuilder<CartCubit, List<FoodModel>>(
                   builder: (context, state) {
-                    final cartItem = context.read<CartCubit>().isInCart(
+                    final cartItem = context.read<CartCubit>().getFoodFromCart(
                       foodModel,
                     );
                     addToCartController.setQuantity(cartItem.quantity);
@@ -388,13 +383,14 @@ class FooterSection extends StatelessWidget {
             SizedBox(height: 20.h),
             BlocBuilder<CartCubit, List<FoodModel>>(
               builder: (context, state) {
+                bool isInCart = context.read<CartCubit>().isInCart(foodModel);
                 return CustomRectangleButton(
-                  onPressed: state.isEmpty
+                  onPressed: !isInCart
                       ? null
                       : () => context.push(AppPaths.cart),
                   title: AppStrings.addToCart.toUpperCase(),
                   height: 60.h,
-                  backgroundColor: state.isEmpty
+                  backgroundColor: !isInCart
                       ? AppColors.secondary.withAlpha(100)
                       : AppColors.secondary,
                   titleColor: AppColors.white,

@@ -1,3 +1,4 @@
+import 'package:animated_digit/animated_digit.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,12 +6,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/core/routes/app_router.dart';
+import 'package:food_delivery/core/routes/args/payment_screen_args.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 import 'package:scroll_to_hide/scroll_to_hide.dart';
@@ -65,17 +69,13 @@ class _CartScreenState extends State<CartScreen> {
           builder: (context, state) {
             return state.isEmpty
                 ? const SizedBox.shrink()
-                : ScrollToHide(
-                    hideDirection: Axis.vertical,
-                    scrollController: _scrollController,
-                    child: AnimatedPadding(
-                      duration: const Duration(milliseconds: 200),
-                      // padding = keyboard height
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child: SafeArea(top: false, child: FooterSection()),
+                : AnimatedPadding(
+                    duration: const Duration(milliseconds: 200),
+                    // padding = keyboard height
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
                     ),
+                    child: SafeArea(top: false, child: FooterSection()),
                   );
           },
         ),
@@ -188,6 +188,7 @@ class _CartPartState extends State<CartPart> {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final foodItem = state[index];
+
             final addToCartController = AddToCartController(
               initialQuantity: foodItem.quantity,
             );
@@ -261,9 +262,9 @@ class _CartPartState extends State<CartPart> {
                 children: [
                   BlocBuilder<CartCubit, List<FoodModel>>(
                     builder: (context, state) {
-                      final cartItem = context.read<CartCubit>().isInCart(
-                        foodItem,
-                      );
+                      final cartItem = context
+                          .read<CartCubit>()
+                          .getFoodFromCart(foodItem);
                       return Text(
                         cartItem.size,
                         style: GoogleFonts.sen(
@@ -374,19 +375,41 @@ class _FooterSectionState extends State<FooterSection> {
             SizedBox(height: 40.h),
             _SummaryPart(),
             SizedBox(height: 30.h),
-            CustomRectangleButton(
-              onPressed: () {},
-              title: AppStrings.placeOrder.toUpperCase(),
-              backgroundColor: AppColors.secondary,
-              textStyle: GoogleFonts.sen(
-                fontSize: 16.sp,
-                fontWeight: FontWeight.bold,
-                color: AppColors.white,
-              ),
-            ),
+            _PlaceOrderButton(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PlaceOrderButton extends StatelessWidget {
+  const _PlaceOrderButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CartEditItemsCubit, bool>(
+      builder: (context, state) {
+        return CustomRectangleButton(
+          onPressed: state
+              ? null
+              : () => context.push(
+                  AppPaths.payment,
+                  extra: PaymentScreenArgs(
+                    totalPrice: context.read<CartCubit>().getTotalPrice(),
+                  ),
+                ),
+          title: AppStrings.placeOrder.toUpperCase(),
+          backgroundColor: state
+              ? AppColors.secondary.withAlpha(100)
+              : AppColors.secondary,
+          textStyle: GoogleFonts.sen(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.white,
+          ),
+        );
+      },
     );
   }
 }
@@ -408,9 +431,10 @@ class _SummaryPart extends StatelessWidget {
                 color: Color(0xFFA0A5BA),
               ),
             ),
-            Text(
-              '\$${faker.faker.randomGenerator.integer(100).toString()}',
-              style: GoogleFonts.sen(
+            AnimatedDigitWidget(
+              value: context.read<CartCubit>().getTotalPrice(),
+              prefix: '\$',
+              textStyle: GoogleFonts.sen(
                 fontSize: 30.sp,
                 fontWeight: FontWeight.normal,
                 color: AppColors.darkBlue,

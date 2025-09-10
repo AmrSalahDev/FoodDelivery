@@ -35,6 +35,7 @@ class CartCubit extends Cubit<List<FoodModel>> {
       final updated = state[index].copyWith(
         quantity: state[index].quantity + 1,
       );
+
       final newState = [...state];
       newState[index] = updated;
       emit(newState);
@@ -50,6 +51,7 @@ class CartCubit extends Cubit<List<FoodModel>> {
     final current = state[index];
     if (current.quantity > 1) {
       final updated = current.copyWith(quantity: current.quantity - 1);
+
       final newState = [...state];
       newState[index] = updated;
       emit(newState);
@@ -64,8 +66,19 @@ class CartCubit extends Cubit<List<FoodModel>> {
   void removeFromCart(FoodModel food) =>
       emit(state.where((p) => p.id != food.id).toList());
 
-  FoodModel isInCart(FoodModel food) => state.firstWhere(
+  FoodModel getFoodFromCart(FoodModel food) => state.firstWhere(
     (p) => p.id == food.id,
     orElse: () => food.copyWith(quantity: 0),
   );
+
+  bool isInCart(FoodModel food) {
+    return state.any((f) => f.id == food.id);
+  }
+
+  double getTotalPrice() {
+    return state.fold(
+      0.0,
+      (previousValue, food) => previousValue + (food.price * food.quantity),
+    );
+  }
 }

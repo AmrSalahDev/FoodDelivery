@@ -18,9 +18,28 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/card_logo_mastercard.svg
+  SvgGenImage get cardLogoMastercard =>
+      const SvgGenImage('assets/icons/card_logo_mastercard.svg');
+
+  /// File path: assets/icons/card_logo_paypal.svg
+  SvgGenImage get cardLogoPaypal =>
+      const SvgGenImage('assets/icons/card_logo_paypal.svg');
+
+  /// File path: assets/icons/card_logo_unknown.svg
+  SvgGenImage get cardLogoUnknown =>
+      const SvgGenImage('assets/icons/card_logo_unknown.svg');
+
+  /// File path: assets/icons/card_logo_visa.svg
+  SvgGenImage get cardLogoVisa =>
+      const SvgGenImage('assets/icons/card_logo_visa.svg');
+
   /// File path: assets/icons/ic_broccoli.svg
   SvgGenImage get icBroccoli =>
       const SvgGenImage('assets/icons/ic_broccoli.svg');
+
+  /// File path: assets/icons/ic_cash.svg
+  SvgGenImage get icCash => const SvgGenImage('assets/icons/ic_cash.svg');
 
   /// File path: assets/icons/ic_chicken.svg
   SvgGenImage get icChicken => const SvgGenImage('assets/icons/ic_chicken.svg');
@@ -31,6 +50,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_ginger.svg
   SvgGenImage get icGinger => const SvgGenImage('assets/icons/ic_ginger.svg');
 
+  /// File path: assets/icons/ic_mastercard.svg
+  SvgGenImage get icMastercard =>
+      const SvgGenImage('assets/icons/ic_mastercard.svg');
+
   /// File path: assets/icons/ic_onion.svg
   SvgGenImage get icOnion => const SvgGenImage('assets/icons/ic_onion.svg');
 
@@ -40,6 +63,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/ic_pappers.svg
   SvgGenImage get icPappers => const SvgGenImage('assets/icons/ic_pappers.svg');
 
+  /// File path: assets/icons/ic_paypal.svg
+  SvgGenImage get icPaypal => const SvgGenImage('assets/icons/ic_paypal.svg');
+
   /// File path: assets/icons/ic_salt.svg
   SvgGenImage get icSalt => const SvgGenImage('assets/icons/ic_salt.svg');
 
@@ -47,20 +73,31 @@ class $AssetsIconsGen {
   AssetGenImage get icSortSettings =>
       const AssetGenImage('assets/icons/ic_sort_settings.png');
 
+  /// File path: assets/icons/ic_visa.svg
+  SvgGenImage get icVisa => const SvgGenImage('assets/icons/ic_visa.svg');
+
   /// File path: assets/icons/ic_walnut.svg
   SvgGenImage get icWalnut => const SvgGenImage('assets/icons/ic_walnut.svg');
 
   /// List of all assets
   List<dynamic> get values => [
+    cardLogoMastercard,
+    cardLogoPaypal,
+    cardLogoUnknown,
+    cardLogoVisa,
     icBroccoli,
+    icCash,
     icChicken,
     icGarlic,
     icGinger,
+    icMastercard,
     icOnion,
     icOrange,
     icPappers,
+    icPaypal,
     icSalt,
     icSortSettings,
+    icVisa,
     icWalnut,
   ];
 }

@@ -99,12 +99,15 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CustomTextfield(
-                            controller: emailController,
-                            formKey: formKey,
-                            hint: AppStrings.emailHint,
-                            textInputType: TextInputType.emailAddress,
-                            label: AppStrings.email.toUpperCase(),
+                          Form(
+                            key: formKey,
+                            child: CustomTextfield(
+                              controller: emailController,
+
+                              hint: AppStrings.emailHint,
+                              textInputType: TextInputType.emailAddress,
+                              label: AppStrings.email.toUpperCase(),
+                            ),
                           ),
 
                           CustomRectangleButton(

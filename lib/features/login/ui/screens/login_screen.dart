@@ -29,16 +29,14 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
-  late final GlobalKey<FormState> emailFormKey;
-  late final GlobalKey<FormState> passwordFormKey;
+  late final GlobalKey<FormState> formKey;
 
   @override
   void initState() {
     super.initState();
     emailController = TextEditingController();
     passwordController = TextEditingController();
-    emailFormKey = GlobalKey<FormState>();
-    passwordFormKey = GlobalKey<FormState>();
+    formKey = GlobalKey<FormState>();
   }
 
   @override
@@ -118,155 +116,159 @@ class _LoginScreenState extends State<LoginScreen> {
                         top: 20.h,
                       ),
                       child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomTextfield(
-                              controller: emailController,
-                              formKey: emailFormKey,
-                              validator: (value) => Validators.email(value),
-                              hint: AppStrings.emailHint,
-                              textInputType: TextInputType.emailAddress,
-                              label: AppStrings.email.toUpperCase(),
-                            ),
-                            CustomTextfield(
-                              controller: passwordController,
-                              isPassword: true,
-                              validator: (value) => Validators.password(value),
-                              formKey: passwordFormKey,
-                              hint: AppStrings.passwordHint,
-                              textInputType: TextInputType.visiblePassword,
-                              label: AppStrings.password.toUpperCase(),
-                            ),
-                            SizedBox(height: 10.h),
-                            Row(
-                              children: [
-                                CustomCheckbox(onChange: (value) {}),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  AppStrings.rememberMe,
-                                  style: GoogleFonts.sen(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.normal,
-                                    color: const Color(0xFF7E8A97),
-                                  ),
-                                ),
-                                const Spacer(),
-                                InkWell(
-                                  onTap: () {
-                                    context.push(AppPaths.forgetPassword);
-                                  },
-                                  child: Text(
-                                    AppStrings.forgotPassword,
+                        child: Form(
+                          key: formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomTextfield(
+                                controller: emailController,
+
+                                validator: (value) => Validators.email(value),
+                                hint: AppStrings.emailHint,
+                                textInputType: TextInputType.emailAddress,
+                                label: AppStrings.email.toUpperCase(),
+                              ),
+                              CustomTextfield(
+                                controller: passwordController,
+                                isPassword: true,
+                                validator: (value) =>
+                                    Validators.password(value),
+
+                                hint: AppStrings.passwordHint,
+                                textInputType: TextInputType.visiblePassword,
+                                label: AppStrings.password.toUpperCase(),
+                              ),
+                              SizedBox(height: 10.h),
+                              Row(
+                                children: [
+                                  CustomCheckbox(onChange: (value) {}),
+                                  SizedBox(width: 10.w),
+                                  Text(
+                                    AppStrings.rememberMe,
                                     style: GoogleFonts.sen(
                                       fontSize: 16.sp,
                                       fontWeight: FontWeight.normal,
-                                      color: AppColors.secondary,
+                                      color: const Color(0xFF7E8A97),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 30.h),
-                            BlocSelector<LoginCubit, LoginState, bool>(
-                              selector: (state) {
-                                return state is LoginLoading;
-                              },
-                              builder: (context, state) {
-                                return CustomRectangleButton(
-                                  title: AppStrings.login.toUpperCase(),
-                                  titleColor: AppColors.white,
-                                  isLoading: state,
-                                  onPressed: () {
-                                    if (emailFormKey.currentState!.validate() &&
-                                        passwordFormKey.currentState!
-                                            .validate()) {
-                                      context.read<LoginCubit>().login(
-                                        email: emailController.text,
-                                        password: passwordController.text,
-                                      );
-                                    }
-                                  },
-                                  backgroundColor: AppColors.secondary,
-                                );
-                              },
-                            ),
-                            SizedBox(height: 20.h),
-                            Center(
-                              child: Text.rich(
-                                TextSpan(
-                                  text: AppStrings.dontHaveAccount,
-                                  style: GoogleFonts.sen(
-                                    fontSize: 16.sp,
-                                    fontWeight: FontWeight.normal,
-                                    color: const Color(0xFF646982),
-                                  ),
-                                  children: [
-                                    TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () {
-                                          context.push(AppPaths.register);
-                                        },
-                                      text: AppStrings.signUp.toUpperCase(),
+                                  const Spacer(),
+                                  InkWell(
+                                    onTap: () {
+                                      context.push(AppPaths.forgetPassword);
+                                    },
+                                    child: Text(
+                                      AppStrings.forgotPassword,
                                       style: GoogleFonts.sen(
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.normal,
                                         color: AppColors.secondary,
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 30.h),
+                              BlocSelector<LoginCubit, LoginState, bool>(
+                                selector: (state) {
+                                  return state is LoginLoading;
+                                },
+                                builder: (context, state) {
+                                  return CustomRectangleButton(
+                                    title: AppStrings.login.toUpperCase(),
+                                    titleColor: AppColors.white,
+                                    isLoading: state,
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate() &&
+                                          formKey.currentState!.validate()) {
+                                        context.read<LoginCubit>().login(
+                                          email: emailController.text,
+                                          password: passwordController.text,
+                                        );
+                                      }
+                                    },
+                                    backgroundColor: AppColors.secondary,
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 20.h),
+                              Center(
+                                child: Text.rich(
+                                  TextSpan(
+                                    text: AppStrings.dontHaveAccount,
+                                    style: GoogleFonts.sen(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.normal,
+                                      color: const Color(0xFF646982),
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        recognizer: TapGestureRecognizer()
+                                          ..onTap = () {
+                                            context.push(AppPaths.register);
+                                          },
+                                        text: AppStrings.signUp.toUpperCase(),
+                                        style: GoogleFonts.sen(
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.secondary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(height: 20.h),
-                            CustomDivider(
-                              title: AppStrings.or.toUpperCase(),
-                              color: Colors.grey.shade300,
-                              textStyle: const TextStyle(
-                                color: Color(0xFF646982),
+                              SizedBox(height: 20.h),
+                              CustomDivider(
+                                title: AppStrings.or.toUpperCase(),
+                                color: Colors.grey.shade300,
+                                textStyle: const TextStyle(
+                                  color: Color(0xFF646982),
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 20.h),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SocialCircleButton(
-                                  height: 62.h,
-                                  width: 62.w,
-                                  onTap: () {},
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.facebookF,
-                                    color: Colors.white,
-                                    size: 24.h,
+                              SizedBox(height: 20.h),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SocialCircleButton(
+                                    height: 62.h,
+                                    width: 62.w,
+                                    onTap: () {},
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.facebookF,
+                                      color: Colors.white,
+                                      size: 24.h,
+                                    ),
+                                    color: AppColors.facebook,
                                   ),
-                                  color: AppColors.facebook,
-                                ),
-                                SocialCircleButton(
-                                  height: 62.h,
-                                  width: 62.w,
-                                  onTap: () {},
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.twitter,
-                                    color: Colors.white,
-                                    size: 24.h,
+                                  SocialCircleButton(
+                                    height: 62.h,
+                                    width: 62.w,
+                                    onTap: () {},
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.twitter,
+                                      color: Colors.white,
+                                      size: 24.h,
+                                    ),
+                                    color: AppColors.twitter,
                                   ),
-                                  color: AppColors.twitter,
-                                ),
-                                SocialCircleButton(
-                                  height: 62.h,
-                                  width: 62.w,
-                                  onTap: () {},
-                                  icon: FaIcon(
-                                    FontAwesomeIcons.apple,
-                                    color: Colors.white,
-                                    size: 24.h,
+                                  SocialCircleButton(
+                                    height: 62.h,
+                                    width: 62.w,
+                                    onTap: () {},
+                                    icon: FaIcon(
+                                      FontAwesomeIcons.apple,
+                                      color: Colors.white,
+                                      size: 24.h,
+                                    ),
+                                    color: AppColors.apple,
                                   ),
-                                  color: AppColors.apple,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 20.h),
-                          ],
+                                ],
+                              ),
+                              SizedBox(height: 20.h),
+                            ],
+                          ),
                         ),
                       ),
                     ),
