@@ -3,16 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
-import 'package:food_delivery/core/utils/validators.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_textfield.dart';
-import 'package:food_delivery/shared/widgets/text_field_formatters/credit_card_number_formatter.dart';
-import 'package:food_delivery/shared/widgets/text_field_formatters/expiry_date_formatter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/core/utils/validators.dart'
-    as my_toolkit_validators;
+import 'package:my_flutter_toolkit/core/utils/text_field_utils/credit_card_number_formatter.dart';
+import 'package:my_flutter_toolkit/core/utils/text_field_utils/expiry_date_formatter.dart';
+import 'package:my_flutter_toolkit/core/utils/text_field_utils/validators.dart';
 
 class AddCardScreen extends StatefulWidget {
   const AddCardScreen({super.key});
@@ -152,7 +150,7 @@ class _BodySectionState extends State<BodySection> {
             controller: widget.holderNameController,
             label: AppStrings.cardHolderName.toUpperCase(),
             hint: AppStrings.enterCardHolderName,
-            validator: (value) => my_toolkit_validators.Validators.name(value),
+            validator: (value) => Validators.name(value: value),
             labelStyle: GoogleFonts.sen(
               fontSize: 14.sp,
               color: Color(0xFFA0A5BA),
@@ -169,10 +167,7 @@ class _BodySectionState extends State<BodySection> {
               CreditCardNumberFormatter(),
             ],
             label: AppStrings.cardNumber.toUpperCase(),
-            validator: (value) => Validators.cardNumberValidator(
-              value,
-              'Please enter card number',
-            ),
+            validator: (value) => Validators.cardNumber(value: value),
             hint: AppStrings.enterCardNumber,
             labelStyle: GoogleFonts.sen(
               fontSize: 14.sp,
@@ -192,10 +187,7 @@ class _BodySectionState extends State<BodySection> {
                     LengthLimitingTextInputFormatter(6),
                     ExpiryDateFormatter(),
                   ],
-                  validator: (value) => Validators.expiryDateValidator(
-                    value,
-                    'Please enter expiry date',
-                  ),
+                  validator: (value) => Validators.expiryDate(value: value),
                   label: AppStrings.expiry.toUpperCase(),
                   hint: AppStrings.enterExpiry,
                   labelStyle: GoogleFonts.sen(
@@ -216,8 +208,7 @@ class _BodySectionState extends State<BodySection> {
                     FilteringTextInputFormatter.digitsOnly,
                     LengthLimitingTextInputFormatter(3),
                   ],
-                  validator: (value) =>
-                      Validators.cvvValidator(value, 'Please enter CVV'),
+                  validator: (value) => Validators.cvv(value: value),
                   label: AppStrings.cvv.toUpperCase(),
                   hint: AppStrings.enterCvv,
                   labelStyle: GoogleFonts.sen(

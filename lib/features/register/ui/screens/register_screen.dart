@@ -10,7 +10,7 @@ import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/services/toast_service.dart';
 import 'package:food_delivery/features/register/ui/cubit/register_cubit.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/core/utils/validators.dart';
+import 'package:my_flutter_toolkit/core/utils/text_field_utils/validators.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -131,7 +131,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: nameController,
 
                                 hint: AppStrings.nameHint,
-                                validator: (value) => Validators.name(value),
+                                validator: (value) =>
+                                    Validators.name(value: value),
                                 textInputType: TextInputType.name,
                                 label: AppStrings.name.toUpperCase(),
                               ),
@@ -139,7 +140,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 controller: emailController,
 
                                 hint: AppStrings.emailHint,
-                                validator: (value) => Validators.email(value),
+                                validator: (value) =>
+                                    Validators.email(value: value),
                                 textInputType: TextInputType.emailAddress,
                                 label: AppStrings.email.toUpperCase(),
                               ),
@@ -148,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                                 isPassword: true,
                                 validator: (value) =>
-                                    Validators.password(value),
+                                    Validators.password(value: value),
                                 hint: AppStrings.passwordHint,
                                 textInputType: TextInputType.visiblePassword,
                                 label: AppStrings.password.toUpperCase(),

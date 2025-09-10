@@ -853,7 +853,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: f48ec62b2ba4aa91ff09c08cc2b22de41e6f18a8
+      resolved-ref: "6259102426e0503f8fa1e0692b0cfd6e00290e20"
       url: "https://github.com/AmrSalahDev/MyFlutterToolKit.git"
     source: git
     version: "0.0.1"
@@ -993,6 +993,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.1"
+  phone_numbers_parser:
+    dependency: transitive
+    description:
+      name: phone_numbers_parser
+      sha256: "87b2c344e1ae28bc92ee9e534b30ef85a16d4e7279a770c222aaefe2eeac6f02"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.0.11"
   pinput:
     dependency: "direct main"
     description:

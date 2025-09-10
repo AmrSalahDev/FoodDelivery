@@ -16,7 +16,7 @@ import 'package:food_delivery/core/services/toast_service.dart';
 import 'package:food_delivery/features/login/ui/cubit/login_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_flutter_toolkit/core/utils/validators.dart';
+import 'package:my_flutter_toolkit/core/utils/text_field_utils/validators.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -124,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               CustomTextfield(
                                 controller: emailController,
 
-                                validator: (value) => Validators.email(value),
+                                validator: (value) =>
+                                    Validators.email(value: value),
                                 hint: AppStrings.emailHint,
                                 textInputType: TextInputType.emailAddress,
                                 label: AppStrings.email.toUpperCase(),
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: passwordController,
                                 isPassword: true,
                                 validator: (value) =>
-                                    Validators.password(value),
+                                    Validators.password(value: value),
 
                                 hint: AppStrings.passwordHint,
                                 textInputType: TextInputType.visiblePassword,
