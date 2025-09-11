@@ -1,8 +1,15 @@
+import 'package:awesome_card/credit_card.dart';
+import 'package:awesome_card/extra/card_type.dart';
+import 'package:awesome_card/style/card_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/features/payment/data/models/card_info_model.dart';
+import 'package:food_delivery/features/payment/enums/cards_supported.dart';
+import 'package:food_delivery/features/payment/ui/cubits/card_cubit.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_textfield.dart';
@@ -13,7 +20,8 @@ import 'package:my_flutter_toolkit/core/utils/text_field_utils/expiry_date_forma
 import 'package:my_flutter_toolkit/core/utils/text_field_utils/validators.dart';
 
 class AddCardScreen extends StatefulWidget {
-  const AddCardScreen({super.key});
+  final CardsSupported cardType;
+  const AddCardScreen({super.key, required this.cardType});
 
   @override
   State<AddCardScreen> createState() => _AddCardScreenState();
@@ -47,6 +55,21 @@ class _AddCardScreenState extends State<AddCardScreen> {
     super.dispose();
   }
 
+  void _onSubmit() {
+    if (formKey.currentState!.validate()) {
+      final cardInfo = CardInfoModel(
+        cardHolderName: holderNameController.text,
+        cardNumber: cardNumberController.text,
+        expiryDate: expiryDateController.text,
+        cvv: cvvController.text,
+        cardType: widget.cardType.displayName,
+        cardLogo: widget.cardType.icon,
+      );
+      context.read<CardCubit>().saveCard(cardInfo);
+      context.pop();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,14 +94,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: FooterSection(
-        holderNameController: holderNameController,
-        cardNumberController: cardNumberController,
-        expiryDateController: expiryDateController,
-        cvvController: cvvController,
-
-        formKey: formKey,
-      ),
+      bottomNavigationBar: FooterSection(onSubmit: () => _onSubmit()),
     );
   }
 }
@@ -228,22 +244,9 @@ class _BodySectionState extends State<BodySection> {
 }
 
 class FooterSection extends StatelessWidget {
-  final TextEditingController holderNameController;
-  final TextEditingController cardNumberController;
-  final TextEditingController expiryDateController;
-  final TextEditingController cvvController;
+  final VoidCallback onSubmit;
 
-  final GlobalKey<FormState> formKey;
-
-  const FooterSection({
-    super.key,
-    required this.holderNameController,
-    required this.cardNumberController,
-    required this.expiryDateController,
-    required this.cvvController,
-
-    required this.formKey,
-  });
+  const FooterSection({super.key, required this.onSubmit});
 
   @override
   Widget build(BuildContext context) {
@@ -252,7 +255,7 @@ class FooterSection extends StatelessWidget {
       child: CustomRectangleButton(
         backgroundColor: AppColors.secondary,
         title: AppStrings.addAndMakePayment.toUpperCase(),
-        onPressed: () {},
+        onPressed: () => onSubmit(),
       ),
     );
   }

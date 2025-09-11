@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:food_delivery/core/routes/args/add_card_screen_args.dart';
 import 'package:food_delivery/core/routes/args/payment_screen_args.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart';
 import 'package:food_delivery/features/cart/ui/screens/cart_screen.dart';
+import 'package:food_delivery/features/payment/ui/cubits/card_cubit.dart';
 import 'package:food_delivery/features/payment/ui/cubits/selected_card_cubit.dart';
 import 'package:food_delivery/features/payment/ui/screens/add_card_screen.dart';
 import 'package:food_delivery/features/payment/ui/screens/payment_screen.dart';
@@ -97,8 +99,11 @@ class AppRouter {
         path: AppPaths.payment,
         builder: (context, state) {
           final args = state.extra as PaymentScreenArgs;
-          return BlocProvider(
-            create: (context) => getIt<SelectedCardCubit>(),
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (context) => getIt<SelectedCardCubit>()),
+              BlocProvider.value(value: getIt<CardCubit>()),
+            ],
             child: PaymentScreen(totalPrice: args.totalPrice),
           );
         },
@@ -109,7 +114,13 @@ class AppRouter {
       ),
       GoRoute(
         path: AppPaths.addCard,
-        builder: (context, state) => AddCardScreen(),
+        builder: (context, state) {
+          final args = state.extra as AddCardScreenArgs;
+          return BlocProvider.value(
+            value: getIt<CardCubit>(),
+            child: AddCardScreen(cardType: args.cardType),
+          );
+        },
       ),
       GoRoute(
         path: AppPaths.cart,

@@ -8,7 +8,6 @@ class CustomTextfield extends StatefulWidget {
   final String label;
   final String hint;
   final String? Function(String?)? validator;
-
   final TextInputType textInputType;
   final bool? isPassword;
   final TextStyle? labelStyle;
@@ -73,7 +72,6 @@ class _CustomTextfieldState extends State<CustomTextfield> {
             color: Color(0xFF32343E),
           ),
           validator: widget.validator,
-
           decoration: InputDecoration(
             counter: SizedBox.shrink(),
             filled: true,

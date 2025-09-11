@@ -10,6 +10,7 @@ environment:
 dependencies:
   after_layout: ^1.2.0
   animated_digit: ^3.3.1+2
+  awesome_card: ^1.1.7
   bounce: ^1.0.2
   build_runner: ^2.7.0
   cached_network_image: ^3.4.1
