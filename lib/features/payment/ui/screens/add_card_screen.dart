@@ -1,6 +1,3 @@
-import 'package:awesome_card/credit_card.dart';
-import 'package:awesome_card/extra/card_type.dart';
-import 'package:awesome_card/style/card_background.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

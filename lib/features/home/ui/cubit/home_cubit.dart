@@ -10,6 +10,7 @@ part 'home_state.dart';
 @injectable
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
+
   late final Timer timer;
 
   void startGreeting() {

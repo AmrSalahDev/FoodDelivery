@@ -6,6 +6,7 @@ import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_address_cubit.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_edit_items_cubit.dart';
 import 'package:food_delivery/features/cart/ui/screens/cart_screen.dart';
+import 'package:food_delivery/features/home/ui/cubit/home_category_cubit.dart';
 import 'package:food_delivery/features/payment/ui/cubits/card_cubit.dart';
 import 'package:food_delivery/features/payment/ui/cubits/selected_card_cubit.dart';
 import 'package:food_delivery/features/payment/ui/screens/add_card_screen.dart';
@@ -20,7 +21,7 @@ import 'package:food_delivery/core/routes/args/verification_screen_args.dart';
 import 'package:food_delivery/features/access_location/ui/screens/access_location_screen.dart';
 import 'package:food_delivery/features/food_details/ui/screens/food_details_screen.dart';
 import 'package:food_delivery/features/forget_password/ui/screens/forget_password_screen.dart';
-import 'package:food_delivery/features/home/cubit/home_cubit.dart';
+import 'package:food_delivery/features/home/ui/cubit/home_cubit.dart';
 import 'package:food_delivery/features/home/ui/screens/home_screen.dart';
 import 'package:food_delivery/features/search/ui/screens/search_result_screen.dart';
 import 'package:food_delivery/features/search/ui/screens/search_screen.dart';
@@ -85,6 +86,7 @@ class AppRouter {
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => getIt<HomeCubit>()),
+              BlocProvider(create: (context) => getIt<HomeCategoryCubit>()),
               BlocProvider.value(value: getIt<CartCubit>()),
             ],
             child: HomeScreen(userLocation: 'Unknown Location'),

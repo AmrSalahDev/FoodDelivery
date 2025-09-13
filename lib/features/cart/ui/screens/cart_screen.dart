@@ -17,7 +17,6 @@ import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
-import 'package:scroll_to_hide/scroll_to_hide.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
