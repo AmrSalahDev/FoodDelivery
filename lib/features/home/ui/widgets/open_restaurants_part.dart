@@ -108,9 +108,7 @@ class RestaurantImage extends StatelessWidget {
               width: double.infinity,
               placeholder: (context, url) =>
                   ShimmerBox(height: 200.h, width: double.infinity),
-              errorWidget: (context, url, error) => isLoading
-                  ? ShimmerBox(height: 200.h, width: double.infinity)
-                  : Center(child: errorLottie),
+              errorWidget: (context, url, error) => Center(child: errorLottie),
             )
           : ShimmerBox(height: 200.h, width: double.infinity),
     );

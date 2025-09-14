@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_delivery/features/home/data/models/category_model.dart';
+import 'package:food_delivery/features/home/domain/entities/category_entity.dart';
 import 'package:food_delivery/features/home/domain/usecases/fetch_categories_usecase.dart';
 import 'package:injectable/injectable.dart';
 

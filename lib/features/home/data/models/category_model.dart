@@ -1,3 +1,5 @@
+import 'package:food_delivery/features/home/domain/entities/category_entity.dart';
+
 class CategoryModel {
   final String id;
   final String title;
@@ -22,12 +24,12 @@ class CategoryModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'image': image,
-    'startingPrice': startingPrice,
-  };
+  CategoryEntity toEntity() => CategoryEntity(
+    id: id,
+    title: title,
+    image: image,
+    startingPrice: startingPrice,
+  );
 
   @override
   String toString() {

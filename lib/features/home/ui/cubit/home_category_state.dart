@@ -16,7 +16,7 @@ class HomeCategoryLoading extends HomeCategoryState {
 }
 
 class HomeCategoryLoaded extends HomeCategoryState {
-  final List<CategoryModel> categories;
+  final List<CategoryEntity> categories;
   HomeCategoryLoaded({required this.categories});
   @override
   List<Object?> get props => [categories];

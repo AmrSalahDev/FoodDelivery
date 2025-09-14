@@ -6,13 +6,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
-import 'package:food_delivery/features/home/data/models/category_model.dart';
+import 'package:food_delivery/features/home/domain/entities/category_entity.dart';
 import 'package:food_delivery/features/home/ui/cubit/home_category_cubit.dart';
-import 'package:food_delivery/shared/widgets/custom_skeletonizer.dart';
+import 'package:food_delivery/shared/widgets/shimmer_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AllCategoriesPart extends StatelessWidget {
-  final Function(CategoryModel category) onTap;
+  final Function(CategoryEntity category) onTap;
   const AllCategoriesPart({super.key, required this.onTap});
 
   @override
@@ -28,7 +28,7 @@ class AllCategoriesPart extends StatelessWidget {
               clipBehavior: Clip.none,
               shrinkWrap: true,
               itemBuilder: (context, index) {
-                return _buildCategoryItem(isLoading: true, category: null);
+                return _CategoryItem(isLoading: true);
               },
             );
           }
@@ -40,7 +40,11 @@ class AllCategoriesPart extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final category = state.categories[index];
-                return _buildCategoryItem(category: category, isLoading: false);
+                return _CategoryItem(
+                  onTap: onTap,
+                  category: category,
+                  isLoading: false,
+                );
               },
             );
           }
@@ -49,13 +53,19 @@ class AllCategoriesPart extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildCategoryItem({
-    CategoryModel? category,
-    required bool isLoading,
-  }) {
+class _CategoryItem extends StatelessWidget {
+  final Function(CategoryEntity category)? onTap;
+  final CategoryEntity? category;
+  final bool isLoading;
+
+  const _CategoryItem({this.onTap, this.category, required this.isLoading});
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: isLoading && category == null ? null : () => onTap(category!),
+      onTap: category != null ? () => onTap?.call(category!) : null,
       child: Padding(
         padding: EdgeInsets.only(right: 12.w),
         child: SizedBox(
@@ -84,13 +94,13 @@ class AllCategoriesPart extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    _ImagesPart(
+                    _CategoryImage(
                       category: category,
                       isLoading: isLoading,
                       constraints: constraints,
                     ),
                     const Spacer(),
-                    _TextPart(category: category, isLoading: isLoading),
+                    _CategoryInfo(category: category, isLoading: isLoading),
                   ],
                 ),
               ),
@@ -102,12 +112,12 @@ class AllCategoriesPart extends StatelessWidget {
   }
 }
 
-class _ImagesPart extends StatelessWidget {
-  final CategoryModel? category;
+class _CategoryImage extends StatelessWidget {
+  final CategoryEntity? category;
   final bool isLoading;
   final BoxConstraints constraints;
 
-  const _ImagesPart({
+  const _CategoryImage({
     this.category,
     required this.isLoading,
     required this.constraints,
@@ -115,98 +125,96 @@ class _ImagesPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return isLoading
-        ? Transform.scale(
-            scale: 1.6,
-            child: Assets.lottie.handLoading.lottie(
-              width: constraints.maxWidth * 0.60,
-              height: constraints.maxHeight * 0.55,
-              fit: BoxFit.contain,
-            ),
-          )
-        : CachedNetworkImage(
+    final loadingLottie = Assets.lottie.handLoading.lottie(
+      width: constraints.maxWidth * 0.60,
+      height: constraints.maxHeight * 0.55,
+      fit: BoxFit.contain,
+    );
+
+    final errorLottie = Assets.lottie.error.lottie(
+      width: constraints.maxWidth * 0.60,
+      height: constraints.maxHeight * 0.55,
+      fit: BoxFit.contain,
+    );
+
+    Widget showLoading() {
+      return Transform.scale(scale: 1.7, child: loadingLottie);
+    }
+
+    Widget showError() {
+      return Transform.scale(scale: 1.4, child: errorLottie);
+    }
+
+    return category != null && !isLoading
+        ? CachedNetworkImage(
             height: constraints.maxHeight * 0.55,
             width: constraints.maxWidth * 0.60,
-            imageUrl: category?.image ?? '',
+            imageUrl: category!.image,
             fit: BoxFit.contain,
-            placeholder: (context, url) => Transform.scale(
-              scale: 1.6,
-              child: Assets.lottie.handLoading.lottie(
-                width: constraints.maxWidth * 0.60,
-                height: constraints.maxHeight * 0.55,
-                fit: BoxFit.contain,
-              ),
-            ),
+            placeholder: (context, url) => showLoading(),
             errorWidget: (context, url, error) {
-              return isLoading
-                  ? Container(
-                      height: constraints.maxHeight * 0.55,
-                      width: constraints.maxWidth * 0.60,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                    )
-                  : Transform.scale(
-                      scale: 1.4,
-                      child: Assets.lottie.error.lottie(
-                        width: constraints.maxWidth * 0.60,
-                        height: constraints.maxHeight * 0.55,
-                        fit: BoxFit.contain,
-                      ),
-                    );
+              return showError();
             },
-          );
+          )
+        : showLoading();
   }
 }
 
-class _TextPart extends StatelessWidget {
-  final CategoryModel? category;
+class _CategoryInfo extends StatelessWidget {
+  final CategoryEntity? category;
   final bool isLoading;
-  const _TextPart({this.category, required this.isLoading});
+  const _CategoryInfo({this.category, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
-    return CustomSkeletonizer(
-      enabled: isLoading,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            category?.title ?? 'unknown',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.sen(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: AppColors.darkBlue,
-            ),
-          ),
-          Row(
-            children: [
-              Text(
-                AppStrings.starting,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        category != null && !isLoading
+            ? Text(
+                category!.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
                 style: GoogleFonts.sen(
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF646982),
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkBlue,
                 ),
+              )
+            : Column(
+                children: [
+                  ShimmerBox(height: 15.h, width: 100.w),
+                  SizedBox(height: 10.h),
+                ],
               ),
-              const Spacer(),
-              AnimatedDigitWidget(
-                value: category?.startingPrice ?? 0.0,
-                prefix: '\$',
-                textStyle: GoogleFonts.sen(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.normal,
-                  color: Color(0xFF32343E),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+        Row(
+          children: [
+            !isLoading
+                ? Text(
+                    AppStrings.starting,
+                    style: GoogleFonts.sen(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF646982),
+                    ),
+                  )
+                : ShimmerBox(height: 15.h, width: 60.w),
+            const Spacer(),
+            category != null && !isLoading
+                ? AnimatedDigitWidget(
+                    value: category!.startingPrice,
+                    prefix: '\$',
+                    textStyle: GoogleFonts.sen(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.normal,
+                      color: Color(0xFF32343E),
+                    ),
+                  )
+                : ShimmerBox(height: 15.h, width: 40.w),
+          ],
+        ),
+      ],
     );
   }
 }

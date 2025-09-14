@@ -6,12 +6,14 @@ class ShimmerBox extends StatelessWidget {
   final double height;
   final double width;
   final BorderRadius? borderRadius;
+  final EdgeInsetsGeometry? margin;
 
   const ShimmerBox({
     super.key,
     required this.height,
     required this.width,
     this.borderRadius,
+    this.margin,
   });
 
   @override
@@ -22,6 +24,7 @@ class ShimmerBox extends StatelessWidget {
       child: Container(
         height: height,
         width: width,
+        margin: margin,
         decoration: BoxDecoration(
           color: Colors.grey.shade300,
           borderRadius: borderRadius ?? BorderRadius.circular(8.r),
