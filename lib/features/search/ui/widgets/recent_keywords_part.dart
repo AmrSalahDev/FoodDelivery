@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
+import 'package:food_delivery/features/search/domain/entities/recent_keywords_entity.dart';
+import 'package:food_delivery/features/search/ui/cubit/recent_keywords_cubit.dart';
+import 'package:food_delivery/shared/widgets/shimmer_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecentKeywordsPart extends StatefulWidget {
-  final List<String> keywords;
   final TextEditingController searchController;
-  const RecentKeywordsPart({
-    super.key,
-    required this.keywords,
-    required this.searchController,
-  });
+  const RecentKeywordsPart({super.key, required this.searchController});
 
   @override
   State<RecentKeywordsPart> createState() => _RecentKeywordsPartState();
 }
 
 class _RecentKeywordsPartState extends State<RecentKeywordsPart> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RecentKeywordsCubit>().fetchKeywords();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -32,45 +37,95 @@ class _RecentKeywordsPartState extends State<RecentKeywordsPart> {
           ),
         ),
         SizedBox(height: 10.h),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            spacing: 10.w,
-            children: widget.keywords
-                .map(
-                  (keyword) => GestureDetector(
-                    onTap: () =>
-                        setState(() => widget.searchController.text = keyword),
-                    child: Chip(
-                      label: Text(
-                        keyword,
-                        style: GoogleFonts.sen(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.normal,
-                          color: AppColors.darkBlue,
-                        ),
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 10.h,
-                      ),
-                      onDeleted: () =>
-                          setState(() => widget.keywords.remove(keyword)),
-                      deleteIcon: Icon(
-                        Icons.clear_rounded,
-                        color: AppColors.darkBlue,
-                      ),
-                      shape: StadiumBorder(
-                        side: BorderSide(color: Color(0xFFEDEDED), width: 1.w),
-                      ),
-                      backgroundColor: AppColors.white,
-                    ),
-                  ),
-                )
-                .toList(),
-          ),
+        BlocBuilder<RecentKeywordsCubit, RecentKeywordsState>(
+          builder: (context, state) {
+            if (state is RecentKeywordsLoading) {
+              return SizedBox(
+                height: 50.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return _ChipKeyword(isLoading: true);
+                  },
+                ),
+              );
+            }
+
+            if (state is RecentKeywordsLoaded) {
+              return SizedBox(
+                height: 50.h,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  itemCount: state.keywords.length,
+                  itemBuilder: (context, index) {
+                    final keyword = state.keywords[index];
+                    return _ChipKeyword(
+                      keyword: keyword,
+                      searchController: widget.searchController,
+                      isLoading: false,
+                    );
+                  },
+                ),
+              );
+            }
+
+            return SizedBox.shrink();
+          },
         ),
       ],
+    );
+  }
+}
+
+class _ChipKeyword extends StatelessWidget {
+  final RecentKeywordsEntity? keyword;
+  final TextEditingController? searchController;
+  final bool isLoading;
+
+  const _ChipKeyword({
+    this.keyword,
+    this.searchController,
+    required this.isLoading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: keyword != null && searchController != null && !isLoading
+          ? () => searchController!.text = keyword!.keyword
+          : null,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 10),
+        child: keyword != null && !isLoading
+            ? Chip(
+                label: Text(
+                  keyword!.keyword,
+                  style: GoogleFonts.sen(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.normal,
+                    color: AppColors.darkBlue,
+                  ),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+                //onDeleted: () => setState(() => widget.keywords.remove(keyword)),
+                deleteIcon: Icon(
+                  Icons.clear_rounded,
+                  color: AppColors.darkBlue,
+                ),
+                shape: StadiumBorder(
+                  side: BorderSide(color: Color(0xFFEDEDED), width: 1.w),
+                ),
+                backgroundColor: AppColors.white,
+              )
+            : ShimmerBox(
+                height: 20.h,
+                width: 100.w,
+                borderRadius: BorderRadius.circular(30.r),
+              ),
+      ),
     );
   }
 }

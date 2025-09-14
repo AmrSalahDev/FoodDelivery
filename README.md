@@ -64,7 +64,8 @@ lib
 │   ├───models
 │   ├───routes
 │   │   └───args
-│   └───services
+│   ├───services
+│   └───utils
 ├───features
 │   ├───access_location
 │   │   └───ui
@@ -82,11 +83,17 @@ lib
 │   │   └───ui
 │   │       └───screens
 │   ├───home
-│   │   ├───cubit
 │   │   ├───data
-│   │   │   └───models
+│   │   │   ├───models
+│   │   │   └───repo
+│   │   ├───domain
+│   │   │   ├───entities
+│   │   │   ├───repo
+│   │   │   └───usecases
 │   │   └───ui
-│   │       └───screens
+│   │       ├───cubit
+│   │       ├───screens
+│   │       └───widgets
 │   ├───login
 │   │   ├───data
 │   │   │   └───repo
@@ -101,6 +108,14 @@ lib
 │   │   │   └───models
 │   │   └───ui
 │   │       └───screens
+│   ├───payment
+│   │   ├───data
+│   │   │   └───models
+│   │   ├───enums
+│   │   └───ui
+│   │       ├───cubits
+│   │       ├───screens
+│   │       └───widgets
 │   ├───register
 │   │   ├───data
 │   │   │   └───repo
@@ -111,11 +126,28 @@ lib
 │   │       ├───cubit
 │   │       └───screens
 │   ├───restaurant_details
+│   │   ├───data
+│   │   │   ├───models
+│   │   │   └───repo
+│   │   ├───domain
+│   │   │   ├───entities
+│   │   │   ├───repo
+│   │   │   └───usecases
 │   │   └───ui
+│   │       ├───cubit
 │   │       └───screens
 │   ├───search
+│   │   ├───data
+│   │   │   ├───models
+│   │   │   └───repo
+│   │   ├───domain
+│   │   │   ├───entities
+│   │   │   ├───repo
+│   │   │   └───usecases
 │   │   └───ui
-│   │       └───screens
+│   │       ├───cubit
+│   │       ├───screens
+│   │       └───widgets
 │   └───verification_password
 │       └───ui
 │           └───screens

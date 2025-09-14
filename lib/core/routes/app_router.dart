@@ -13,6 +13,7 @@ import 'package:food_delivery/features/payment/ui/screens/add_card_screen.dart';
 import 'package:food_delivery/features/payment/ui/screens/payment_screen.dart';
 import 'package:food_delivery/features/payment/ui/screens/payment_success_screen.dart';
 import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
+import 'package:food_delivery/features/search/ui/cubit/recent_keywords_cubit.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
@@ -100,6 +101,7 @@ class AppRouter {
         builder: (context, state) => MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => getIt<RestaurantCubit>()),
+            BlocProvider(create: (context) => getIt<RecentKeywordsCubit>()),
             BlocProvider.value(value: getIt<CartCubit>()),
           ],
           child: SearchScreen(),

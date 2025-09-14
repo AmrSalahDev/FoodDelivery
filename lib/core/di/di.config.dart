@@ -56,6 +56,16 @@ import 'package:food_delivery/features/restaurant_details/domain/usecases/get_re
     as _i571;
 import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart'
     as _i1010;
+import 'package:food_delivery/features/search/data/repo/search_repo_impl.dart'
+    as _i411;
+import 'package:food_delivery/features/search/domain/repo/search_repo.dart'
+    as _i323;
+import 'package:food_delivery/features/search/domain/usecases/get_keywords_usecase.dart'
+    as _i944;
+import 'package:food_delivery/features/search/domain/usecases/save_keyword_usecase.dart'
+    as _i438;
+import 'package:food_delivery/features/search/ui/cubit/recent_keywords_cubit.dart'
+    as _i908;
 import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i1067;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -77,12 +87,16 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i963.CartCubit>(() => _i963.CartCubit());
     gh.lazySingleton<_i211.CardCubit>(() => _i211.CardCubit());
     gh.lazySingleton<_i1067.FoodCubit>(() => _i1067.FoodCubit());
+    gh.lazySingleton<_i323.SearchRepo>(() => _i411.SearchRepoImpl());
     gh.lazySingleton<_i137.RestaurantRepo>(
       () => _i1015.RestaurantRepositoryImpl(),
     );
     gh.lazySingleton<_i852.LoginRepo>(() => _i392.LoginRepoImpl());
     gh.lazySingleton<_i534.HomeRepo>(() => _i343.HomeRepoImpl());
     gh.lazySingleton<_i566.RegisterRepo>(() => _i70.RegisterRepoImpl());
+    gh.factory<_i944.GetKeywordsUsecase>(
+      () => _i944.GetKeywordsUsecase(gh<_i323.SearchRepo>()),
+    );
     gh.factory<_i36.LoginUseCase>(
       () => _i36.LoginUseCase(loginRepo: gh<_i852.LoginRepo>()),
     );
@@ -106,6 +120,15 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i117.HomeCategoryCubit>(
       () => _i117.HomeCategoryCubit(gh<_i561.FetchCategoriesUsecase>()),
+    );
+    gh.factory<_i438.SaveKeywordUsecase>(
+      () => _i438.SaveKeywordUsecase(searchRepo: gh<_i323.SearchRepo>()),
+    );
+    gh.factory<_i908.RecentKeywordsCubit>(
+      () => _i908.RecentKeywordsCubit(
+        saveKeywordUsecase: gh<_i438.SaveKeywordUsecase>(),
+        getKeywordsUsecase: gh<_i944.GetKeywordsUsecase>(),
+      ),
     );
     gh.factory<_i1010.RestaurantCubit>(
       () => _i1010.RestaurantCubit(
