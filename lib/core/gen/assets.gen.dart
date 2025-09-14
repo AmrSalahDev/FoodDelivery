@@ -172,12 +172,20 @@ class $AssetsImagesFoodGen {
   /// Directory path: assets/images/food/burger
   $AssetsImagesFoodBurgerGen get burger => const $AssetsImagesFoodBurgerGen();
 
+  /// File path: assets/images/food/burger_3.png
+  AssetGenImage get burger3 =>
+      const AssetGenImage('assets/images/food/burger_3.png');
+
   /// File path: assets/images/food/french_fries.png
   AssetGenImage get frenchFries =>
       const AssetGenImage('assets/images/food/french_fries.png');
 
   /// Directory path: assets/images/food/pasta
   $AssetsImagesFoodPastaGen get pasta => const $AssetsImagesFoodPastaGen();
+
+  /// File path: assets/images/food/pasta.png
+  AssetGenImage get pastaPng =>
+      const AssetGenImage('assets/images/food/pasta.png');
 
   /// Directory path: assets/images/food/pizza
   $AssetsImagesFoodPizzaGen get pizza => const $AssetsImagesFoodPizzaGen();
@@ -198,7 +206,14 @@ class $AssetsImagesFoodGen {
       const AssetGenImage('assets/images/food/steak.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [frenchFries, salad, soup, steak];
+  List<AssetGenImage> get values => [
+    burger3,
+    frenchFries,
+    pastaPng,
+    salad,
+    soup,
+    steak,
+  ];
 }
 
 class $AssetsImagesRestaurantsGen {

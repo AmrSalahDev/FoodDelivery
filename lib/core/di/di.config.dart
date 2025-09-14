@@ -46,6 +46,16 @@ import 'package:food_delivery/features/register/domain/usecases/register_usecase
     as _i640;
 import 'package:food_delivery/features/register/ui/cubit/register_cubit.dart'
     as _i325;
+import 'package:food_delivery/features/restaurant_details/data/repo/restaurant_repo_impl.dart'
+    as _i1015;
+import 'package:food_delivery/features/restaurant_details/domain/repo/restaurant_repo.dart'
+    as _i137;
+import 'package:food_delivery/features/restaurant_details/domain/usecases/get_restaurant_details_usecase.dart'
+    as _i143;
+import 'package:food_delivery/features/restaurant_details/domain/usecases/get_restaurants_usecase.dart'
+    as _i571;
+import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart'
+    as _i1010;
 import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i1067;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -59,19 +69,28 @@ extension GetItInjectableX on _i174.GetIt {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
     gh.factory<_i740.CartEditAddressCubit>(() => _i740.CartEditAddressCubit());
     gh.factory<_i273.CartEditItemsCubit>(() => _i273.CartEditItemsCubit());
-    gh.factory<_i807.SelectedCardCubit>(() => _i807.SelectedCardCubit());
     gh.factory<_i559.HomeCubit>(() => _i559.HomeCubit());
+    gh.factory<_i807.SelectedCardCubit>(() => _i807.SelectedCardCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
     gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());
     gh.lazySingleton<_i963.CartCubit>(() => _i963.CartCubit());
     gh.lazySingleton<_i211.CardCubit>(() => _i211.CardCubit());
     gh.lazySingleton<_i1067.FoodCubit>(() => _i1067.FoodCubit());
+    gh.lazySingleton<_i137.RestaurantRepo>(
+      () => _i1015.RestaurantRepositoryImpl(),
+    );
     gh.lazySingleton<_i852.LoginRepo>(() => _i392.LoginRepoImpl());
     gh.lazySingleton<_i534.HomeRepo>(() => _i343.HomeRepoImpl());
     gh.lazySingleton<_i566.RegisterRepo>(() => _i70.RegisterRepoImpl());
     gh.factory<_i36.LoginUseCase>(
       () => _i36.LoginUseCase(loginRepo: gh<_i852.LoginRepo>()),
+    );
+    gh.factory<_i571.GetRestaurantsUsecase>(
+      () => _i571.GetRestaurantsUsecase(gh<_i137.RestaurantRepo>()),
+    );
+    gh.factory<_i143.GetRestaurantDetailsUseCase>(
+      () => _i143.GetRestaurantDetailsUseCase(gh<_i137.RestaurantRepo>()),
     );
     gh.factory<_i640.RegisterUseCase>(
       () => _i640.RegisterUseCase(registerRepo: gh<_i566.RegisterRepo>()),
@@ -87,6 +106,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i117.HomeCategoryCubit>(
       () => _i117.HomeCategoryCubit(gh<_i561.FetchCategoriesUsecase>()),
+    );
+    gh.factory<_i1010.RestaurantCubit>(
+      () => _i1010.RestaurantCubit(
+        getRestaurantDetails: gh<_i143.GetRestaurantDetailsUseCase>(),
+        getRestaurantsUsecase: gh<_i571.GetRestaurantsUsecase>(),
+      ),
     );
     return this;
   }

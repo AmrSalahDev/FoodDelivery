@@ -27,7 +27,7 @@ class MyCustomRefreshIndicator extends StatelessWidget {
       autoRebuild: false,
       durations: const RefreshIndicatorDurations(
         settleDuration: Duration(milliseconds: 250),
-        finalizeDuration: Duration(milliseconds: 600), // smooth release
+        finalizeDuration: Duration(milliseconds: 400), // smooth release
         completeDuration: Duration(milliseconds: 400), // optional hold
       ),
       child: child,

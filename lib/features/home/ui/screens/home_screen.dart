@@ -14,10 +14,10 @@ import 'package:food_delivery/features/home/ui/widgets/search_bar_part.dart';
 import 'package:food_delivery/features/home/ui/widgets/see_all_bar_part.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
-import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
 import 'package:food_delivery/core/routes/args/search_result_screen_args.dart';
 import 'package:food_delivery/features/home/ui/cubit/home_cubit.dart';
 import 'package:food_delivery/features/home/ui/widgets/show_offer_dialog.dart';
+import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
 import 'package:food_delivery/shared/widgets/my_custom_refresh_indicator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -41,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
     fisrtName = fullName.split(" ")[0];
     context.read<HomeCubit>().startGreeting();
     context.read<HomeCategoryCubit>().fetchCategories();
+    context.read<RestaurantCubit>().fetchRestaurants(limit: 2);
   }
 
   @override
@@ -57,7 +58,6 @@ class _HomeScreenState extends State<HomeScreen>
             SliverAppBar(
               expandedHeight: 260.h,
               backgroundColor: AppColors.white,
-              pinned: false,
               flexibleSpace: FlexibleSpaceBar(
                 background: HeaderSecton(
                   fisrtName: fisrtName,
@@ -68,7 +68,12 @@ class _HomeScreenState extends State<HomeScreen>
           ],
           body: MyCustomRefreshIndicator(
             onRefresh: () async {
-              await context.read<HomeCategoryCubit>().fetchCategories();
+              if (!mounted) return;
+
+              await Future.wait([
+                context.read<HomeCategoryCubit>().fetchCategories(),
+                context.read<RestaurantCubit>().fetchRestaurants(limit: 2),
+              ]);
             },
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
@@ -122,10 +127,10 @@ class BodySection extends StatelessWidget {
               SizedBox(height: 30.h),
               OpenRestaurantsPart(
                 onTap: (restaurant) {
-                  context.push(
-                    AppPaths.restaurantDetails,
-                    extra: RestaurantDetailsScreenArgs(restaurant),
-                  );
+                  // context.push(
+                  //   AppPaths.restaurantDetails,
+                  //   extra: RestaurantDetailsScreenArgs(restaurant),
+                  // );
                 },
               ),
             ],

@@ -52,6 +52,7 @@ dependencies:
   rename: ^3.1.0
   scroll_to_hide: ^2.2.1
   sentry_flutter: ^9.6.0
+  shimmer: ^3.0.0
   skeletonizer: ^2.1.0+1
   smooth_page_indicator: ^1.2.1
   supabase_flutter: ^2.10.0
