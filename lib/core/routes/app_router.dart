@@ -97,7 +97,13 @@ class AppRouter {
       ),
       GoRoute(
         path: AppPaths.search,
-        builder: (context, state) => SearchScreen(),
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => getIt<RestaurantCubit>()),
+            BlocProvider.value(value: getIt<CartCubit>()),
+          ],
+          child: SearchScreen(),
+        ),
       ),
       GoRoute(
         path: AppPaths.payment,
@@ -144,6 +150,7 @@ class AppRouter {
           return MultiBlocProvider(
             providers: [
               BlocProvider(create: (context) => getIt<FoodCubit>()),
+              BlocProvider(create: (context) => getIt<RestaurantCubit>()),
               BlocProvider.value(value: getIt<CartCubit>()),
             ],
             child: SearchResultScreen(query: args.query),
@@ -170,9 +177,12 @@ class AppRouter {
         builder: (context, state) {
           final args = state.extra as RestaurantDetailsScreenArgs;
           return MultiBlocProvider(
-            providers: [BlocProvider(create: (context) => getIt<FoodCubit>())],
+            providers: [
+              BlocProvider(create: (context) => getIt<FoodCubit>()),
+              BlocProvider(create: (context) => getIt<RestaurantCubit>()),
+            ],
             child: RestaurantDetailsScreen(
-              restaurantModel: args.restaurantModel,
+              restaurantEntity: args.restaurantEntity,
             ),
           );
         },

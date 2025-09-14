@@ -9,6 +9,7 @@ import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/models/food_model.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
+import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
@@ -16,7 +17,6 @@ import 'package:food_delivery/shared/widgets/custom_readmore.dart';
 import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_select_food_button.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
-import 'package:food_delivery/core/models/restaurant_imodel.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,8 +27,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
-  final RestaurantModel restaurantModel;
-  const RestaurantDetailsScreen({super.key, required this.restaurantModel});
+  final RestaurantEntity restaurantEntity;
+  const RestaurantDetailsScreen({super.key, required this.restaurantEntity});
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -61,12 +61,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              HeaderSection(restaurantModel: widget.restaurantModel),
+              HeaderSection(restaurantEntity: widget.restaurantEntity),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    BodySection(restaurantModel: widget.restaurantModel),
+                    BodySection(restaurantEntity: widget.restaurantEntity),
                     SizedBox(height: 30.h),
                     FooterSection(foundFoods: foundFoods),
                   ],
@@ -81,8 +81,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 }
 
 class RestaurantInfoPart extends StatelessWidget {
-  final RestaurantModel restaurantModel;
-  const RestaurantInfoPart({super.key, required this.restaurantModel});
+  final RestaurantEntity restaurantEntity;
+  const RestaurantInfoPart({super.key, required this.restaurantEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +95,7 @@ class RestaurantInfoPart extends StatelessWidget {
             Icon(FontAwesomeIcons.star, color: AppColors.secondary, size: 20.h),
             SizedBox(width: 10.w),
             Text(
-              restaurantModel.rate.toString(),
+              restaurantEntity.rate.toString(),
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -110,7 +110,7 @@ class RestaurantInfoPart extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              restaurantModel.deliveryCost,
+              restaurantEntity.deliveryCost,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class RestaurantInfoPart extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              restaurantModel.deliveryTime,
+              restaurantEntity.deliveryTime,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -136,7 +136,7 @@ class RestaurantInfoPart extends StatelessWidget {
         ),
         SizedBox(height: 20.h),
         Text(
-          restaurantModel.name,
+          restaurantEntity.name,
           style: GoogleFonts.sen(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
@@ -149,8 +149,8 @@ class RestaurantInfoPart extends StatelessWidget {
 }
 
 class HeaderSection extends StatefulWidget {
-  final RestaurantModel restaurantModel;
-  const HeaderSection({super.key, required this.restaurantModel});
+  final RestaurantEntity restaurantEntity;
+  const HeaderSection({super.key, required this.restaurantEntity});
 
   @override
   State<HeaderSection> createState() => _HeaderSectionState();
@@ -273,14 +273,14 @@ class _HeaderSectionState extends State<HeaderSection> {
       children: [
         CarouselSlider.builder(
           carouselController: _carouselController,
-          itemCount: widget.restaurantModel.images.length,
+          itemCount: widget.restaurantEntity.images.length,
           itemBuilder: (context, itemIndex, pageViewIndex) => ClipRRect(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(30.r),
               bottomRight: Radius.circular(30.r),
             ),
             child: CachedNetworkImage(
-              imageUrl: widget.restaurantModel.images[itemIndex],
+              imageUrl: widget.restaurantEntity.images[itemIndex],
               height: 350.h,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -329,7 +329,7 @@ class _HeaderSectionState extends State<HeaderSection> {
             children: [
               SmoothPageIndicator(
                 controller: PageController(initialPage: _currentIndex),
-                count: widget.restaurantModel.images.length,
+                count: widget.restaurantEntity.images.length,
                 effect: WormEffect(
                   dotHeight: 12,
                   dotWidth: 12,
@@ -561,17 +561,17 @@ class RateFilterPart extends StatelessWidget {
 }
 
 class BodySection extends StatelessWidget {
-  final RestaurantModel restaurantModel;
+  final RestaurantEntity restaurantEntity;
 
-  const BodySection({super.key, required this.restaurantModel});
+  const BodySection({super.key, required this.restaurantEntity});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        RestaurantInfoPart(restaurantModel: restaurantModel),
+        RestaurantInfoPart(restaurantEntity: restaurantEntity),
         SizedBox(height: 10.h),
-        CustomReadMore(text: restaurantModel.description),
+        CustomReadMore(text: restaurantEntity.description),
       ],
     );
   }

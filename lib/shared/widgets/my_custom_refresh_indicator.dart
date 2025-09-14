@@ -41,7 +41,7 @@ class MyCustomRefreshIndicator extends StatelessWidget {
                 return SizedBox(
                   height: controller.value * indicatorSize,
                   child: Center(
-                    child: Transform.scale(scale: 1.6, child: lottieWidget),
+                    child: Transform.scale(scale: 1.8, child: lottieWidget),
                   ),
                 );
               },

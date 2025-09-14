@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
+import 'package:food_delivery/core/routes/args/restaurant_details_screen_args.dart';
 import 'package:food_delivery/features/home/ui/cubit/home_category_cubit.dart';
 import 'package:food_delivery/features/home/ui/widgets/all_categories_part.dart';
 import 'package:food_delivery/features/home/ui/widgets/app_bar_part.dart';
@@ -127,10 +128,10 @@ class BodySection extends StatelessWidget {
               SizedBox(height: 30.h),
               OpenRestaurantsPart(
                 onTap: (restaurant) {
-                  // context.push(
-                  //   AppPaths.restaurantDetails,
-                  //   extra: RestaurantDetailsScreenArgs(restaurant),
-                  // );
+                  context.push(
+                    AppPaths.restaurantDetails,
+                    extra: RestaurantDetailsScreenArgs(restaurant),
+                  );
                 },
               ),
             ],

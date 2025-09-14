@@ -1,7 +1,7 @@
-import 'package:food_delivery/core/models/restaurant_imodel.dart';
+import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
 
 class RestaurantDetailsScreenArgs {
-  final RestaurantModel restaurantModel;
+  final RestaurantEntity restaurantEntity;
 
-  RestaurantDetailsScreenArgs(this.restaurantModel);
+  RestaurantDetailsScreenArgs(this.restaurantEntity);
 }
