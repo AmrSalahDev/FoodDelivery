@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery/features/search/domain/entities/recent_keywords_entity.dart';

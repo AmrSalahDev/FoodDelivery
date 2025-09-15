@@ -70,6 +70,12 @@ lib
 │   ├───access_location
 │   │   └───ui
 │   │       └───screens
+│   ├───call
+│   │   ├───data
+│   │   ├───domain
+│   │   └───ui
+│   │       ├───cubit
+│   │       └───screens
 │   ├───cart
 │   │   └───ui
 │   │       ├───cubits
@@ -103,6 +109,18 @@ lib
 │   │   └───ui
 │   │       ├───cubit
 │   │       └───screens
+│   ├───message
+│   │   ├───data
+│   │   ├───domain
+│   │   └───ui
+│   │       ├───cubit
+│   │       └───screens
+│   ├───my_orders
+│   │   ├───data
+│   │   ├───domain
+│   │   └───ui
+│   │       ├───cubit
+│   │       └───screens
 │   ├───onboarding
 │   │   ├───data
 │   │   │   └───models
@@ -116,6 +134,12 @@ lib
 │   │       ├───cubits
 │   │       ├───screens
 │   │       └───widgets
+│   ├───profile
+│   │   ├───data
+│   │   ├───domain
+│   │   └───ui
+│   │       ├───cubit
+│   │       └───screens
 │   ├───register
 │   │   ├───data
 │   │   │   └───repo
@@ -148,6 +172,12 @@ lib
 │   │       ├───cubit
 │   │       ├───screens
 │   │       └───widgets
+│   ├───tracking_order
+│   │   ├───data
+│   │   ├───domain
+│   │   └───ui
+│   │       ├───cubit
+│   │       └───screens
 │   └───verification_password
 │       └───ui
 │           └───screens
