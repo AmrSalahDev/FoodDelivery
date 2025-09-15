@@ -60,6 +60,8 @@ import 'package:food_delivery/features/search/data/repo/search_repo_impl.dart'
     as _i411;
 import 'package:food_delivery/features/search/domain/repo/search_repo.dart'
     as _i323;
+import 'package:food_delivery/features/search/domain/usecases/delete_keyword_usecase.dart'
+    as _i142;
 import 'package:food_delivery/features/search/domain/usecases/get_keywords_usecase.dart'
     as _i944;
 import 'package:food_delivery/features/search/domain/usecases/save_keyword_usecase.dart'
@@ -115,6 +117,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i561.FetchCategoriesUsecase>(
       () => _i561.FetchCategoriesUsecase(homeRepo: gh<_i534.HomeRepo>()),
     );
+    gh.factory<_i142.DeleteKeywordUseCase>(
+      () => _i142.DeleteKeywordUseCase(gh<_i323.SearchRepo>()),
+    );
     gh.factory<_i325.RegisterCubit>(
       () => _i325.RegisterCubit(gh<_i640.RegisterUseCase>()),
     );
@@ -131,6 +136,7 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i908.RecentKeywordsCubit(
         saveKeywordUsecase: gh<_i438.SaveKeywordUsecase>(),
         getKeywordsUsecase: gh<_i944.GetKeywordsUsecase>(),
+        deleteKeywordUseCase: gh<_i142.DeleteKeywordUseCase>(),
       ),
     );
     gh.factory<_i1010.RestaurantCubit>(

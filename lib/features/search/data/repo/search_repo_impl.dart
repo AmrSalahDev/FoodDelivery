@@ -86,4 +86,18 @@ class SearchRepoImpl extends SearchRepo {
       throw Exception("Failed to fetch keywords: $e");
     }
   }
+
+  @override
+  /// Deletes a keyword from the database.
+  ///
+  /// Throws an [Exception] if there is an error deleting the keyword.
+  Future<void> deleteKeyword(String keyword) async {
+    try {
+      // Delete the keyword from the database
+      await supabase.from('recent_keywords').delete().eq('keyword', keyword);
+    } catch (e) {
+      // Throw an exception if there is an error deleting the keyword
+      throw Exception("Failed to delete keyword: $e");
+    }
+  }
 }

@@ -73,82 +73,107 @@ class _CustomSearchBarPartState extends State<CustomSearchBarPart> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        TextField(
-          controller: suggestionController,
-          enabled: false,
-          style: GoogleFonts.sen(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.normal,
-            color: Colors.grey.shade400,
-          ),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 20.h,
-              horizontal: 20.w,
-            ),
-            filled: true,
-            fillColor: AppColors.searchBarColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide.none,
-            ),
-            prefixIcon: Icon(
-              Icons.search_rounded,
-              color: AppColors.searchBarIconColor,
-              size: 24.h,
-            ),
-          ),
-        ),
-
-        TextField(
-          autofocus: true,
+        _SuggestionTextField(suggestionController: suggestionController),
+        _SearchTextField(
           controller: controller,
-          textInputAction: TextInputAction.search,
-          onSubmitted: (value) {
-            widget.onSubmitted?.call(value);
-          },
-
-          style: GoogleFonts.sen(
-            fontSize: 16.sp,
-            fontWeight: FontWeight.normal,
-            color: Colors.black,
-          ),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-              vertical: 20.h,
-              horizontal: 20.w,
-            ),
-            filled: true,
-            fillColor: Colors.transparent,
-            hintText: AppStrings.search,
-            hintStyle: GoogleFonts.sen(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.normal,
-              color: AppColors.searchBarHintColor,
-            ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.r),
-              borderSide: BorderSide.none,
-            ),
-            prefixIcon: Icon(
-              Icons.search_rounded,
-              color: AppColors.searchBarIconColor,
-              size: 24.h,
-            ),
-
-            suffixIcon: isSearching
-                ? GestureDetector(
-                    onTap: () => controller.clear(),
-                    child: Icon(
-                      Icons.close_rounded,
-                      color: AppColors.searchBarIconColor,
-                      size: 24.h,
-                    ),
-                  )
-                : null,
-          ),
+          widget: widget,
+          isSearching: isSearching,
         ),
       ],
+    );
+  }
+}
+
+class _SearchTextField extends StatelessWidget {
+  const _SearchTextField({
+    required this.controller,
+    required this.widget,
+    required this.isSearching,
+  });
+
+  final TextEditingController controller;
+  final CustomSearchBarPart widget;
+  final bool isSearching;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autofocus: true,
+      controller: controller,
+      textInputAction: TextInputAction.search,
+      onSubmitted: (value) {
+        widget.onSubmitted?.call(value);
+      },
+
+      style: GoogleFonts.sen(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: Colors.black,
+      ),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+        filled: true,
+        fillColor: Colors.transparent,
+        hintText: AppStrings.search,
+        hintStyle: GoogleFonts.sen(
+          fontSize: 16.sp,
+          fontWeight: FontWeight.normal,
+          color: AppColors.searchBarHintColor,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide: BorderSide.none,
+        ),
+        prefixIcon: Icon(
+          Icons.search_rounded,
+          color: AppColors.searchBarIconColor,
+          size: 24.h,
+        ),
+
+        suffixIcon: isSearching
+            ? GestureDetector(
+                onTap: () => controller.clear(),
+                child: Icon(
+                  Icons.close_rounded,
+                  color: AppColors.searchBarIconColor,
+                  size: 24.h,
+                ),
+              )
+            : null,
+      ),
+    );
+  }
+}
+
+class _SuggestionTextField extends StatelessWidget {
+  const _SuggestionTextField({required this.suggestionController});
+
+  final TextEditingController suggestionController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: suggestionController,
+      enabled: false,
+      style: GoogleFonts.sen(
+        fontSize: 16.sp,
+        fontWeight: FontWeight.normal,
+        color: Colors.grey.shade400,
+      ),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
+        filled: true,
+        fillColor: AppColors.searchBarColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10.r),
+          borderSide: BorderSide.none,
+        ),
+        prefixIcon: Icon(
+          Icons.search_rounded,
+          color: AppColors.searchBarIconColor,
+          size: 24.h,
+        ),
+      ),
     );
   }
 }

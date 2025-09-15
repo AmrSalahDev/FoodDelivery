@@ -3,4 +3,5 @@ import 'package:food_delivery/features/search/domain/entities/recent_keywords_en
 abstract class SearchRepo {
   Future<void> saveKeyword(String keyword);
   Future<List<RecentKeywordsEntity>> getKeywords({String? query, int? limit});
+  Future<void> deleteKeyword(String keyword);
 }

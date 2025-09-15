@@ -45,57 +45,86 @@ class _RecentKeywordsPartState extends State<RecentKeywordsPart> {
             SizedBox(height: 20.h),
             BlocBuilder<RecentKeywordsCubit, RecentKeywordsState>(
               builder: (context, state) {
-                if (state is RecentKeywordsLoading) {
-                  return SizedBox(
-                    height: 50.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      clipBehavior: Clip.none,
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return _ChipKeyword(isLoading: true);
-                      },
-                    ),
-                  );
+                if (state is RecentKeywordsLoading ||
+                    state is RecentKeywordDeleting ||
+                    state is RecentKeywordSaving) {
+                  return _ChipLoadingShimmer();
                 }
-
                 if (state is RecentKeywordsLoaded) {
                   if (state.keywords.isEmpty) {
-                    return Center(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade600,
-                        highlightColor: Colors.grey.shade100,
-                        child: Text(
-                          AppStrings.noRecentKeywords,
-                          style: GoogleFonts.sen(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.normal,
-                            color: Color(0xFF32343E),
-                          ),
-                        ),
-                      ),
-                    );
+                    return _NoRecentKeywordsShimmer();
+                  } else {
+                    return _ShowKeywords(keywords: state.keywords);
                   }
-                  return SizedBox(
-                    height: 50.h,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      clipBehavior: Clip.none,
-                      itemCount: state.keywords.length,
-                      itemBuilder: (context, index) {
-                        final keyword = state.keywords[index];
-                        return _ChipKeyword(keyword: keyword, isLoading: false);
-                      },
-                    ),
-                  );
                 }
-
                 return SizedBox.shrink();
               },
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class _ChipLoadingShimmer extends StatelessWidget {
+  const _ChipLoadingShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return _ChipKeyword(isLoading: true);
+        },
+      ),
+    );
+  }
+}
+
+class _NoRecentKeywordsShimmer extends StatelessWidget {
+  const _NoRecentKeywordsShimmer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade600,
+        highlightColor: Colors.grey.shade100,
+        child: Text(
+          AppStrings.noRecentKeywords,
+          style: GoogleFonts.sen(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ShowKeywords extends StatelessWidget {
+  final List<RecentKeywordsEntity> keywords;
+  const _ShowKeywords({required this.keywords});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
+        itemCount: keywords.length,
+        itemBuilder: (context, index) {
+          final keyword = keywords[index];
+          return _ChipKeyword(keyword: keyword, isLoading: false);
+        },
+      ),
     );
   }
 }
@@ -127,7 +156,9 @@ class _ChipKeyword extends StatelessWidget {
                   ),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                //onDeleted: () => setState(() => widget.keywords.remove(keyword)),
+                onDeleted: () async => await context
+                    .read<RecentKeywordsCubit>()
+                    .deleteKeyword(keyword!.keyword),
                 deleteIcon: Icon(
                   Icons.clear_rounded,
                   color: AppColors.darkBlue,
