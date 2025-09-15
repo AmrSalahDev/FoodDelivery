@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:food_delivery/features/home/ui/widgets/open_restaurants_part.dart';
 import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
+import 'package:food_delivery/features/search/ui/widgets/open_restaurants_part.dart';
 import 'package:food_delivery/features/search/ui/widgets/search_result_app_bar_part.dart';
 import 'package:food_delivery/features/search/ui/widgets/search_result_popular_food_part.dart';
 

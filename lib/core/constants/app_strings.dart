@@ -79,6 +79,7 @@ class AppStrings {
   static const String enterCvv = 'Enter CVV';
   static const String expiry = 'Expire date';
   static const String enterExpiry = 'Enter expiry';
+  static const String noRecentKeywords = 'No recent keywords';
 
   // food
   static const String burger = "Burger";

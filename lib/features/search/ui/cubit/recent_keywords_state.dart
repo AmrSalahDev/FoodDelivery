@@ -9,6 +9,7 @@ sealed class RecentKeywordsState extends Equatable {
 
 final class RecentKeywordsInitial extends RecentKeywordsState {}
 
+// Fetching Keywords states
 final class RecentKeywordsLoading extends RecentKeywordsState {}
 
 final class RecentKeywordsLoaded extends RecentKeywordsState {
@@ -27,6 +28,8 @@ final class RecentKeywordsFailure extends RecentKeywordsState {
   List<Object> get props => [message];
 }
 
+// Saving Keyword states
+
 final class RecentKeywordSaving extends RecentKeywordsState {}
 
 final class RecentKeywordSaved extends RecentKeywordsState {}
@@ -34,8 +37,21 @@ final class RecentKeywordSaved extends RecentKeywordsState {}
 final class RecentKeywordSavingFailure extends RecentKeywordsState {
   final String message;
   const RecentKeywordSavingFailure({required this.message});
+
+  @override
+  List<Object> get props => [message];
 }
+
+// Deleting Keyword states
 
 final class RecentKeywordDeleted extends RecentKeywordsState {}
 
 final class RecentKeywordDeleting extends RecentKeywordsState {}
+
+final class RecentKeywordDeletingFailure extends RecentKeywordsState {
+  final String message;
+  const RecentKeywordDeletingFailure({required this.message});
+
+  @override
+  List<Object> get props => [message];
+}

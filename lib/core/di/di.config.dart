@@ -66,6 +66,8 @@ import 'package:food_delivery/features/search/domain/usecases/save_keyword_useca
     as _i438;
 import 'package:food_delivery/features/search/ui/cubit/recent_keywords_cubit.dart'
     as _i908;
+import 'package:food_delivery/features/search/ui/cubit/search_cubit.dart'
+    as _i1051;
 import 'package:food_delivery/shared/cubits/food_cubit.dart' as _i1067;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -81,6 +83,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i273.CartEditItemsCubit>(() => _i273.CartEditItemsCubit());
     gh.factory<_i559.HomeCubit>(() => _i559.HomeCubit());
     gh.factory<_i807.SelectedCardCubit>(() => _i807.SelectedCardCubit());
+    gh.factory<_i1051.SearchCubit>(() => _i1051.SearchCubit());
     gh.lazySingleton<_i717.AuthService>(() => _i717.AuthService());
     gh.lazySingleton<_i750.LocationService>(() => _i750.LocationService());
     gh.lazySingleton<_i947.ToastService>(() => _i947.ToastService());

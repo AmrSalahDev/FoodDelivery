@@ -29,6 +29,7 @@ dependencies:
   flutter_gen_runner: ^5.11.0
   flutter_native_splash: ^2.4.6
   flutter_screenutil: ^5.9.3
+  flutter_staggered_animations: ^1.1.1
   flutter_svg: ^2.2.0
   font_awesome_flutter: ^10.10.0
   geocoding: ^4.0.0

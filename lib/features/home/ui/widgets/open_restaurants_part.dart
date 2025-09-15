@@ -22,51 +22,37 @@ class OpenRestaurantsPart extends StatefulWidget {
 class _OpenRestaurantsPartState extends State<OpenRestaurantsPart> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppStrings.openRestaurants,
-          style: GoogleFonts.sen(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.normal,
-            color: Color(0xFF32343E),
-          ),
-        ),
-        SizedBox(height: 20.h),
-        BlocBuilder<RestaurantCubit, RestaurantState>(
-          builder: (context, state) {
-            if (state is RestaurantLoading) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return const RestaurantItem(isLoading: true);
-                },
-              );
-            }
+    return BlocBuilder<RestaurantCubit, RestaurantState>(
+      builder: (context, state) {
+        if (state is RestaurantLoading) {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 2,
+            itemBuilder: (context, index) {
+              return const RestaurantItem(isLoading: true);
+            },
+          );
+        }
 
-            if (state is RestaurantListLoaded) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.restaurants.length,
-                itemBuilder: (context, index) {
-                  final restaurant = state.restaurants[index];
-                  return RestaurantItem(
-                    restaurant: restaurant,
-                    onTap: widget.onTap,
-                    isLoading: false,
-                  );
-                },
+        if (state is RestaurantListLoaded) {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.restaurants.length,
+            itemBuilder: (context, index) {
+              final restaurant = state.restaurants[index];
+              return RestaurantItem(
+                restaurant: restaurant,
+                onTap: widget.onTap,
+                isLoading: false,
               );
-            }
+            },
+          );
+        }
 
-            return const SizedBox.shrink();
-          },
-        ),
-      ],
+        return const SizedBox.shrink();
+      },
     );
   }
 }

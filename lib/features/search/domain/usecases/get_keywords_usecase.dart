@@ -7,5 +7,6 @@ class GetKeywordsUsecase {
   final SearchRepo searchRepo;
   GetKeywordsUsecase(this.searchRepo);
 
-  Future<List<RecentKeywordsEntity>> call() => searchRepo.getKeywords();
+  Future<List<RecentKeywordsEntity>> call({String? query, int? limit}) =>
+      searchRepo.getKeywords(query: query, limit: limit);
 }

@@ -1,5 +1,6 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_delivery/features/search/domain/entities/recent_keywords_entity.dart';
 import 'package:food_delivery/features/search/domain/usecases/get_keywords_usecase.dart';
 import 'package:food_delivery/features/search/domain/usecases/save_keyword_usecase.dart';
@@ -12,6 +13,8 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
   final SaveKeywordUsecase saveKeywordUsecase;
   final GetKeywordsUsecase getKeywordsUsecase;
 
+  Timer? _debounce;
+
   RecentKeywordsCubit({
     required this.saveKeywordUsecase,
     required this.getKeywordsUsecase,
@@ -21,21 +24,32 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
     emit(RecentKeywordSaving());
     try {
       await saveKeywordUsecase(keyword);
-      final keywords = await getKeywordsUsecase();
-      emit(RecentKeywordsLoaded(keywords: keywords));
+      await fetchKeywords();
     } catch (e) {
       emit(RecentKeywordSavingFailure(message: e.toString()));
     }
   }
 
-  Future<void> fetchKeywords() async {
+  Future<void> fetchKeywords({String? query}) async {
     emit(RecentKeywordsLoading());
     try {
-      final keywords = await getKeywordsUsecase();
-
+      final keywords = await getKeywordsUsecase(query: query);
       emit(RecentKeywordsLoaded(keywords: keywords));
     } catch (e) {
       emit(RecentKeywordsFailure(message: e.toString()));
     }
+  }
+
+  void filterKeywords(String query) {
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 400), () {
+      fetchKeywords(query: query);
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _debounce?.cancel();
+    return super.close();
   }
 }

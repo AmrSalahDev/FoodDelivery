@@ -7,11 +7,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 class SearchPopularFastFoodPart extends StatefulWidget {
   final Function(FoodModel food) onTap;
-  final TextEditingController searchController;
+  final String keyword;
   const SearchPopularFastFoodPart({
     super.key,
     required this.onTap,
-    required this.searchController,
+    required this.keyword,
   });
 
   @override
@@ -23,7 +23,7 @@ class _SearchPopularFastFoodPartState extends State<SearchPopularFastFoodPart> {
   late List<FoodModel> foodList;
   @override
   Widget build(BuildContext context) {
-    final search = widget.searchController.text.toLowerCase();
+    final search = widget.keyword.toLowerCase();
 
     final Map<String, List<FoodModel>> foodMap = {
       'pizza': FoodModel.pizzaList,

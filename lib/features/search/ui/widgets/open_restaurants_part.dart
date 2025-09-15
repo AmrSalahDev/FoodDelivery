@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
+import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
 import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
 import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
@@ -21,37 +22,50 @@ class OpenRestaurantsPart extends StatefulWidget {
 class _OpenRestaurantsPartState extends State<OpenRestaurantsPart> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RestaurantCubit, RestaurantState>(
-      builder: (context, state) {
-        if (state is RestaurantLoading) {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 2,
-            itemBuilder: (context, index) {
-              return const RestaurantItem(isLoading: true);
-            },
-          );
-        }
-
-        if (state is RestaurantListLoaded) {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.restaurants.length,
-            itemBuilder: (context, index) {
-              final restaurant = state.restaurants[index];
-              return RestaurantItem(
-                restaurant: restaurant,
-                onTap: widget.onTap,
-                isLoading: false,
+    return Column(
+      children: [
+        Text(
+          AppStrings.openRestaurants,
+          style: GoogleFonts.sen(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.normal,
+            color: Color(0xFF32343E),
+          ),
+        ),
+        SizedBox(height: 20.h),
+        BlocBuilder<RestaurantCubit, RestaurantState>(
+          builder: (context, state) {
+            if (state is RestaurantLoading) {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 2,
+                itemBuilder: (context, index) {
+                  return const RestaurantItem(isLoading: true);
+                },
               );
-            },
-          );
-        }
+            }
 
-        return const SizedBox.shrink();
-      },
+            if (state is RestaurantListLoaded) {
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.restaurants.length,
+                itemBuilder: (context, index) {
+                  final restaurant = state.restaurants[index];
+                  return RestaurantItem(
+                    restaurant: restaurant,
+                    onTap: widget.onTap,
+                    isLoading: false,
+                  );
+                },
+              );
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
     );
   }
 }
