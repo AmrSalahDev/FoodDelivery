@@ -1,6 +1,7 @@
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
+import 'package:equatable/equatable.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
 
-class RestaurantModel {
+class RestaurantModel extends Equatable {
   final String id;
   final String name;
   final String deliveryCost;
@@ -10,8 +11,9 @@ class RestaurantModel {
   final String rate;
   final String description;
   final String deliveryTime;
+  final List<String> categories;
 
-  RestaurantModel({
+  const RestaurantModel({
     required this.id,
     required this.name,
     required this.deliveryCost,
@@ -21,6 +23,7 @@ class RestaurantModel {
     required this.rate,
     required this.description,
     required this.deliveryTime,
+    required this.categories,
   });
 
   factory RestaurantModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +46,11 @@ class RestaurantModel {
       rate: json['rate']?.toString() ?? '0',
       description: json['description']?.toString() ?? '',
       deliveryTime: json['delivery_time']?.toString() ?? '',
+      categories:
+          (json['categories'] as List<dynamic>?)
+              ?.map((e) => e.toString())
+              .toList() ??
+          [],
     );
   }
 
@@ -56,10 +64,20 @@ class RestaurantModel {
     rate: rate,
     description: description,
     deliveryTime: deliveryTime,
+    categories: categories,
   );
 
   @override
-  String toString() {
-    return 'RestaurantModel(id: $id, name: $name, deliveryCost: $deliveryCost, imageUrl: $imageUrl, images: $images, foundFood: $foundFood, rate: $rate, description: $description, deliveryTime: $deliveryTime)';
-  }
+  List<Object?> get props => [
+    id,
+    name,
+    deliveryCost,
+    imageUrl,
+    images,
+    foundFood,
+    rate,
+    description,
+    deliveryTime,
+    categories,
+  ];
 }

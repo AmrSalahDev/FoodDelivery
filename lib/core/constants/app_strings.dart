@@ -80,6 +80,8 @@ class AppStrings {
   static const String expiry = 'Expire date';
   static const String enterExpiry = 'Enter expiry';
   static const String noRecentKeywords = 'No recent keywords';
+  static const String popular = 'Popular';
+  static const String noResultsFound = 'No results found';
 
   // food
   static const String burger = "Burger";

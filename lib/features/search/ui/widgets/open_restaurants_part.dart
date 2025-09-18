@@ -6,14 +6,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
-import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/cubits/restaurant_cubit.dart';
 import 'package:food_delivery/shared/widgets/shimmer_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OpenRestaurantsPart extends StatefulWidget {
   final Function(RestaurantEntity restaurant) onTap;
-  const OpenRestaurantsPart({super.key, required this.onTap});
+  final String query;
+  const OpenRestaurantsPart({
+    super.key,
+    required this.onTap,
+    required this.query,
+  });
 
   @override
   State<OpenRestaurantsPart> createState() => _OpenRestaurantsPartState();
@@ -21,8 +26,82 @@ class OpenRestaurantsPart extends StatefulWidget {
 
 class _OpenRestaurantsPartState extends State<OpenRestaurantsPart> {
   @override
+  void initState() {
+    super.initState();
+    context.read<RestaurantCubit>().fetchRestaurants(category: widget.query);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RestaurantCubit, RestaurantState>(
+      builder: (context, state) {
+        return BlocBuilder<RestaurantCubit, RestaurantState>(
+          builder: (context, state) {
+            if (state is RestaurantLoading) {
+              return _ShimmerItems();
+            }
+
+            if (state is RestaurantListLoaded) {
+              return _RestaurantItems(
+                widget: widget,
+                restaurants: state.restaurants,
+              );
+            }
+
+            return const SizedBox.shrink();
+          },
+        );
+      },
+    );
+  }
+}
+
+class _RestaurantItems extends StatelessWidget {
+  final List<RestaurantEntity> restaurants;
+  final OpenRestaurantsPart widget;
+  const _RestaurantItems({required this.widget, required this.restaurants});
+
+  @override
+  Widget build(BuildContext context) {
+    return restaurants.isEmpty
+        ? const SizedBox.shrink()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppStrings.openRestaurants,
+                style: GoogleFonts.sen(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF32343E),
+                ),
+              ),
+              SizedBox(height: 40.h),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: restaurants.length,
+                itemBuilder: (context, index) {
+                  final restaurant = restaurants[index];
+                  return RestaurantItem(
+                    restaurant: restaurant,
+                    onTap: widget.onTap,
+                    isLoading: false,
+                  );
+                },
+              ),
+            ],
+          );
+  }
+}
+
+class _ShimmerItems extends StatelessWidget {
+  const _ShimmerItems();
+
+  @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppStrings.openRestaurants,
@@ -32,37 +111,13 @@ class _OpenRestaurantsPartState extends State<OpenRestaurantsPart> {
             color: Color(0xFF32343E),
           ),
         ),
-        SizedBox(height: 20.h),
-        BlocBuilder<RestaurantCubit, RestaurantState>(
-          builder: (context, state) {
-            if (state is RestaurantLoading) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return const RestaurantItem(isLoading: true);
-                },
-              );
-            }
-
-            if (state is RestaurantListLoaded) {
-              return ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: state.restaurants.length,
-                itemBuilder: (context, index) {
-                  final restaurant = state.restaurants[index];
-                  return RestaurantItem(
-                    restaurant: restaurant,
-                    onTap: widget.onTap,
-                    isLoading: false,
-                  );
-                },
-              );
-            }
-
-            return const SizedBox.shrink();
+        SizedBox(height: 40.h),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 2,
+          itemBuilder: (context, index) {
+            return const RestaurantItem(isLoading: true);
           },
         ),
       ],

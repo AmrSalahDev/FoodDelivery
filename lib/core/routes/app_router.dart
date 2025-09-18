@@ -12,7 +12,8 @@ import 'package:food_delivery/features/payment/ui/cubits/selected_card_cubit.dar
 import 'package:food_delivery/features/payment/ui/screens/add_card_screen.dart';
 import 'package:food_delivery/features/payment/ui/screens/payment_screen.dart';
 import 'package:food_delivery/features/payment/ui/screens/payment_success_screen.dart';
-import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
+import 'package:food_delivery/shared/cubits/restaurant_cubit.dart';
+import 'package:food_delivery/features/search/ui/cubit/drop_down_cubit.dart';
 import 'package:food_delivery/features/search/ui/cubit/recent_keywords_cubit.dart';
 import 'package:food_delivery/features/search/ui/cubit/search_cubit.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
@@ -104,6 +105,7 @@ class AppRouter {
             BlocProvider(create: (context) => getIt<RestaurantCubit>()),
             BlocProvider(create: (context) => getIt<RecentKeywordsCubit>()),
             BlocProvider(create: (context) => getIt<SearchCubit>()),
+            BlocProvider(create: (context) => getIt<FoodCubit>()),
             BlocProvider.value(value: getIt<CartCubit>()),
           ],
           child: SearchScreen(),
@@ -155,6 +157,8 @@ class AppRouter {
             providers: [
               BlocProvider(create: (context) => getIt<FoodCubit>()),
               BlocProvider(create: (context) => getIt<RestaurantCubit>()),
+              BlocProvider(create: (context) => getIt<RecentKeywordsCubit>()),
+              BlocProvider(create: (context) => getIt<DropDownCubit>()),
               BlocProvider.value(value: getIt<CartCubit>()),
             ],
             child: SearchResultScreen(query: args.query),
@@ -171,7 +175,7 @@ class AppRouter {
               BlocProvider(create: (context) => getIt<FoodCubit>()),
               BlocProvider.value(value: getIt<CartCubit>()),
             ],
-            child: FoodDetailsScreen(foodModel: args.foodModel),
+            child: FoodDetailsScreen(foodEntity: args.foodEntity),
           );
         },
       ),

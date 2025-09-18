@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
-import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/shared/data/models/food_model.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';

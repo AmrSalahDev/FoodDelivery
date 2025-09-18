@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   after_layout: ^1.2.0
+  animated_custom_dropdown: ^3.1.1
   animated_digit: ^3.3.1+2
   awesome_card: ^1.1.7
   bounce: ^1.0.2
@@ -20,6 +21,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   custom_refresh_indicator: ^4.0.1
   equatable: ^2.0.7
+  extension: ^0.6.0
   faker: ^2.2.0
   flutter:
     sdk: flutter

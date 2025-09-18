@@ -1,30 +1,25 @@
 import 'package:animated_digit/animated_digit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:food_delivery/core/routes/app_router.dart';
-import 'package:food_delivery/features/cart/ui/cubits/cart_cubit.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
+import 'package:food_delivery/shared/domain/entities/food_entity.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_readmore.dart';
-import 'package:food_delivery/shared/widgets/custom_rectangle_button.dart';
 import 'package:food_delivery/shared/widgets/favorite_button.dart';
 import 'package:food_delivery/shared/widgets/select_size_buttons.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/di/di.dart';
 import 'package:food_delivery/features/food_details/data/models/ingridents_model.dart';
-import 'package:food_delivery/core/models/food_model.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_flutter_toolkit/ui/system/system_ui_wrapper.dart';
 
 class FoodDetailsScreen extends StatefulWidget {
-  final FoodModel foodModel;
-  const FoodDetailsScreen({super.key, required this.foodModel});
+  final FoodEntity foodEntity;
+  const FoodDetailsScreen({super.key, required this.foodEntity});
 
   @override
   State<FoodDetailsScreen> createState() => _FoodDetailsScreenState();
@@ -103,17 +98,17 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen>
                   backBtnSlideAnimation: _backBtnSlideAnimation,
                   favoriteBtnSlideAnimation: _favoriteBtnSlideAnimation,
                   foodSlideAnimation: _foodSlideAnimation,
-                  foodModel: widget.foodModel,
+                  foodEntity: widget.foodEntity,
                 ),
                 SizedBox(height: 30.h),
-                BodySection(foodModel: widget.foodModel),
+                BodySection(foodEntity: widget.foodEntity),
                 SizedBox(height: 30.h),
               ],
             ),
           ),
         ),
         bottomNavigationBar: FooterSection(
-          foodModel: widget.foodModel,
+          foodEntity: widget.foodEntity,
           foodCubit: foodCubit,
           addToCartController: _addToCartController,
           animationController: _animationController,
@@ -178,8 +173,8 @@ class IngridentsPart extends StatelessWidget {
 }
 
 class SizeSelectorPart extends StatelessWidget {
-  final FoodModel foodModel;
-  const SizeSelectorPart({super.key, required this.foodModel});
+  final FoodEntity foodEntity;
+  const SizeSelectorPart({super.key, required this.foodEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -195,17 +190,12 @@ class SizeSelectorPart extends StatelessWidget {
           ),
         ),
         SizedBox(width: 10.w),
-        BlocBuilder<CartCubit, List<FoodModel>>(
-          builder: (context, state) {
-            return SelectSizeButtons(
-              sizes: ["10”", "14”", "16”"],
-              selectedBackgroundColor: Color(0xFFF58D1D),
-              unselectedBackgroundColor: AppColors.lightGray,
-              onSizeSelected: (index, size) => context
-                  .read<CartCubit>()
-                  .changeSize(food: foodModel, size: size),
-            );
-          },
+
+        SelectSizeButtons(
+          sizes: ["10”", "14”", "16”"],
+          selectedBackgroundColor: Color(0xFFF58D1D),
+          unselectedBackgroundColor: AppColors.lightGray,
+          onSizeSelected: (index, size) => () {},
         ),
       ],
     );
@@ -213,8 +203,8 @@ class SizeSelectorPart extends StatelessWidget {
 }
 
 class FoodInfoPart extends StatelessWidget {
-  final FoodModel foodModel;
-  const FoodInfoPart({super.key, required this.foodModel});
+  final FoodEntity foodEntity;
+  const FoodInfoPart({super.key, required this.foodEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +212,7 @@ class FoodInfoPart extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          foodModel.title,
+          foodEntity.title,
           style: GoogleFonts.sen(
             fontSize: 24.sp,
             fontWeight: FontWeight.bold,
@@ -231,7 +221,7 @@ class FoodInfoPart extends StatelessWidget {
         ),
         SizedBox(height: 10.h),
         Text(
-          foodModel.restaurantName,
+          foodEntity.restaurantName,
           style: GoogleFonts.sen(
             fontSize: 16.sp,
             fontWeight: FontWeight.normal,
@@ -244,7 +234,7 @@ class FoodInfoPart extends StatelessWidget {
             Icon(FontAwesomeIcons.star, color: AppColors.secondary, size: 20.h),
             SizedBox(width: 10.w),
             Text(
-              foodModel.rating.toString(),
+              foodEntity.rating.toString(),
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -259,7 +249,7 @@ class FoodInfoPart extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              foodModel.deliveryCost,
+              foodEntity.deliveryCost,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -274,7 +264,7 @@ class FoodInfoPart extends StatelessWidget {
             ),
             SizedBox(width: 10.w),
             Text(
-              foodModel.deliveryTime,
+              foodEntity.deliveryTime,
               style: GoogleFonts.sen(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
@@ -289,8 +279,8 @@ class FoodInfoPart extends StatelessWidget {
 }
 
 class BodySection extends StatelessWidget {
-  final FoodModel foodModel;
-  const BodySection({super.key, required this.foodModel});
+  final FoodEntity foodEntity;
+  const BodySection({super.key, required this.foodEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -299,11 +289,11 @@ class BodySection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FoodInfoPart(foodModel: foodModel),
+          FoodInfoPart(foodEntity: foodEntity),
           SizedBox(height: 20.h),
-          CustomReadMore(text: foodModel.description),
+          CustomReadMore(text: foodEntity.description),
           SizedBox(height: 20.h),
-          SizeSelectorPart(foodModel: foodModel),
+          SizeSelectorPart(foodEntity: foodEntity),
           SizedBox(height: 30.h),
           IngridentsPart(),
         ],
@@ -313,13 +303,13 @@ class BodySection extends StatelessWidget {
 }
 
 class FooterSection extends StatelessWidget {
-  final FoodModel foodModel;
+  final FoodEntity foodEntity;
   final FoodCubit foodCubit;
   final AddToCartController addToCartController;
   final AnimationController animationController;
   const FooterSection({
     super.key,
-    required this.foodModel,
+    required this.foodEntity,
     required this.foodCubit,
     required this.addToCartController,
     required this.animationController,
@@ -344,7 +334,7 @@ class FooterSection extends StatelessWidget {
             Row(
               children: [
                 AnimatedDigitWidget(
-                  value: foodModel.price,
+                  value: foodEntity.price,
                   textStyle: GoogleFonts.sen(
                     fontSize: 28.sp,
                     fontWeight: FontWeight.normal,
@@ -355,48 +345,48 @@ class FooterSection extends StatelessWidget {
                   prefix: "\$",
                 ),
                 const Spacer(),
-                BlocBuilder<CartCubit, List<FoodModel>>(
-                  builder: (context, state) {
-                    final cartItem = context.read<CartCubit>().getFoodFromCart(
-                      foodModel,
-                    );
-                    addToCartController.setQuantity(cartItem.quantity);
-                    return AddToCartButtonV2(
-                      onIncrement: (value) {
-                        context.read<CartCubit>().incrementQuantity(foodModel);
-                      },
-                      onDecrement: (value) {
-                        context.read<CartCubit>().decrementQuantity(foodModel);
-                      },
-                      controller: addToCartController,
-                      iconBackgroundColor: Colors.white.withAlpha(100),
-                      backgroundColor: AppColors.secondary,
-                      height: 55.h,
-                      width: 130.w,
-                      iconColor: AppColors.white,
-                      countColor: AppColors.white,
-                    );
-                  },
-                ),
+                // BlocBuilder<CartCubit, List<FoodEntity>>(
+                //   builder: (context, state) {
+                //     final cartItem = context.read<CartCubit>().getFoodFromCart(
+                //       foodEntity,
+                //     );
+                //     addToCartController.setQuantity(cartItem.quantity);
+                //     return AddToCartButtonV2(
+                //       onIncrement: (value) {
+                //         context.read<CartCubit>().incrementQuantity(foodEntity);
+                //       },
+                //       onDecrement: (value) {
+                //         context.read<CartCubit>().decrementQuantity(foodEntity);
+                //       },
+                //       controller: addToCartController,
+                //       iconBackgroundColor: Colors.white.withAlpha(100),
+                //       backgroundColor: AppColors.secondary,
+                //       height: 55.h,
+                //       width: 130.w,
+                //       iconColor: AppColors.white,
+                //       countColor: AppColors.white,
+                //     );
+                //   },
+                // ),
               ],
             ),
             SizedBox(height: 20.h),
-            BlocBuilder<CartCubit, List<FoodModel>>(
-              builder: (context, state) {
-                bool isInCart = context.read<CartCubit>().isInCart(foodModel);
-                return CustomRectangleButton(
-                  onPressed: !isInCart
-                      ? null
-                      : () => context.push(AppPaths.cart),
-                  title: AppStrings.addToCart.toUpperCase(),
-                  height: 60.h,
-                  backgroundColor: !isInCart
-                      ? AppColors.secondary.withAlpha(100)
-                      : AppColors.secondary,
-                  titleColor: AppColors.white,
-                );
-              },
-            ),
+            // BlocBuilder<CartCubit, List<FoodEntity>>(
+            //   builder: (context, state) {
+            //     bool isInCart = context.read<CartCubit>().isInCart(foodEntity);
+            //     return CustomRectangleButton(
+            //       onPressed: !isInCart
+            //           ? null
+            //           : () => context.push(AppPaths.cart),
+            //       title: AppStrings.addToCart.toUpperCase(),
+            //       height: 60.h,
+            //       backgroundColor: !isInCart
+            //           ? AppColors.secondary.withAlpha(100)
+            //           : AppColors.secondary,
+            //       titleColor: AppColors.white,
+            //     );
+            //   },
+            // ),
           ],
         ),
       ),
@@ -408,14 +398,14 @@ class HeaderSection extends StatelessWidget {
   final Animation<Offset> backBtnSlideAnimation;
   final Animation<Offset> favoriteBtnSlideAnimation;
   final Animation<Offset> foodSlideAnimation;
-  final FoodModel foodModel;
+  final FoodEntity foodEntity;
 
   const HeaderSection({
     super.key,
     required this.backBtnSlideAnimation,
     required this.favoriteBtnSlideAnimation,
     required this.foodSlideAnimation,
-    required this.foodModel,
+    required this.foodEntity,
   });
 
   @override
@@ -468,7 +458,7 @@ class HeaderSection extends StatelessWidget {
             ),
             SlideTransition(
               position: foodSlideAnimation,
-              child: Image.asset(foodModel.image, width: 245.w, height: 245.h),
+              child: Image.asset(foodEntity.image, width: 245.w, height: 245.h),
             ),
           ],
         ),

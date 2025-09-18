@@ -1,4 +1,4 @@
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
 
 class RestaurantDetailsScreenArgs {
   final RestaurantEntity restaurantEntity;

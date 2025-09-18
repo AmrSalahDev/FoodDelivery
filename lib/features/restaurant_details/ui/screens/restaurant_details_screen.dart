@@ -6,11 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_strings.dart';
-import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/shared/cubits/food_state.dart';
 import 'package:food_delivery/core/routes/app_router.dart';
 import 'package:food_delivery/core/routes/args/food_details_screen_args.dart';
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
 import 'package:food_delivery/shared/cubits/food_cubit.dart';
+import 'package:food_delivery/shared/domain/entities/food_entity.dart';
 import 'package:food_delivery/shared/widgets/add_to_cart_button_v2.dart';
 import 'package:food_delivery/shared/widgets/custom_circle_button.dart';
 import 'package:food_delivery/shared/widgets/custom_readmore.dart';
@@ -609,7 +610,7 @@ class _FooterSectionState extends State<FooterSection> {
           onTap: (food) {
             context.push(
               AppPaths.foodDetails,
-              extra: FoodDetailsScreenArgs(foodModel: food),
+              extra: FoodDetailsScreenArgs(foodEntity: food),
             );
           },
         ),
@@ -620,7 +621,7 @@ class _FooterSectionState extends State<FooterSection> {
 
 class FoodPart extends StatefulWidget {
   final String type;
-  final Function(FoodModel foodd) onTap;
+  final Function(FoodEntity foodd) onTap;
   const FoodPart({super.key, required this.type, required this.onTap});
 
   @override
@@ -628,52 +629,52 @@ class FoodPart extends StatefulWidget {
 }
 
 class _FoodPartState extends State<FoodPart> {
-  late List<FoodModel> foodList;
   @override
   Widget build(BuildContext context) {
-    final Map<String, List<FoodModel>> foodMap = {
-      'pizza': FoodModel.pizzaList,
-      'burger': FoodModel.burgerList,
-      'pasta': FoodModel.pastaList,
-      'sandwich': FoodModel.sandwichList,
-    };
+    return BlocBuilder<FoodCubit, FoodState>(
+      builder: (context, state) {
+        if (state is FoodLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (state is FoodLoaded) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${widget.type} (${state.foods.length})",
 
-    foodList = foodMap[widget.type.toLowerCase()] ?? FoodModel.foodList;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "${widget.type} (${foodList.length})",
-
-          style: GoogleFonts.sen(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.normal,
-            color: Color(0xFF32343E),
-          ),
-        ),
-        SizedBox(height: 20.h),
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15.w,
-            mainAxisSpacing: 45.h,
-            mainAxisExtent: 190.h,
-          ),
-          clipBehavior: Clip.none,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: foodList.length,
-          itemBuilder: (context, index) {
-            final popularFood = foodList[index];
-            return _buildPopularFoodItem(popularFood);
-          },
-        ),
-      ],
+                style: GoogleFonts.sen(
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.normal,
+                  color: Color(0xFF32343E),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15.w,
+                  mainAxisSpacing: 45.h,
+                  mainAxisExtent: 190.h,
+                ),
+                clipBehavior: Clip.none,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: state.foods.length,
+                itemBuilder: (context, index) {
+                  final popularFood = state.foods[index];
+                  return _buildPopularFoodItem(popularFood);
+                },
+              ),
+            ],
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 
-  Widget _buildPopularFoodItem(FoodModel popularFood) {
+  Widget _buildPopularFoodItem(FoodEntity popularFood) {
     return GestureDetector(
       onTap: () => widget.onTap(popularFood),
       child: LayoutBuilder(
@@ -742,14 +743,14 @@ class _FoodPartState extends State<FoodPart> {
                         AddToCartButtonV2(
                           controller: AddToCartController(),
                           onIncrement: (value) {
-                            context.read<FoodCubit>().incrementQuantity(
-                              popularFood.id,
-                            );
+                            // context.read<FoodCubit>().incrementQuantity(
+                            //   popularFood.id,
+                            // );
                           },
                           onDecrement: (value) {
-                            context.read<FoodCubit>().decrementQuantity(
-                              popularFood.id,
-                            );
+                            // context.read<FoodCubit>().decrementQuantity(
+                            //   popularFood.id,
+                            // );
                           },
 
                           width: 90.w,

@@ -24,6 +24,7 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
   }) : super(RecentKeywordsInitial());
 
   Future<void> saveKeyword(String keyword) async {
+    if (isClosed) return;
     emit(RecentKeywordSaving());
     try {
       await saveKeywordUsecase(keyword);
@@ -34,6 +35,7 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
   }
 
   Future<void> fetchKeywords({String? query}) async {
+    if (isClosed) return;
     emit(RecentKeywordsLoading());
     try {
       final keywords = await getKeywordsUsecase(query: query);
@@ -44,6 +46,7 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
   }
 
   void filterKeywords(String query) {
+    if (isClosed) return;
     _debounce?.cancel();
     _debounce = Timer(const Duration(milliseconds: 400), () {
       fetchKeywords(query: query);
@@ -51,6 +54,7 @@ class RecentKeywordsCubit extends Cubit<RecentKeywordsState> {
   }
 
   Future<void> deleteKeyword(String keyword) async {
+    if (isClosed) return;
     emit(RecentKeywordDeleting());
     try {
       await deleteKeywordUseCase(keyword);

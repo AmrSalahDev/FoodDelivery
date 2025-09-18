@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
-import 'package:food_delivery/features/restaurant_details/domain/usecases/get_restaurant_details_usecase.dart';
-import 'package:food_delivery/features/restaurant_details/domain/usecases/get_restaurants_usecase.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/domain/usecases/get_restaurant_details_usecase.dart';
+import 'package:food_delivery/shared/domain/usecases/get_restaurants_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 part 'restaurant_state.dart';
@@ -27,10 +27,13 @@ class RestaurantCubit extends Cubit<RestaurantState> {
     }
   }
 
-  Future<void> fetchRestaurants({int? limit}) async {
+  Future<void> fetchRestaurants({String? category, int? limit}) async {
     emit(RestaurantLoading());
     try {
-      final restaurants = await getRestaurantsUsecase(limit: limit);
+      final restaurants = await getRestaurantsUsecase(
+        category: category,
+        limit: limit,
+      );
       emit(RestaurantListLoaded(restaurants));
     } catch (e) {
       emit(RestaurantError(e.toString()));

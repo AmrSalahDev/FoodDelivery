@@ -155,6 +155,9 @@ class $AssetsLogoGen {
 class $AssetsLottieGen {
   const $AssetsLottieGen();
 
+  /// File path: assets/lottie/empty.json
+  LottieGenImage get empty => const LottieGenImage('assets/lottie/empty.json');
+
   /// File path: assets/lottie/error.json
   LottieGenImage get error => const LottieGenImage('assets/lottie/error.json');
 
@@ -163,7 +166,7 @@ class $AssetsLottieGen {
       const LottieGenImage('assets/lottie/hand_loading.json');
 
   /// List of all assets
-  List<LottieGenImage> get values => [error, handLoading];
+  List<LottieGenImage> get values => [empty, error, handLoading];
 }
 
 class $AssetsImagesFoodGen {

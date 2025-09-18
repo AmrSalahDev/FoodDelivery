@@ -1,5 +1,5 @@
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
-import 'package:food_delivery/features/restaurant_details/domain/repo/restaurant_repo.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/domain/repos/restaurant_repo.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable

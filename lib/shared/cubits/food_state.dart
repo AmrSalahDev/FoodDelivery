@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/shared/domain/entities/food_entity.dart';
 
 abstract class FoodState extends Equatable {
   const FoodState();
@@ -13,7 +13,7 @@ class FoodInitial extends FoodState {}
 class FoodLoading extends FoodState {}
 
 class FoodLoaded extends FoodState {
-  final List<FoodModel> foods;
+  final List<FoodEntity> foods;
 
   const FoodLoaded(this.foods);
 
@@ -21,10 +21,10 @@ class FoodLoaded extends FoodState {
   List<Object?> get props => [foods];
 }
 
-class FoodError extends FoodState {
+class FoodFailure extends FoodState {
   final String message;
 
-  const FoodError(this.message);
+  const FoodFailure(this.message);
 
   @override
   List<Object?> get props => [message];

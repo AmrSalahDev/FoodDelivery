@@ -1,7 +1,7 @@
-import 'package:food_delivery/core/models/food_model.dart';
+import 'package:food_delivery/shared/domain/entities/food_entity.dart';
 
 class FoodDetailsScreenArgs {
-  final FoodModel foodModel;
+  final FoodEntity foodEntity;
 
-  const FoodDetailsScreenArgs({required this.foodModel});
+  const FoodDetailsScreenArgs({required this.foodEntity});
 }

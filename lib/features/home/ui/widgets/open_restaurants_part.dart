@@ -4,10 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_delivery/core/constants/app_colors.dart';
-import 'package:food_delivery/core/constants/app_strings.dart';
 import 'package:food_delivery/core/gen/assets.gen.dart';
-import 'package:food_delivery/features/restaurant_details/domain/entities/restaurant_entity.dart';
-import 'package:food_delivery/features/restaurant_details/ui/cubit/restaurant_cubit.dart';
+import 'package:food_delivery/shared/domain/entities/restaurant_entity.dart';
+import 'package:food_delivery/shared/cubits/restaurant_cubit.dart';
 import 'package:food_delivery/shared/widgets/shimmer_box.dart';
 import 'package:google_fonts/google_fonts.dart';
 
